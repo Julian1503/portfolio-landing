@@ -17,6 +17,7 @@ type EntityModalFormProps<T> = {
     fields: FieldConfig<T>[];
     onClose: () => void;
     onSubmit: (formData: FormData) => Promise<void> | void;
+    submitting?: boolean; // 👈 nuevo
 };
 
 export function EntityModalForm<T>({
@@ -27,31 +28,29 @@ export function EntityModalForm<T>({
                                        fields,
                                        onClose,
                                        onSubmit,
+                                       submitting = false,
                                    }: EntityModalFormProps<T>) {
     const [filePreviews, setFilePreviews] = React.useState<
         Record<string, string>
     >({});
 
-    // 🔥 Limpia previews cuando el modal se cierra
     React.useEffect(() => {
         if (!open) {
-            // Borrar URLs generadas
             Object.values(filePreviews).forEach((url) => URL.revokeObjectURL(url));
-            // Resetear estado
             setFilePreviews({});
         }
-    }, [open]); // se ejecuta cuando open cambia a false
+    }, [open]);
 
     if (!open) return null;
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (submitting) return;
         const form = e.currentTarget;
         const data = new FormData(form);
 
         try {
             await onSubmit(data);
-            onClose();
         } catch (error) {
             console.error("Failed to submit form:", error);
         }
@@ -66,7 +65,12 @@ export function EntityModalForm<T>({
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-xs text-slate-500 hover:text-slate-800"
+                        disabled={submitting}
+                        className={`text-xs  ${
+                            submitting
+                                ? "text-slate-300 cursor-not-allowed"
+                                : "text-slate-500 hover:text-slate-800"
+                        }`}
                     >
                         Close
                     </button>
@@ -95,13 +99,11 @@ export function EntityModalForm<T>({
                         ) => {
                             const file = e.target.files?.[0];
 
-                            // limpiar preview anterior
                             setFilePreviews((prev) => {
                                 if (prev[key]) URL.revokeObjectURL(prev[key]);
                                 return prev;
                             });
 
-                            // nuevo preview
                             if (file) {
                                 const url = URL.createObjectURL(file);
                                 setFilePreviews((prev) => ({ ...prev, [key]: url }));
@@ -126,7 +128,12 @@ export function EntityModalForm<T>({
                                     name={key}
                                     {...(!isFileInput && { defaultValue: initialValue })}
                                     required={field.required}
-                                    className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400/60"
+                                    disabled={submitting}
+                                    className={`rounded-lg border border-slate-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400/60 ${
+                                        submitting
+                                            ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                                            : ""
+                                    }`}
                                     {...restProps}
                                     onChange={
                                         isFileInput ? handleFileChange : (inputOnChange as any)
@@ -153,15 +160,25 @@ export function EntityModalForm<T>({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="text-xs text-slate-500 hover:underline"
+                            disabled={submitting}
+                            className={`text-xs ${
+                                submitting
+                                    ? "text-slate-300 cursor-not-allowed"
+                                    : "text-slate-500 hover:underline"
+                            }`}
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="rounded-full bg-slate-900 px-4 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
+                            disabled={submitting}
+                            className={`rounded-full px-4 py-1.5 text-xs font-semibold shadow-sm ${
+                                submitting
+                                    ? "bg-slate-200 text-slate-400 cursor-wait"
+                                    : "bg-slate-900 text-white hover:bg-slate-800"
+                            }`}
                         >
-                            {mode === "create" ? "Create" : "Save changes"}
+                            {submitting ? "Saving..." : mode === "create" ? "Create" : "Save changes"}
                         </button>
                     </div>
                 </form>
