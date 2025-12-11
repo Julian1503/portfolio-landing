@@ -1,0 +1,23 @@
+// prisma/schema.prisma
+// Define your database models
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+model Project {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  tag       String
+  location  String
+  year      String
+  image     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
