@@ -1,15 +1,30 @@
 "use client"
-import React, { useState } from "react";
-
+import React, {useEffect, useState} from "react";
+import {motion} from "framer-motion";
 type NavbarProps = {
     options: string[];
 };
 
 const Navbar: React.FC<NavbarProps> = ({ options }) => {
     const [open, setOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     return (
-        <header className="w-full sticky top-0 z-50 bg-white/80 backdrop-blur border-b">
+        <motion.header
+            className="w-full sticky top-0 z-50 backdrop-blur border-b transition-all"
+            animate={{
+                backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.8)',
+                boxShadow: scrolled ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : '0 0 0 0 rgba(0, 0, 0, 0)'
+            }}
+        >
             <nav className="mx-auto flex max-w-6xl items-center justify-end px-6 py-4">
                 {/* Desktop menu */}
                 <ul className="hidden md:flex flex-row gap-10">
@@ -52,7 +67,7 @@ const Navbar: React.FC<NavbarProps> = ({ options }) => {
                     ))}
                 </ul>
             </div>
-        </header>
+        </motion.header>
     );
 };
 

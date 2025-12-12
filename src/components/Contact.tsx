@@ -6,8 +6,10 @@ import { Section } from "@/components/Section";
 import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
 import { Button } from "@/components/Button";
+import {motion} from "framer-motion";
 
 const ContactSection = () => {
+    const [focusedField, setFocusedField] = React.useState<string | null>(null);
     return (
         <Section
             id="contact"
@@ -24,7 +26,7 @@ const ContactSection = () => {
 
             <div className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] items-start">
                 <div className="space-y-6">
-                    <InfoCard title="Email" variant="primary">
+                    <InfoCard title="Email" >
                         <a
                             href="mailto:mlourdesynigo@gmail.com"
                             className="text-base md:text-lg font-semibold text-slate-900 underline underline-offset-4 decoration-slate-300 hover:decoration-slate-800"
@@ -37,7 +39,7 @@ const ContactSection = () => {
                         </p>
                     </InfoCard>
 
-                    <InfoCard title="Details" variant="primary">
+                    <InfoCard title="Details" >
                         <div className="text-sm md:text-base text-slate-800">
                             <p>Based in Queensland, Australia.</p>
                             <p>Available for remote and local collaboration.</p>
@@ -53,78 +55,60 @@ const ContactSection = () => {
                     </InfoCard>
                 </div>
 
-                <InfoCard title="Quick message" variant="primary">
-                    <form
-                        className="space-y-4"
-                        aria-label="Quick contact form"
-                    >
-                        <div className="space-y-1.5">
-                            <label
-                                htmlFor="contact-name"
-                                className="text-xs uppercase tracking-[0.2em] text-slate-500"
+                <InfoCard title="Quick message" >
+                    <form className="space-y-4">
+                        {["name", "email", "message"].map((field) => (
+                            <motion.div
+                                key={field}
+                                className="space-y-1.5"
+                                animate={{
+                                    scale: focusedField === field ? 1.01 : 1
+                                }}
+                                transition={{ duration: 0.2 }}
                             >
-                                Name
-                            </label>
-                            <input
-                                id="contact-name"
-                                name="name"
-                                type="text"
-                                autoComplete="name"
-                                required
-                                className="w-full rounded-xl border border-slate-200 bg-white/80
-                     px-3 py-2 text-sm text-slate-900 outline-none
-                     focus:border-slate-900/60 focus-visible:ring-2 focus-visible:ring-slate-900"
-                                placeholder="Your name"
-                            />
-                        </div>
+                                <label
+                                    htmlFor={`contact-${field}`}
+                                    className="text-xs uppercase tracking-[0.2em] text-slate-500"
+                                >
+                                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                                </label>
 
-                        <div className="space-y-1.5">
-                            <label
-                                htmlFor="contact-email"
-                                className="text-xs uppercase tracking-[0.2em] text-slate-500"
-                            >
-                                Email
-                            </label>
-                            <input
-                                id="contact-email"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className="w-full rounded-xl border border-slate-200 bg-white/80
-                     px-3 py-2 text-sm text-slate-900 outline-none
-                     focus:border-slate-900/60 focus-visible:ring-2 focus-visible:ring-slate-900"
-                                placeholder="your@email.com"
-                            />
-                        </div>
+                                {field === "message" ? (
+                                    <motion.textarea
+                                        id={`contact-${field}`}
+                                        name={field}
+                                        rows={4}
+                                        required
+                                        onFocus={() => setFocusedField(field)}
+                                        onBlur={() => setFocusedField(null)}
+                                        whileFocus={{ boxShadow: "0 0 0 3px rgba(15, 23, 42, 0.1)" }}
+                                        className="w-full rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-sm text-slate-900 outline-none resize-none transition-all"
+                                    />
+                                ) : (
+                                    <motion.input
+                                        id={`contact-${field}`}
+                                        name={field}
+                                        type={field === "email" ? "email" : "text"}
+                                        required
+                                        onFocus={() => setFocusedField(field)}
+                                        onBlur={() => setFocusedField(null)}
+                                        whileFocus={{ boxShadow: "0 0 0 3px rgba(15, 23, 42, 0.1)" }}
+                                        className="w-full rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-sm text-slate-900 outline-none transition-all"
+                                    />
+                                )}
+                            </motion.div>
+                        ))}
 
-                        <div className="space-y-1.5">
-                            <label
-                                htmlFor="contact-message"
-                                className="text-xs uppercase tracking-[0.2em] text-slate-500"
-                            >
-                                Message
-                            </label>
-                            <textarea
-                                id="contact-message"
-                                name="message"
-                                rows={4}
-                                required
-                                className="w-full rounded-xl border border-slate-200 bg-white/80
-                     px-3 py-2 text-sm text-slate-900 outline-none
-                     resize-none focus:border-slate-900/60 focus-visible:ring-2 focus-visible:ring-slate-900"
-                                placeholder="Tell me briefly about your project or enquiry."
-                            />
-                        </div>
-
-                        <Button type="submit" className="mt-2 w-full">
-                            Send Message
-                        </Button>
+                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                            <Button type="submit" className="mt-2 w-full">
+                                Send Message
+                            </Button>
+                        </motion.div>
                     </form>
                 </InfoCard>
             </div>
         </Section>
-    );
+);
 };
 
 export default ContactSection;

@@ -1,5 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 type ProjectCardProps = {
     slug: string;
@@ -10,67 +11,72 @@ type ProjectCardProps = {
     image: string;
 };
 
-export function ProjectCard({
-                                slug,
-                                title,
-                                tag,
-                                location,
-                                year,
-                                image,
-                            }: ProjectCardProps) {
+export function ProjectCard({ slug, title, tag, location, year, image }: ProjectCardProps) {
+    const [isHovered, setIsHovered] = React.useState(false);
+
     return (
-        <article className="relative">
+        <motion.article
+            className="relative"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+        >
             <Link
                 href={`/projects/${slug}`}
-                className="group block rounded-2xl overflow-hidden bg-white/60
-                   border border-white/70 shadow-lg backdrop-blur-sm
-                   transition-transform duration-300 motion-safe:hover:-translate-y-1
-                   motion-safe:hover:shadow-2xl focus-visible:outline-none
-                   focus-visible:ring-2 focus-visible:ring-offset-2
-                   focus-visible:ring-slate-900"
-                aria-label={`${title} – ${tag} project`}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className="group block rounded-2xl overflow-hidden bg-white/60 border border-white/70 shadow-lg backdrop-blur-sm"
             >
                 <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
+                    <motion.img
                         src={image}
                         alt={title}
-                        className="h-full w-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-105"
+                        animate={{ scale: isHovered ? 1.1 : 1 }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                        className="h-full w-full object-cover"
                     />
-                    <div
-                        className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-80"
-                        aria-hidden="true"
+
+                    {/* Animated overlay */}
+                    <motion.div
+                        initial={{ opacity: 0.8 }}
+                        animate={{ opacity: isHovered ? 0.95 : 0.8 }}
+                        className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"
                     />
+
+                    {/* Reveal effect from bottom */}
+                    <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{
+                            y: isHovered ? 0 : 20,
+                            opacity: isHovered ? 1 : 0
+                        }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-slate-900/90 to-transparent"
+                    >
+                        <p className="text-xs text-white/80">
+                            Click to explore this project →
+                        </p>
+                    </motion.div>
                 </div>
 
                 <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
-                    <div className="flex flex-col gap-2">
-            <span className="inline-flex px-3 py-1 rounded-full text-[10px] md:text-xs
-                             tracking-[0.25em] uppercase bg-black/40 text-white/90
-                             border border-white/30">
-              {tag}
-            </span>
-
+                    <motion.div
+                        className="flex flex-col gap-2"
+                        animate={{ y: isHovered ? -4 : 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <span className="inline-flex px-3 py-1 rounded-full text-[10px] md:text-xs tracking-[0.25em] uppercase bg-black/40 text-white/90 border border-white/30">
+                            {tag}
+                        </span>
                         <h3 className="text-lg md:text-xl font-semibold text-white leading-snug">
                             {title}
                         </h3>
-
                         <div className="flex items-center justify-between text-xs md:text-sm text-gray-100/90">
                             <span>{location}</span>
                             <span>{year}</span>
                         </div>
-
-                        <span className="mt-1 inline-flex items-center text-xs md:text-sm text-gray-100/90 opacity-80 group-hover:opacity-100">
-              View project
-              <span
-                  className="ml-1 translate-x-0 group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-              >
-                →
-              </span>
-            </span>
-                    </div>
+                    </motion.div>
                 </div>
             </Link>
-        </article>
+        </motion.article>
     );
 }

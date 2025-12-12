@@ -2,8 +2,12 @@
 
 import React, { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { useScroll, useTransform } from "framer-motion";
 
 const Hero = () => {
+    const { scrollY } = useScroll();
+    const y = useTransform(scrollY, [0, 500], [0, 150]);
+    const opacity = useTransform(scrollY, [0, 300], [1, 0]);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const reduceMotion = useReducedMotion();
 
@@ -19,8 +23,10 @@ const Hero = () => {
 
     return (
         <section className="relative w-full h-[100svh] min-h-[540px] overflow-hidden bg-white">
-            {/* Fondo video */}
-            <div className="absolute inset-0 w-full h-full">
+            <motion.div
+                style={{ y }}
+                className="absolute inset-0 w-full h-full"
+            >
                 <video
                     ref={videoRef}
                     className="absolute inset-0 w-full h-full object-cover"
@@ -36,10 +42,13 @@ const Hero = () => {
 
                 {/* Degradé para legibilidad del texto */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
-            </div>
+            </motion.div>
 
             {/* Contenido */}
-            <div className="relative z-10 h-full">
+            <motion.div
+                style={{ opacity }}
+                className="relative z-10 h-full"
+            >
                 <div className="mx-auto flex h-full max-w-6xl items-center justify-center md:justify-start px-4 sm:px-6 md:px-10 lg:px-16">
                     <div className="w-full max-w-sm sm:max-w-md md:max-w-xl">
                         {/* CARD ANIMADO */}
@@ -77,7 +86,7 @@ const Hero = () => {
                         </motion.div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         </section>
     );
 };

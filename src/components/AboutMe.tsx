@@ -1,10 +1,31 @@
+"use client"
 import React from "react";
 import { Section } from "@/components/Section";
 import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
 import { Button } from "@/components/Button";
+import { motion } from "framer-motion";
 
 const AboutMe = () => {
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.15
+            }
+        }
+    };
+
+    const cardVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.5 }
+        }
+    };
+
     return (
         <Section
             id="about"
@@ -19,8 +40,14 @@ const AboutMe = () => {
                 tone="dark"
             />
 
-            <div className="grid gap-10 md:gap-16 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start">
-                <div className="space-y-5">
+            <motion.div className="grid gap-10 md:gap-16 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start">
+                <motion.div
+                    className="space-y-5"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                >
                     <p className="text-sm md:text-base text-slate-400 leading-relaxed">
                         Architect trained in Argentina and based in Australia, with a
                         strong focus on residential and mixed-use projects. I enjoy
@@ -50,31 +77,41 @@ const AboutMe = () => {
                             <a href="#projects">View Projects</a>
                         </Button>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Columna cards */}
-                <div className="grid gap-4 md:gap-5">
+                <motion.div
+                    className="grid gap-4 md:gap-5"
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                >
+                    <motion.div variants={cardVariants}>
                     <InfoCard title="Experience">
                         <p className="text-sm md:text-base font-semibold text-slate-900">
                             5+ years across residential, hospitality and mixed-use projects.
                         </p>
                     </InfoCard>
-
+                    </motion.div>
+                    <motion.div variants={cardVariants}>
                     <InfoCard title="Focus">
                         <p className="text-sm md:text-base font-semibold text-slate-900">
                             Design development, Revit documentation, coordination with
                             consultants and builders.
                         </p>
                     </InfoCard>
-
+                    </motion.div>
+                    <motion.div variants={cardVariants}>
                     <InfoCard title="Tools">
                         <p className="text-sm md:text-base font-semibold text-slate-900">
                             Revit, AutoCAD, Enscape, Adobe Suite, hand sketching and
                             physical model making.
                         </p>
                     </InfoCard>
-                </div>
-            </div>
+                    </motion.div>
+                </motion.div>
+            </motion.div>
         </Section>
     );
 };
