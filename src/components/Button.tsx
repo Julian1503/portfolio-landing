@@ -29,9 +29,9 @@ export function Button({
 
     const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
         primary:
-            "bg-slate-900 text-white hover:bg-slate-800 aria-disabled:bg-slate-700 aria-disabled:text-slate-200",
+            "bg-accent text-white hover:bg-accent-dark aria-disabled:bg-slate-300 aria-disabled:text-slate-500 shadow-md shadow-accent/20",
         secondary:
-            "border border-slate-900/30 text-slate-900 bg-white/60 backdrop-blur-sm hover:border-slate-900 hover:bg-white aria-disabled:border-slate-300 aria-disabled:text-slate-500",
+            "border-2 border-accent text-accent bg-white/60 backdrop-blur-sm hover:bg-accent hover:text-white aria-disabled:border-slate-300 aria-disabled:text-slate-500",
     };
 
     const focusStyles =

@@ -41,8 +41,7 @@ const Hero = () => {
                 </video>
 
                 {/* Degradé para legibilidad del texto */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
-            </motion.div>
+                <div className="absolute inset-0 bg-gradient-to-t from-amber-950/70 via-slate-900/30 to-transparent" />            </motion.div>
 
             {/* Contenido */}
             <motion.div

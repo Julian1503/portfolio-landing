@@ -35,10 +35,10 @@ export function InfoCard({
             className={`${base} ${variants[variant]} ${className}`}
             aria-labelledby={headingId}
             role="group"
-        >
+            >
             <h3
                 id={headingId}
-                className={`text-xs tracking-[0.25em] uppercase ${titleColors[variant]}`}
+                className={`text-xs tracking-[0.25em] uppercase text-accent mb-2 ${titleColors[variant]}`}
             >
                 {title}
             </h3>

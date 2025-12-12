@@ -46,7 +46,7 @@ const ContactSection = () => {
                         </div>
 
                         <div className="flex flex-wrap gap-3 pt-2">
-                            <Button asChild>
+                            <Button variant="secondary" asChild>
                                 <Link href="https://calendly.com/mlourdesynigo/30min">
                                     Schedule a Call
                                 </Link>

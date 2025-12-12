@@ -39,10 +39,9 @@ export function ProjectCard({ slug, title, tag, location, year, image }: Project
                     <motion.div
                         initial={{ opacity: 0.8 }}
                         animate={{ opacity: isHovered ? 0.95 : 0.8 }}
-                        className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"
+                        className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-accent/10 to-transparent opacity-90"
                     />
 
-                    {/* Reveal effect from bottom */}
                     <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{
@@ -50,7 +49,7 @@ export function ProjectCard({ slug, title, tag, location, year, image }: Project
                             opacity: isHovered ? 1 : 0
                         }}
                         transition={{ duration: 0.3 }}
-                        className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-slate-900/90 to-transparent"
+                        className="absolute inset-0 bg-gradient-to-t from-amber-950/70 via-transparent to-transparent mix-blend-multiply"
                     >
                         <p className="text-xs text-white/80">
                             Click to explore this project →
