@@ -8,10 +8,10 @@ type ProjectCardProps = {
     tag: string;
     location: string;
     year: string;
-    image: string;
+    coverImage?: string;
 };
 
-export function ProjectCard({ slug, title, tag, location, year, image }: ProjectCardProps) {
+export function ProjectCard({ slug, title, tag, location, year, coverImage }: ProjectCardProps) {
     const [isHovered, setIsHovered] = React.useState(false);
 
     return (
@@ -28,7 +28,7 @@ export function ProjectCard({ slug, title, tag, location, year, image }: Project
             >
                 <div className="relative aspect-[4/3] overflow-hidden">
                     <motion.img
-                        src={image}
+                        src={coverImage}
                         alt={title}
                         animate={{ scale: isHovered ? 1.1 : 1 }}
                         transition={{ duration: 0.6, ease: "easeOut" }}

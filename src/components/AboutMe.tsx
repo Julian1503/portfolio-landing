@@ -1,10 +1,10 @@
 "use client"
 import React from "react";
 import { Section } from "@/components/Section";
-import { SectionHeader } from "@/components/SectionHeader";
-import { InfoCard } from "@/components/InfoCard";
 import { Button } from "@/components/Button";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import {scrollToSection} from "@/hooks/scrollToSection";
 
 const AboutMe = () => {
     const containerVariants = {
@@ -28,90 +28,98 @@ const AboutMe = () => {
 
     return (
         <Section
-            id="about"
-            tone="dark"
+            id="about me"
+            tone="light"
             maxWidth="6xl"
-            labelledBy="about-heading"
         >
-            <SectionHeader
-                id="about-heading"
-                eyebrow="About Me"
-                title="Maria Lourdes Ynigo"
-                tone="dark"
-            />
-
-            <motion.div className="grid gap-10 md:gap-16 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                {/* Foto lado izquierdo */}
                 <motion.div
-                    className="space-y-5"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
+                    className="relative order-2 lg:order-1"
                 >
-                    <p className="text-sm md:text-base text-slate-400 leading-relaxed">
-                        Architect trained in Argentina and based in Australia, with a
-                        strong focus on residential and mixed-use projects. I enjoy
-                        working from early concept sketches to detailed documentation,
-                        always looking for clear spatial ideas, natural light and
-                        connection with everyday life.
-                    </p>
+                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
+                        <Image
+                            src="/img/lourdes-professional.jpeg"
+                            alt="Maria Lourdes Ynigo - Architect"
+                            fill
+                            className="object-cover"
+                            priority
+                        />
+                        {/* Marco decorativo */}
+                        <div className="absolute inset-0 rounded-2xl border-8 border-white/10 pointer-events-none" />
+                    </div>
 
-                    <p className="text-sm md:text-base text-slate-400 leading-relaxed">
-                        My experience ranges from housing developments and hospitality to
-                        small-scale interventions. I am comfortable collaborating with
-                        engineers and consultants, coordinating Revit models and keeping
-                        drawings precise and buildable.
-                    </p>
+                    {/* Elemento decorativo */}
+                    <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-amber-100 rounded-full blur-3xl opacity-30 -z-10" />
+                    <div className="absolute -top-6 -left-6 w-40 h-40 bg-slate-200 rounded-full blur-3xl opacity-20 -z-10" />
+                </motion.div>
 
-                    <p className="text-sm md:text-base text-slate-400 leading-relaxed">
-                        I am particularly interested in context-driven design, sustainable
-                        strategies and solutions that feel calm, warm and timeless rather
-                        than trendy.
-                    </p>
+                {/* Contenido lado derecho */}
+                <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="order-1 lg:order-2 space-y-6 flex flex-col justify-center lg:justify-start"
+                >
+                    <div className="space-y-2">
+                        <span className="text-xs md:text-sm tracking-[0.35em] uppercase text-amber-700 font-semibold">
+                            Meet the Architect
+                        </span>
+                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
+                            Design with purpose,
+                            <br />
+                            built with care
+                        </h2>
+                    </div>
 
-                    <div className="flex flex-wrap gap-3 pt-2">
+                    <div className="space-y-4 text-sm md:text-base text-slate-600 leading-relaxed">
+                        <p>
+                            I'm Maria Lourdes Ynigo, an architect with over 5 years of experience
+                            creating thoughtful spaces that balance functionality, aesthetics, and
+                            human connection.
+                        </p>
+                        <p>
+                            Trained in Argentina and now based in Queensland, Australia, I bring
+                            a unique perspective to every project—combining Latin American warmth
+                            with Australian pragmatism.
+                        </p>
+                        <p>
+                            My approach is simple: listen deeply, design intentionally, and deliver
+                            spaces that feel timeless rather than trendy.
+                        </p>
+                    </div>
+
+                    {/* Stats rápidas */}
+                    <div className="grid grid-cols-3 gap-4 pt-4">
+                        <div className="text-center p-4 rounded-xl bg-white/80 border border-slate-200 shadow-sm">
+                            <div className="text-2xl md:text-3xl font-bold text-slate-900">5+</div>
+                            <div className="text-[10px] md:text-xs text-slate-600 mt-1 uppercase tracking-wider">Years</div>
+                        </div>
+                        <div className="text-center p-4 rounded-xl bg-white/80 border border-slate-200 shadow-sm">
+                            <div className="text-2xl md:text-3xl font-bold text-slate-900">20+</div>
+                            <div className="text-[10px] md:text-xs text-slate-600 mt-1 uppercase tracking-wider">Projects</div>
+                        </div>
+                        <div className="text-center p-4 rounded-xl bg-white/80 border border-slate-200 shadow-sm">
+                            <div className="text-2xl md:text-3xl font-bold text-slate-900">2</div>
+                            <div className="text-[10px] md:text-xs text-slate-600 mt-1 uppercase tracking-wider">Countries</div>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3 pt-2 md:pt-4 justify-center lg:justify-start">
                         <Button asChild>
-                            <a href="/CV_Lourdes_Ynigo.pdf">Download CV</a>
+                            <a onClick={() => scrollToSection("contact")}>Let's Connect</a>
                         </Button>
                         <Button variant="secondary" asChild>
-                            <a href="#projects">View Projects</a>
+                            <a href="/CV_Lourdes_Ynigo.pdf">Download CV</a>
                         </Button>
                     </div>
                 </motion.div>
-
-                {/* Columna cards */}
-                <motion.div
-                    className="grid gap-4 md:gap-5"
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                >
-                    <motion.div variants={cardVariants}>
-                    <InfoCard title="Experience">
-                        <p className="text-sm md:text-base font-semibold text-slate-900">
-                            5+ years across residential, hospitality and mixed-use projects.
-                        </p>
-                    </InfoCard>
-                    </motion.div>
-                    <motion.div variants={cardVariants}>
-                    <InfoCard title="Focus">
-                        <p className="text-sm md:text-base font-semibold text-slate-900">
-                            Design development, Revit documentation, coordination with
-                            consultants and builders.
-                        </p>
-                    </InfoCard>
-                    </motion.div>
-                    <motion.div variants={cardVariants}>
-                    <InfoCard title="Tools">
-                        <p className="text-sm md:text-base font-semibold text-slate-900">
-                            Revit, AutoCAD, Enscape, Adobe Suite, hand sketching and
-                            physical model making.
-                        </p>
-                    </InfoCard>
-                    </motion.div>
-                </motion.div>
-            </motion.div>
+            </div>
         </Section>
     );
 };

@@ -1,6 +1,7 @@
 "use client"
 import React, {useEffect, useState} from "react";
 import {motion} from "framer-motion";
+import {scrollToSection} from "@/hooks/scrollToSection";
 type NavbarProps = {
     options: string[];
 };
@@ -31,6 +32,7 @@ const Navbar: React.FC<NavbarProps> = ({ options }) => {
                     {options.map((option, index) => (
                         <li
                             key={index}
+                            onClick={() => scrollToSection(option.toLowerCase())}
                             className="group flex flex-col items-center text-xs font-semibold tracking-wide cursor-pointer text-gray-800"
                         >
                             {option.toUpperCase()}
