@@ -10,14 +10,94 @@ generator client {
 }
 
 model Project {
-  id        String   @id @default(cuid())
-  slug      String   @unique
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  tag         String
+  location    String
+  year        String
+
+  coverImage  String?
+  excerpt     String?
+  description String?
+
+  status      ProjectStatus @default(CONCEPT)
+  type        ProjectType?
+  role        String?
+  client      String?
+  isFeatured  Boolean  @default(false)
+
+  tools       String[]
+
+  images      ProjectImage[]
+  posts       ProjectPost[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ProjectImage {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  url       String
+  alt       String?
+  caption   String?
+  order     Int     @default(0)
+  kind      ImageKind @default(GALLERY)
+
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
+  @@index([projectId, kind])
+  @@index([projectId, order])
+}
+
+model ProjectPost {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  slug      String
   title     String
-  tag       String
-  location  String
-  year      String
-  image     String
+  content   String
+  order     Int     @default(0)
+  published Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([projectId, slug])
+  @@index([projectId])
+  @@index([projectId, published])
+  @@index([projectId, order])
+}
+
+enum ProjectStatus {
+  CONCEPT
+  DESIGN_DEVELOPMENT
+  DOCUMENTATION
+  SUBMITTED
+  BUILT
+}
+
+enum ProjectType {
+  RESIDENTIAL
+  MULTI_RESIDENTIAL
+  HOSPITALITY
+  RETAIL
+  COMMERCIAL
+  MIXED_USE
+  URBAN
+}
+
+enum ImageKind {
+  COVER
+  GALLERY
+  RENDER
+  PLAN
+  SECTION
+  DETAIL
+  BEFORE_AFTER
 }
