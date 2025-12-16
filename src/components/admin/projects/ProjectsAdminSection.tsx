@@ -3,37 +3,25 @@
 import React from "react";
 import { DataTable, Column } from "../DataTable";
 import { EntityModalForm, FieldConfig } from "../EntityModalForm";
-
-export type ProjectDTO = {
-    id: string;
-    slug: string;
-    title: string;
-    tag: string;
-    location: string;
-    year: string;
-    image: string; // URL de Cloudinary
-};
+import type { ProjectDTO, ProjectCardDTO } from "@/types/ProjectDTO";
 
 const PAGE_SIZE = 6;
 
 export function ProjectsAdminSection() {
-    const [projects, setProjects] = React.useState<ProjectDTO[]>([]);
+    const [projects, setProjects] = React.useState<ProjectCardDTO[]>([]);
     const [page, setPage] = React.useState(0);
-    const [modalMode, setModalMode] =
-        React.useState<"create" | "edit" | null>(null);
+    const [modalMode, setModalMode] = React.useState<"create" | "edit" | null>(null);
+
     const [selected, setSelected] = React.useState<ProjectDTO | null>(null);
     const [isMutating, setIsMutating] = React.useState(false);
     const [searchQuery, setSearchQuery] = React.useState("");
 
     const [sort, setSort] = React.useState<{
-        key: keyof ProjectDTO | null;
+        key: keyof ProjectCardDTO | null;
         direction: "asc" | "desc";
-    }>({
-        key: null,
-        direction: "asc",
-    });
+    }>({ key: null, direction: "asc" });
 
-    // ───────────────────── fetch de proyectos ─────────────────────
+    // ───────────────────── fetch projects list ─────────────────────
     const fetchProjects = React.useCallback(async () => {
         try {
             const res = await fetch("/api/projects");
@@ -41,7 +29,7 @@ export function ProjectsAdminSection() {
                 console.error("Failed to fetch projects");
                 return;
             }
-            const data: ProjectDTO[] = await res.json();
+            const data: ProjectCardDTO[] = await res.json();
             setProjects(data);
         } catch (error) {
             console.error("Error fetching projects", error);
@@ -52,18 +40,25 @@ export function ProjectsAdminSection() {
         fetchProjects();
     }, [fetchProjects]);
 
-    // ───────────────────── filtro por búsqueda ─────────────────────
+    // ───────────────────── fetch full project for edit ─────────────────────
+    const fetchProjectById = React.useCallback(async (id: string) => {
+        const res = await fetch(`/api/projects/${id}`);
+        if (!res.ok) throw new Error("Failed to fetch project");
+        return (await res.json()) as ProjectDTO;
+    }, []);
+
+    // ───────────────────── search ─────────────────────
     const normalizedQuery = searchQuery.trim().toLowerCase();
 
     const filteredProjects = React.useMemo(() => {
         if (!normalizedQuery) return projects;
         return projects.filter((p) => {
             const values = [p.title, p.tag, p.location, p.year, p.slug];
-            return values.some((v) => v.toLowerCase().includes(normalizedQuery));
+            return values.some((v) => (v ?? "").toLowerCase().includes(normalizedQuery));
         });
     }, [projects, normalizedQuery]);
 
-    // ───────────────────── ordenamiento 3 estados ─────────────────────
+    // ───────────────────── sort (3 states) ─────────────────────
     const sortedProjects = React.useMemo(() => {
         if (!sort.key) return filteredProjects;
 
@@ -71,10 +66,7 @@ export function ProjectsAdminSection() {
         copy.sort((a, b) => {
             const aVal = (a[sort.key!] ?? "").toString().toLowerCase();
             const bVal = (b[sort.key!] ?? "").toString().toLowerCase();
-            const cmp = aVal.localeCompare(bVal, undefined, {
-                numeric: true,
-                sensitivity: "base",
-            });
+            const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: "base" });
             return sort.direction === "asc" ? cmp : -cmp;
         });
         return copy;
@@ -84,16 +76,30 @@ export function ProjectsAdminSection() {
     const startIndex = page * PAGE_SIZE;
     const pageItems = sortedProjects.slice(startIndex, startIndex + PAGE_SIZE);
 
-    // ───────────────────── columnas & campos ─────────────────────
-    const columns: Column<ProjectDTO>[] = [
+    // ───────────────────── columns ─────────────────────
+    const columns: Column<ProjectCardDTO>[] = [
         { key: "title", header: "Title" },
         { key: "tag", header: "Tag" },
         { key: "location", header: "Location" },
         { key: "year", header: "Year" },
         { key: "slug", header: "Slug" },
-        { key: "image", header: "Image" },
+        {
+            key: "coverImage",
+            header: "Cover",
+            render: (row) =>
+                row.coverImage ? (
+                    <img
+                        src={row.coverImage}
+                        alt={row.title}
+                        className="h-10 w-14 rounded-md object-cover border border-slate-200"
+                    />
+                ) : (
+                    <span className="text-slate-400">—</span>
+                ),
+        },
     ];
 
+    // ───────────────────── fields (modal) ─────────────────────
     const fields: FieldConfig<ProjectDTO>[] = [
         { name: "title", label: "Title", required: true },
         { name: "slug", label: "Slug", required: true },
@@ -101,9 +107,9 @@ export function ProjectsAdminSection() {
         { name: "location", label: "Location", required: true },
         { name: "year", label: "Year", required: true },
         {
-            name: "image",
-            label: "Image (upload or leave empty to keep current)",
-            required: modalMode === "create",
+            name: "coverImage",
+            label: "Cover image (upload or leave empty to keep current)",
+            required: false,
             inputProps: {
                 type: "file",
                 accept: "image/*",
@@ -111,17 +117,25 @@ export function ProjectsAdminSection() {
         },
     ];
 
-    // ───────────────────── helpers UI ─────────────────────
+    // ───────────────────── UI helpers ─────────────────────
     const openCreate = () => {
         if (isMutating) return;
         setSelected(null);
         setModalMode("create");
     };
 
-    const openEdit = (row: ProjectDTO) => {
+    const openEdit = async (row: ProjectCardDTO) => {
         if (isMutating) return;
-        setSelected(row);
-        setModalMode("edit");
+        setIsMutating(true);
+        try {
+            const full = await fetchProjectById(row.id);
+            setSelected(full);
+            setModalMode("edit");
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setIsMutating(false);
+        }
     };
 
     const closeModal = () => {
@@ -135,44 +149,32 @@ export function ProjectsAdminSection() {
         setPage(0);
     };
 
-    const handleSortChange = (key: keyof ProjectDTO) => {
+    const handleSortChange = (key: keyof ProjectCardDTO) => {
         setPage(0);
         setSort((prev) => {
-            // columna nueva → asc
-            if (prev.key !== key) {
-                return { key, direction: "asc" };
-            }
-            // misma columna → ciclo asc -> desc -> none
-            if (prev.direction === "asc") {
-                return { key, direction: "desc" }; // asc -> desc
-            }
-            // desc -> sin orden (key null) y dejamos asc listo para el próximo
+            if (prev.key !== key) return { key, direction: "asc" };
+            if (prev.direction === "asc") return { key, direction: "desc" };
             return { key: null, direction: "asc" };
         });
     };
 
-    // ───────────────────── Cloudinary upload ─────────────────────
+    // ───────────────────── upload ─────────────────────
     const uploadImage = async (file: File): Promise<string> => {
         const formData = new FormData();
         formData.append("file", file);
 
-        const res = await fetch("/api/upload", {
-            method: "POST",
-            body: formData,
-        });
-
-        if (!res.ok) {
-            throw new Error("Error uploading image");
-        }
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        if (!res.ok) throw new Error("Error uploading image");
 
         const data = await res.json();
         return data.url as string;
     };
 
-    // ───────────────────── Create / Edit ─────────────────────
+    // ───────────────────── submit ─────────────────────
     const handleSubmit = async (formData: FormData) => {
         if (isMutating) return;
         setIsMutating(true);
+
         try {
             const isCreate = modalMode === "create";
 
@@ -182,29 +184,28 @@ export function ProjectsAdminSection() {
             const location = (formData.get("location") ?? "").toString();
             const year = (formData.get("year") ?? "").toString();
 
-            const imageFile = formData.get("image");
-            let imageUrl = selected?.image ?? "";
+            // ✅ FIX: el input se llama "coverImage"
+            const coverFile = formData.get("coverImage");
+            let coverImage = selected?.coverImage ?? undefined;
 
-            if (imageFile instanceof File && imageFile.size > 0) {
-                imageUrl = await uploadImage(imageFile);
+            if (coverFile instanceof File && coverFile.size > 0) {
+                coverImage = await uploadImage(coverFile);
             }
 
-            if (isCreate && !imageUrl) {
-                throw new Error("Image is required for new projects");
-            }
-
+            // payload mínimo para create/update (lo demás lo sumamos luego en UI)
             const payload = {
                 title,
                 slug,
                 tag,
                 location,
                 year,
-                image: imageUrl,
+                coverImage,
+                // defaults razonables para schema nuevo
+                status: selected?.status ?? "CONCEPT",
+                tools: selected?.tools ?? [],
             };
 
-            const url = isCreate
-                ? "/api/projects"
-                : `/api/projects/${selected?.id}`;
+            const url = isCreate ? "/api/projects" : `/api/projects/${selected?.id}`;
             const method = isCreate ? "POST" : "PUT";
 
             const res = await fetch(url, {
@@ -219,8 +220,7 @@ export function ProjectsAdminSection() {
             }
 
             await fetchProjects();
-            setModalMode(null);
-            setSelected(null);
+            closeModal();
         } catch (error) {
             console.error("Error saving project", error);
         } finally {
@@ -228,20 +228,16 @@ export function ProjectsAdminSection() {
         }
     };
 
-    // ───────────────────── Delete ─────────────────────
-    const handleDelete = async (row: ProjectDTO) => {
+    // ───────────────────── delete ─────────────────────
+    const handleDelete = async (row: ProjectCardDTO) => {
         if (isMutating) return;
         setIsMutating(true);
         try {
-            const res = await fetch(`/api/projects/${row.id}`, {
-                method: "DELETE",
-            });
-
+            const res = await fetch(`/api/projects/${row.id}`, { method: "DELETE" });
             if (!res.ok) {
                 console.error("Error deleting project");
                 return;
             }
-
             await fetchProjects();
         } catch (error) {
             console.error("Error deleting project", error);
@@ -252,28 +248,23 @@ export function ProjectsAdminSection() {
 
     return (
         <div className="space-y-4">
-            {/* Header */}
             <div className="mb-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                 <div>
-                    <h2 className="text-base font-semibold text-slate-900 sm:text-lg">
-                        Projects
-                    </h2>
+                    <h2 className="text-base font-semibold text-slate-900 sm:text-lg">Projects</h2>
                     <p className="mt-1 max-w-md text-xs text-slate-500 sm:text-sm">
                         Gestioná los proyectos que se muestran en el portfolio.
                     </p>
                 </div>
 
                 <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
-                    <div className="flex items-center gap-2">
-                        <input
-                            type="text"
-                            placeholder="Search…"
-                            value={searchQuery}
-                            onChange={handleSearchChange}
-                            disabled={isMutating}
-                            className="w-full rounded-full border border-slate-300 px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-slate-400/70 disabled:bg-slate-100 disabled:text-slate-400 sm:text-sm"
-                        />
-                    </div>
+                    <input
+                        type="text"
+                        placeholder="Search…"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        disabled={isMutating}
+                        className="w-full rounded-full border border-slate-300 px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-slate-400/70 disabled:bg-slate-100 disabled:text-slate-400 sm:text-sm"
+                    />
 
                     <div className="flex items-center gap-3">
                         {isMutating && (
@@ -285,6 +276,7 @@ export function ProjectsAdminSection() {
                                 <span>Working on your changes…</span>
                             </div>
                         )}
+
                         <button
                             type="button"
                             onClick={openCreate}
@@ -301,8 +293,7 @@ export function ProjectsAdminSection() {
                 </div>
             </div>
 
-            {/* Tabla */}
-            <DataTable<ProjectDTO>
+            <DataTable<ProjectCardDTO>
                 columns={columns}
                 data={pageItems}
                 getRowId={(row) => row.id}
@@ -316,9 +307,7 @@ export function ProjectsAdminSection() {
                             onClick={() => openEdit(row)}
                             disabled={isMutating}
                             className={`font-semibold hover:underline ${
-                                isMutating
-                                    ? "cursor-not-allowed text-slate-300"
-                                    : "text-slate-900"
+                                isMutating ? "cursor-not-allowed text-slate-300" : "text-slate-900"
                             }`}
                         >
                             Edit
@@ -327,24 +316,19 @@ export function ProjectsAdminSection() {
                             onClick={() => handleDelete(row)}
                             disabled={isMutating}
                             className={`hover:underline ${
-                                isMutating
-                                    ? "cursor-not-allowed text-red-200"
-                                    : "text-red-500"
+                                isMutating ? "cursor-not-allowed text-red-200" : "text-red-500"
                             }`}
                         >
                             Delete
                         </button>
                     </>
                 )}
-                emptyMessage={
-                    normalizedQuery ? "No projects match your search." : "No projects yet."
-                }
+                emptyMessage={normalizedQuery ? "No projects match your search." : "No projects yet."}
                 sortKey={sort.key ?? undefined}
                 sortDirection={sort.key ? sort.direction : undefined}
                 onSortChange={handleSortChange}
             />
 
-            {/* Modal */}
             <EntityModalForm<ProjectDTO>
                 mode={modalMode ?? "create"}
                 title="project"

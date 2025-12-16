@@ -6,10 +6,10 @@ import { Section } from "@/components/Section";
 import { SectionHeader } from "@/components/SectionHeader";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Button } from "@/components/Button";
-import { ProjectDTO } from "@/types/ProjectDTO";
+import {ProjectCardDTO} from "@/types/ProjectDTO";
 
 type ProjectsClientProps = {
-    projects: ProjectDTO[];
+    projects: ProjectCardDTO[];
 };
 
 export function ProjectsClient({ projects }: ProjectsClientProps) {
@@ -23,13 +23,14 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
     return (
         <Section
             id="projects"
-            tone="light"
+            tone="dark"
             maxWidth="6xl"
             labelledBy="projects-heading"
         >
             <SectionHeader
                 id="projects-heading"
                 eyebrow="Projects"
+                tone="dark"
                 title="Selected Work"
                 description="A selection of residential, hospitality and mixed use projects, from early sketches to detailed documentation."
             />
@@ -55,7 +56,7 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
                                 tag={project.tag}
                                 location={project.location}
                                 year={project.year}
-                                image={project.image}
+                                coverImage={project.coverImage}
                             />
                         </motion.div>
                     ))}

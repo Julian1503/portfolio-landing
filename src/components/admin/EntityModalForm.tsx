@@ -39,7 +39,7 @@ export function EntityModalForm<T>({
             Object.values(filePreviews).forEach((url) => URL.revokeObjectURL(url));
             setFilePreviews({});
         }
-    }, [open]);
+    }, [open, filePreviews]);
 
     if (!open) return null;
 
