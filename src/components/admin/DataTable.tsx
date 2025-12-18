@@ -102,6 +102,7 @@ export function DataTable<T>({
                                 <div
                                     key={id}
                                     className="grid items-center gap-3 px-3 py-2 sm:px-4"
+                                    //I want that if we click the row, we will be redirected to /admin/projects/[id]
                                     style={{
                                         gridTemplateColumns: `repeat(${colCount}, minmax(0, 1fr))`,
                                     }}

@@ -4,7 +4,7 @@ import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import AboutMe from "@/components/AboutMe";
 import ContactSection from "@/components/Contact";
-import {getProjects} from "@/lib/projects.service";
+import {getProjects} from "@/lib/project/projects.service";
 import {ProjectsClient} from "@/components/Projects";
 
 export default async function Home() {

@@ -1,3 +1,4 @@
+// TypeScript
 "use client";
 
 import React from "react";
@@ -6,7 +7,16 @@ export type FieldConfig<T> = {
     name: keyof T;
     label: string;
     required?: boolean;
-    inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+    inputProps?: {
+        type?: string;
+        as?: 'input' | 'textarea' | 'select';
+        rows?: number;
+        accept?: string;
+        options?: { value: string; label: string }[];
+        placeholder?: string;
+        onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+        [key: string]: any;
+    };
 };
 
 type EntityModalFormProps<T> = {
@@ -17,7 +27,7 @@ type EntityModalFormProps<T> = {
     fields: FieldConfig<T>[];
     onClose: () => void;
     onSubmit: (formData: FormData) => Promise<void> | void;
-    submitting?: boolean; // 👈 nuevo
+    submitting?: boolean;
 };
 
 export function EntityModalForm<T>({
@@ -30,16 +40,16 @@ export function EntityModalForm<T>({
                                        onSubmit,
                                        submitting = false,
                                    }: EntityModalFormProps<T>) {
-    const [filePreviews, setFilePreviews] = React.useState<
-        Record<string, string>
-    >({});
+    const [filePreviews, setFilePreviews] = React.useState<Record<string, string>>({});
 
     React.useEffect(() => {
         if (!open) {
-            Object.values(filePreviews).forEach((url) => URL.revokeObjectURL(url));
-            setFilePreviews({});
+            setFilePreviews((prev) => {
+                Object.values(prev).forEach((url) => URL.revokeObjectURL(url));
+                return {};
+            });
         }
-    }, [open, filePreviews]);
+    }, [open]);
 
     if (!open) return null;
 
@@ -66,7 +76,7 @@ export function EntityModalForm<T>({
                     <button
                         onClick={onClose}
                         disabled={submitting}
-                        className={`text-xs  ${
+                        className={`text-xs ${
                             submitting
                                 ? "text-slate-300 cursor-not-allowed"
                                 : "text-slate-500 hover:text-slate-800"
@@ -79,24 +89,29 @@ export function EntityModalForm<T>({
                 <form onSubmit={handleSubmit} className="px-5 py-4 space-y-3 text-sm">
                     {fields.map((field) => {
                         const key = String(field.name);
-                        const isFileInput = field.inputProps?.type === "file";
+                        const inputType = field.inputProps?.type || 'text';
+                        const as = field.inputProps?.as || 'input';
 
-                        const existingValue = (initialValues as any)?.[field.name] as
-                            | string
-                            | undefined;
+                        const isFileInput = inputType === "file";
+                        const isCheckbox = inputType === "checkbox";
+                        const isTextarea = as === "textarea";
+                        const isSelect = as === "select";
 
-                        const initialValue = !isFileInput
-                            ? existingValue ?? ""
+                        const existingValue = (initialValues as any)?.[field.name];
+
+                        // Para checkbox, necesitamos el valor booleano
+                        const checkboxChecked = isCheckbox ? Boolean(existingValue) : undefined;
+
+                        // Para otros inputs (no file, no checkbox)
+                        const initialValue = !isFileInput && !isCheckbox
+                            ? (existingValue ?? "")
                             : undefined;
 
                         const previewUrl = filePreviews[key];
 
-                        const { onChange: inputOnChange, ...restProps } =
-                        field.inputProps ?? {};
+                        const { onChange: inputOnChange, ...restProps } = field.inputProps ?? {};
 
-                        const handleFileChange = (
-                            e: React.ChangeEvent<HTMLInputElement>
-                        ) => {
+                        const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                             const file = e.target.files?.[0];
 
                             setFilePreviews((prev) => {
@@ -115,31 +130,108 @@ export function EntityModalForm<T>({
                                 });
                             }
 
-                            if (inputOnChange) inputOnChange(e);
+                            if (inputOnChange) inputOnChange(e as any);
                         };
+
+                        // Estilos base compartidos
+                        const baseInputStyles = `w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm
+                            focus:outline-none focus:ring-2 focus:ring-slate-400/60
+                            ${submitting ? "bg-slate-100 text-slate-400 cursor-not-allowed" : ""}`;
 
                         return (
                             <div key={key} className="flex flex-col gap-1">
-                                <label className="text-[11px] font-medium text-slate-600">
+                                <label
+                                    htmlFor={`field-${key}`}
+                                    className="text-[11px] font-medium text-slate-600"
+                                >
                                     {field.label}
+                                    {field.required && <span className="text-red-500 ml-1">*</span>}
                                 </label>
 
-                                <input
-                                    name={key}
-                                    {...(!isFileInput && { defaultValue: initialValue })}
-                                    required={field.required}
-                                    disabled={submitting}
-                                    className={`rounded-lg border border-slate-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400/60 ${
-                                        submitting
-                                            ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-                                            : ""
-                                    }`}
-                                    {...restProps}
-                                    onChange={
-                                        isFileInput ? handleFileChange : (inputOnChange as any)
-                                    }
-                                />
+                                {/* TEXTAREA */}
+                                {isTextarea && (
+                                    <textarea
+                                        id={`field-${key}`}
+                                        name={key}
+                                        defaultValue={initialValue}
+                                        required={field.required}
+                                        disabled={submitting}
+                                        rows={field.inputProps?.rows || 4}
+                                        placeholder={field.inputProps?.placeholder}
+                                        className={`${baseInputStyles} resize-none`}
+                                    />
+                                )}
 
+                                {/* SELECT */}
+                                {isSelect && (
+                                    <select
+                                        id={`field-${key}`}
+                                        name={key}
+                                        defaultValue={initialValue}
+                                        required={field.required}
+                                        disabled={submitting}
+                                        className={baseInputStyles}
+                                    >
+                                        <option value="">-- Select --</option>
+                                        {field.inputProps?.options?.map((opt) => (
+                                            <option key={opt.value} value={opt.value}>
+                                                {opt.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+
+                                {/* CHECKBOX */}
+                                {isCheckbox && (
+                                    <div className="flex items-center gap-2 py-1">
+                                        <input
+                                            id={`field-${key}`}
+                                            name={key}
+                                            type="checkbox"
+                                            defaultChecked={checkboxChecked}
+                                            disabled={submitting}
+                                            className="w-4 h-4 rounded border-slate-300 text-slate-900
+                                                focus:ring-2 focus:ring-slate-400/60 cursor-pointer
+                                                disabled:cursor-not-allowed disabled:opacity-50"
+                                        />
+                                        <span className="text-xs text-slate-600">
+                                            {field.inputProps?.placeholder || "Enable this option"}
+                                        </span>
+                                    </div>
+                                )}
+
+                                {/* FILE INPUT */}
+                                {isFileInput && (
+                                    <input
+                                        id={`field-${key}`}
+                                        name={key}
+                                        type="file"
+                                        required={field.required}
+                                        disabled={submitting}
+                                        accept={field.inputProps?.accept}
+                                        onChange={handleFileChange}
+                                        className={`${baseInputStyles} file:mr-3 file:py-1 file:px-3
+                                            file:rounded-md file:border-0 file:text-xs file:font-semibold
+                                            file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200`}
+                                    />
+                                )}
+
+                                {/* REGULAR INPUT */}
+                                {!isTextarea && !isSelect && !isCheckbox && !isFileInput && (
+                                    <input
+                                        id={`field-${key}`}
+                                        name={key}
+                                        type={inputType}
+                                        defaultValue={initialValue}
+                                        required={field.required}
+                                        disabled={submitting}
+                                        placeholder={field.inputProps?.placeholder}
+                                        className={baseInputStyles}
+                                        {...restProps}
+                                    />
+                                )}
+
+                                {/* FILE PREVIEW */}
                                 {isFileInput && (previewUrl || existingValue) && (
                                     <div className="mt-2">
                                         <p className="text-[11px] text-slate-500 mb-1">
