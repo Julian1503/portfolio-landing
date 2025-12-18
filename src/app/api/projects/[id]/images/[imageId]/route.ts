@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import {updateProjectImage, deleteProjectImage } from "@/lib/projectImages.service";
+import {updateProjectImage, deleteProjectImage } from "@/lib/project/projectImages.service";
 
 type Params = { params: { id: string; imageId: string } };
 

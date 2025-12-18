@@ -1,3 +1,5 @@
+import type { ImageKind, ProjectStatus, ProjectType } from "@/types/projectEnums";
+
 export type ProjectDTO = {
     id: string;
     slug: string;
@@ -12,8 +14,8 @@ export type ProjectDTO = {
 
     isFeatured: boolean;
 
-    status: "CONCEPT" | "DESIGN_DEVELOPMENT" | "DOCUMENTATION" | "SUBMITTED" | "BUILT";
-    type?: "RESIDENTIAL" | "MULTI_RESIDENTIAL" | "HOSPITALITY" | "RETAIL" | "COMMERCIAL" | "MIXED_USE" | "URBAN";
+    status: ProjectStatus;
+    type?: ProjectType;
 
     role?: string;
     client?: string;
@@ -59,5 +61,5 @@ export type ProjectImageDTO = {
     alt?: string;
     caption?: string;
     order: number;
-    kind: "COVER" | "GALLERY" | "RENDER" | "PLAN" | "SECTION" | "DETAIL" | "BEFORE_AFTER";
+    kind: ImageKind;
 };

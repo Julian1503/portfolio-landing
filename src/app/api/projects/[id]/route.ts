@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { ProjectDTO } from "@/types/ProjectDTO";
-import { getProjectById, updateProject, deleteProject } from "@/lib/projects.service";
+import { getProjectById, updateProject, deleteProject } from "@/lib/project/projects.service";
 
 type Params = {
     params: Promise<{ id: string }>

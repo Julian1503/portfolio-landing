@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import {addProjectPost} from "@/lib/projectPost.service";
+import {ProjectPostDTO} from "@/types/ProjectDTO";
 
-type Params = { params: { id: string } };
+type Params = {
+    params: Promise<{ id: string }>
+};
 
 function isNonEmptyString(v: unknown): v is string {
     return typeof v === "string" && v.trim().length > 0;
@@ -9,14 +12,8 @@ function isNonEmptyString(v: unknown): v is string {
 
 export async function POST(req: NextRequest, { params }: Params) {
     try {
-        const body = (await req.json()) as {
-            slug?: unknown;
-            title?: unknown;
-            content?: unknown;
-            order?: unknown;
-            published?: unknown;
-        };
-
+        const body = (await req.json()) as ProjectPostDTO;
+        const {id} = await params;
         if (!isNonEmptyString(body.slug)) {
             return NextResponse.json({ error: "Missing field: slug" }, { status: 400 });
         }
@@ -27,12 +24,12 @@ export async function POST(req: NextRequest, { params }: Params) {
             return NextResponse.json({ error: "Missing field: content" }, { status: 400 });
         }
 
-        const created = await addProjectPost(params.id, {
+        const created = await addProjectPost(id, {
             slug: body.slug,
             title: body.title,
             content: body.content,
-            order: typeof body.order === "number" ? body.order : undefined,
-            published: typeof body.published === "boolean" ? body.published : undefined,
+            order: body.order,
+            published:body.published,
         });
 
         return NextResponse.json(created, { status: 201 });

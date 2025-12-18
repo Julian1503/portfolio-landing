@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import {reorderProjectImages} from "@/lib/projectImages.service";
+import {reorderProjectImages} from "@/lib/project/projectImages.service";
 
 type Params = { params: { id: string } };
 

@@ -1,4 +1,4 @@
-import type { ImageKind, ProjectStatus, ProjectType } from "../../../generated/prisma/client";
+import type { ImageKind, ProjectStatus, ProjectType } from "@/types/projectEnums";
 
 export type ProjectImageDTO = {
     id: string;

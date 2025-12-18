@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createProject, getProjects } from "@/lib/projects.service";
+import { createProject, getProjects } from "@/lib/project/projects.service";
 import type {ProjectCreateRequestDTO, ProjectDTO} from "@/types/ProjectDTO";
 
 // GET /api/projects

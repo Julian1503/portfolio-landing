@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
-import type { ProjectPostDTO } from "@/types/ProjectDTO";
-import {mapProjectPostToDTO} from "@/lib/automapper/project.mapper";
+import { mapProjectPostToDTO } from "@/lib/automapper/project.mapper";
+import { assertReorderPayloadCompleteAndValid } from "@/lib/utils/reorderUtils";
 
 export type CreateProjectPostInput = {
     slug: string;
@@ -18,16 +18,16 @@ export type UpdateProjectPostInput = {
     published?: boolean;
 };
 
-export async function addProjectPost(
-    projectId: string,
-    input: CreateProjectPostInput
-): Promise<ProjectPostDTO> {
+async function getNextOrderForProjectPost(projectId: string) {
     const maxOrder = await prisma.projectPost.aggregate({
         where: { projectId },
         _max: { order: true },
     });
+    return (maxOrder._max.order ?? 0) + 1;
+}
 
-    const nextOrder = (maxOrder._max.order ?? 0) + 1;
+export async function addProjectPost(projectId: string, input: CreateProjectPostInput) {
+    const nextOrder = await getNextOrderForProjectPost(projectId);
 
     const created = await prisma.projectPost.create({
         data: {
@@ -43,13 +43,10 @@ export async function addProjectPost(
     return mapProjectPostToDTO(created);
 }
 
-export async function updateProjectPost(
-    projectId: string,
-    postId: string,
-    input: UpdateProjectPostInput
-): Promise<ProjectPostDTO> {
-    const updated = await prisma.projectPost.update({
-        where: { id: postId },
+export async function updateProjectPost(projectId: string, postId: string, input: UpdateProjectPostInput) {
+    // ✅ Seguridad: sólo actualiza si pertenece al proyecto
+    const updated = await prisma.projectPost.updateMany({
+        where: { id: postId, projectId },
         data: {
             slug: input.slug,
             title: input.title,
@@ -59,53 +56,39 @@ export async function updateProjectPost(
         },
     });
 
-    if (updated.projectId !== projectId) {
-        throw new Error("Post does not belong to project");
+    if (updated.count === 0) {
+        // acá elegís: throw (para 404) o return null
+        throw new Error("Post not found for project");
     }
 
-    return mapProjectPostToDTO(updated);
-}
-
-export async function deleteProjectPost(
-    projectId: string,
-    postId: string
-): Promise<void> {
     const post = await prisma.projectPost.findUnique({ where: { id: postId } });
-    if (!post) return;
-
-    if (post.projectId !== projectId) {
-        throw new Error("Post does not belong to project");
-    }
-
-    await prisma.projectPost.delete({ where: { id: postId } });
+    // post existe seguro si count>0
+    return mapProjectPostToDTO(post!);
 }
 
-export async function reorderProjectPosts(
-    projectId: string,
-    orderedPostIds: string[]
-): Promise<ProjectPostDTO[]> {
+export async function deleteProjectPost(projectId: string, postId: string) {
+    // ✅ 1 query, seguro
+    const res = await prisma.projectPost.deleteMany({
+        where: { id: postId, projectId },
+    });
+
+    // si querés idempotente: no tires error si res.count === 0
+    // si querés 404: throw acá
+}
+
+export async function reorderProjectPosts(projectId: string, orderedPostIds: string[]) {
     const posts = await prisma.projectPost.findMany({
         where: { projectId },
         select: { id: true },
     });
 
-    const existingIds = new Set(posts.map((p) => p.id));
-    const uniqueIncoming = Array.from(new Set(orderedPostIds));
-
-    if (uniqueIncoming.length !== posts.length) {
-        throw new Error("Reorder payload must include all posts exactly once");
-    }
-
-    for (const id of uniqueIncoming) {
-        if (!existingIds.has(id)) {
-            throw new Error("Reorder payload includes invalid post id");
-        }
-    }
+    const existingIds = posts.map((p) => p.id);
+    const uniqueIncoming = assertReorderPayloadCompleteAndValid(existingIds, orderedPostIds);
 
     await prisma.$transaction(
         uniqueIncoming.map((id, index) =>
-            prisma.projectPost.update({
-                where: { id },
+            prisma.projectPost.updateMany({
+                where: { id, projectId },       // ✅ seguridad extra
                 data: { order: index + 1 },
             })
         )

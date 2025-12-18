@@ -4,12 +4,16 @@ import React from "react";
 import { DataTable, Column } from "../DataTable";
 import { EntityModalForm, FieldConfig } from "../EntityModalForm";
 import type { ProjectDTO, ProjectCardDTO } from "@/types/ProjectDTO";
+import { useRouter } from 'next/navigation';
+import {PROJECT_TYPES, PROJECT_STATUS, PROJECT_TYPE} from "@/types/projectEnums";
 
 const PAGE_SIZE = 6;
 
 export function ProjectsAdminSection() {
     const [projects, setProjects] = React.useState<ProjectCardDTO[]>([]);
     const [page, setPage] = React.useState(0);
+    const router = useRouter();
+    const mountedRef = React.useRef(false);
     const [modalMode, setModalMode] = React.useState<"create" | "edit" | null>(null);
 
     const [selected, setSelected] = React.useState<ProjectDTO | null>(null);
@@ -37,6 +41,8 @@ export function ProjectsAdminSection() {
     }, []);
 
     React.useEffect(() => {
+        if (mountedRef.current) return;
+        mountedRef.current = true;
         fetchProjects();
     }, [fetchProjects]);
 
@@ -83,6 +89,7 @@ export function ProjectsAdminSection() {
         { key: "location", header: "Location" },
         { key: "year", header: "Year" },
         { key: "slug", header: "Slug" },
+        { key: "isFeatured", header: "★", render: (row) => row.isFeatured ? "⭐" : "" },
         {
             key: "coverImage",
             header: "Cover",
@@ -100,22 +107,40 @@ export function ProjectsAdminSection() {
     ];
 
     // ───────────────────── fields (modal) ─────────────────────
+    const humanize = (s: string) =>
+        s
+            .toLowerCase()
+            .split("_")
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(" ");
+
+    const enumToOptions = (en: Record<string, string>) =>
+        Object.values(en)
+            .filter((v): v is string => typeof v === "string")
+            .map((v) => ({ value: v, label: humanize(v) }));
+
     const fields: FieldConfig<ProjectDTO>[] = [
         { name: "title", label: "Title", required: true },
         { name: "slug", label: "Slug", required: true },
         { name: "tag", label: "Tag", required: true },
         { name: "location", label: "Location", required: true },
         { name: "year", label: "Year", required: true },
-        {
-            name: "coverImage",
-            label: "Cover image (upload or leave empty to keep current)",
-            required: false,
-            inputProps: {
-                type: "file",
-                accept: "image/*",
-            },
-        },
+
+        { name: "excerpt", label: "Short description (excerpt)", required: false },
+        { name: "description", label: "Full description", required: false, inputProps: { as: "textarea" } },
+
+        { name: "status", label: "Status", required: true, inputProps: { as: "select", options: enumToOptions(PROJECT_STATUS) } },
+        { name: "type", label: "Type", required: false, inputProps: { as: "select", options: enumToOptions(PROJECT_TYPE) } },
+
+        { name: "role", label: "Your role", required: false },
+        { name: "client", label: "Client", required: false },
+
+        { name: "tools", label: "Tools (comma separated)", required: false },
+        { name: "isFeatured", label: "Featured", required: false, inputProps: { type: "checkbox" } },
+
+        { name: "coverImage", label: "Cover image", required: false, inputProps: { type: "file" } },
     ];
+
 
     // ───────────────────── UI helpers ─────────────────────
     const openCreate = () => {
@@ -125,17 +150,7 @@ export function ProjectsAdminSection() {
     };
 
     const openEdit = async (row: ProjectCardDTO) => {
-        if (isMutating) return;
-        setIsMutating(true);
-        try {
-            const full = await fetchProjectById(row.id);
-            setSelected(full);
-            setModalMode("edit");
-        } catch (e) {
-            console.error(e);
-        } finally {
-            setIsMutating(false);
-        }
+        router.push(`/admin/projects/${row.id}`);
     };
 
     const closeModal = () => {
@@ -305,7 +320,6 @@ export function ProjectsAdminSection() {
                     <>
                         <button
                             onClick={() => openEdit(row)}
-                            disabled={isMutating}
                             className={`font-semibold hover:underline ${
                                 isMutating ? "cursor-not-allowed text-slate-300" : "text-slate-900"
                             }`}

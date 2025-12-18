@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import {ProjectDTO, ProjectCardDTO, type ProjectCreateRequestDTO} from "@/types/ProjectDTO";
-import {mapProjectToCardDTO, mapProjectToDTO} from "@/lib/automapper/project.mapper";
+import {mapProjectToCardDTO, mapProjectToDTO, ProjectWithRelations} from "@/lib/automapper/project.mapper";
 
 export async function getProjects(): Promise<ProjectCardDTO[]> {
     const projects = await prisma.project.findMany({
@@ -54,7 +54,7 @@ export async function createProject(dto: ProjectCreateRequestDTO): Promise<Proje
 
 export async function updateProject(
     id: string,
-    dto: ProjectDTO
+    dto: ProjectWithRelations
 ): Promise<ProjectDTO> {
     const project = await prisma.project.update({
         where: { id },

@@ -1,12 +1,21 @@
-import { ProjectDTO, ProjectImageDTO, ProjectPostDTO, ProjectCardDTO } from "@/types/ProjectDTO";
-import {ProjectImage, ProjectPost, Project} from "../../../generated/prisma/client";
+import type { ProjectDTO, ProjectImageDTO, ProjectPostDTO, ProjectCardDTO } from "@/types/ProjectDTO";
+import {ProjectImage, ProjectPost, Project} from "@/types/projectEnums";
+
+function undefIfNull<T>(v: T | null): T | undefined {
+    return v === null ? undefined : v;
+}
+
+export type ProjectWithRelations = Project & {
+    images: ProjectImage[];
+    posts: ProjectPost[];
+};
 
 export function mapProjectImageToDTO(image: ProjectImage): ProjectImageDTO {
     return {
         id: image.id,
         url: image.url,
-        alt: image.alt ?? undefined,
-        caption: image.caption ?? undefined,
+        alt: undefIfNull(image.alt),
+        caption: undefIfNull(image.caption),
         order: image.order,
         kind: image.kind,
     };
@@ -25,9 +34,7 @@ export function mapProjectPostToDTO(post: ProjectPost): ProjectPostDTO {
     };
 }
 
-export function mapProjectToDTO(
-    project: Project & { images: ProjectImage[]; posts: ProjectPost[] }
-): ProjectDTO {
+export function mapProjectToDTO(project: ProjectWithRelations): ProjectDTO {
     return {
         id: project.id,
         slug: project.slug,
@@ -36,14 +43,14 @@ export function mapProjectToDTO(
         location: project.location,
         year: project.year,
         isFeatured: project.isFeatured,
-        coverImage: project.coverImage ?? undefined,
-        excerpt: project.excerpt ?? undefined,
-        description: project.description ?? undefined,
+        coverImage: undefIfNull(project.coverImage),
+        excerpt: undefIfNull(project.excerpt),
+        description: undefIfNull(project.description),
 
         status: project.status,
-        type: project.type ?? undefined,
-        role: project.role ?? undefined,
-        client: project.client ?? undefined,
+        type: undefIfNull(project.type),
+        role: undefIfNull(project.role),
+        client: undefIfNull(project.client),
         tools: project.tools,
 
         images: project.images.map(mapProjectImageToDTO),
@@ -63,7 +70,7 @@ export function mapProjectToCardDTO(project: Project): ProjectCardDTO {
         location: project.location,
         year: project.year,
         isFeatured: project.isFeatured,
-        coverImage: project.coverImage ?? undefined,
-        excerpt: project.excerpt ?? undefined,
+        coverImage: undefIfNull(project.coverImage),
+        excerpt: undefIfNull(project.excerpt),
     };
 }
