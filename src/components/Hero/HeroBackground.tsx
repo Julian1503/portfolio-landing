@@ -2,7 +2,12 @@
 
 import React, { useEffect, useRef } from "react";
 
-const HeroBackground = () => {
+type HeroBackgroundProps = {
+    backgroundImage?: string | null;
+    backgroundVideo?: string | null;
+};
+
+const HeroBackground = ({ backgroundImage, backgroundVideo }: HeroBackgroundProps) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
 
     useEffect(() => {
@@ -14,6 +19,10 @@ const HeroBackground = () => {
             });
     }, []);
 
+    // Default fallbacks
+    const videoSrc = backgroundVideo || "/videos/hero-b.mp4";
+    const posterSrc = backgroundImage || "/img/Hero.png";
+
     return (
         <div className="absolute inset-0 w-full h-full">
             <video
@@ -24,9 +33,9 @@ const HeroBackground = () => {
                 muted
                 loop
                 autoPlay
-                poster="/img/Hero.png"
+                poster={posterSrc}
             >
-                <source src="/videos/hero-b.mp4" type="video/mp4" />
+                <source src={videoSrc} type="video/mp4" />
             </video>
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />

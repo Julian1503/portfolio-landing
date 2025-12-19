@@ -3,6 +3,12 @@
 import React from "react";
 import { AdminLayout, AdminSectionId } from "@/components/admin/AdminLayout";
 import { ProjectsAdminSection } from "@/components/admin/projects/ProjectsAdminSection";
+import {
+    HeroAdminSection,
+    AboutAdminSection,
+    ContactAdminSection,
+    FooterAdminSection,
+} from "@/components/admin/cms";
 
 const sections = [
     { id: "hero" as AdminSectionId, label: "Hero / Profile" },
@@ -14,7 +20,7 @@ const sections = [
 ];
 
 export default function AdminPage() {
-    const [active, setActive] = React.useState<AdminSectionId>("projects");
+    const [active, setActive] = React.useState<AdminSectionId>("hero");
 
     return (
         <AdminLayout
@@ -22,11 +28,14 @@ export default function AdminPage() {
             activeSection={active}
             onChangeSection={setActive}
         >
+            {active === "hero" && <HeroAdminSection />}
+            {active === "about" && <AboutAdminSection />}
             {active === "projects" && <ProjectsAdminSection />}
-            {active !== "projects" && (
+            {active === "contact" && <ContactAdminSection />}
+            {active === "footer" && <FooterAdminSection />}
+            {active === "navigation" && (
                 <p className="text-xs text-slate-500">
-                    (Todavía no implementado) — esta sección va a usar los mismos
-                    componentes genéricos con otra config.
+                    Navigation section - not yet implemented
                 </p>
             )}
         </AdminLayout>

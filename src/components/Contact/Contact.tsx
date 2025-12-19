@@ -6,8 +6,13 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { ContactEmailCard } from "./ContactEmailCard";
 import { ContactDetails } from "./ContactDetails";
 import { ContactForm } from "./ContactForm";
+import type { ContactSectionDTO } from "@/lib/cms/schemas";
 
-const ContactSection = () => {
+type ContactSectionProps = {
+    content: ContactSectionDTO;
+};
+
+const ContactSection = ({ content }: ContactSectionProps) => {
     return (
         <Section
             id="contact"
@@ -16,16 +21,20 @@ const ContactSection = () => {
         >
             <SectionHeader
                 id="contact-heading"
-                eyebrow="Contact"
-                title="Let's work together"
+                eyebrow={content.eyebrow}
+                title={content.title}
                 tone="light"
-                description="For collaborations, job opportunities or project enquiries, feel free to reach out by email or schedule a short call."
+                description={content.description}
             />
 
             <div className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] items-start">
                 <div className="space-y-6">
-                    <ContactEmailCard />
-                    <ContactDetails />
+                    <ContactEmailCard email={content.email} />
+                    <ContactDetails 
+                        location={content.location}
+                        availability={content.availability}
+                        calendlyUrl={content.calendlyUrl}
+                    />
                 </div>
 
                 <ContactForm />
