@@ -13,8 +13,8 @@ export default function LoginPage() {
             elements: {
               rootBox: "mx-auto",
               card: "bg-white shadow-lg rounded-2xl border border-slate-200",
-              headerTitle: "hidden",
-              headerSubtitle: "hidden",
+              headerTitle: "text-slate-900",
+              headerSubtitle: "text-slate-600",
               socialButtonsBlockButton: "rounded-xl",
               formButtonPrimary: "bg-slate-900 hover:bg-slate-800 rounded-xl",
               formFieldInput: "rounded-xl",

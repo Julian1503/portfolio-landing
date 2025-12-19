@@ -60,7 +60,7 @@ npm run dev
 
 ### Styling the Login Page
 
-Edit `/src/app/admin/login/page.tsx` to customize the appearance of the login page.
+Edit `src/app/admin/login/page.tsx` to customize the appearance of the login page.
 
 ### Adding More Protected Routes
 
