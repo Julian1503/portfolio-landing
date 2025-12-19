@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
 import {
   Plus,
@@ -12,11 +12,13 @@ import {
   CheckCircle2,
   Eye,
   EyeOff,
-  Calendar
+  Calendar,
+  RefreshCw
 } from "lucide-react";
 import type { ProjectPostDTO } from "@/types/ProjectDTO";
 import { Modal } from "./Modal";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 
 type Props = {
   projectId: string;
@@ -36,6 +38,7 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
   const [selectedPost, setSelectedPost] = useState<ProjectPostDTO | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [formData, setFormData] = useState<PostFormData>({
     slug: "",
@@ -43,6 +46,36 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
     content: "",
     published: true,
   });
+
+  // Función para refrescar posts del servidor
+  const refreshPosts = useCallback(async () => {
+    if (refreshing) return;
+
+    setRefreshing(true);
+    try {
+      const res = await fetch(`/api/projects/${projectId}`);
+      if (!res.ok) throw new Error("Failed to fetch project");
+
+      const project = await res.json();
+      setPosts(project.posts);
+    } catch (error) {
+      console.error("Error refreshing posts:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [projectId, refreshing]);
+
+  // Auto-refresh cuando la página vuelve a estar visible
+  usePageVisibility(() => {
+    if (!modalMode) {
+      refreshPosts();
+    }
+  });
+
+  // Sincronizar con initialPosts cuando cambian
+  useEffect(() => {
+    setPosts(initialPosts);
+  }, [initialPosts]);
 
   const openCreate = () => {
     setFormData({ slug: "", title: "", content: "", published: true });
@@ -146,6 +179,7 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
   };
 
   const handleReorder = async (newOrder: ProjectPostDTO[]) => {
+    const oldOrder = posts;
     setPosts(newOrder);
 
     try {
@@ -158,7 +192,7 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
       if (!res.ok) throw new Error("Failed to reorder posts");
     } catch (error) {
       console.error("Error reordering posts:", error);
-      setPosts(initialPosts);
+      setPosts(oldOrder);
     }
   };
 
@@ -174,15 +208,30 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <FileText className="w-5 h-5" />
-              Project Posts
-            </h3>
-            <p className="text-sm text-slate-600 mt-1">
-              {posts.length} {posts.length === 1 ? "post" : "posts"} • Drag to reorder
-            </p>
+          <div className="flex items-center gap-3">
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                Project Posts
+              </h3>
+              <p className="text-sm text-slate-600 mt-1">
+                {posts.length} {posts.length === 1 ? "post" : "posts"} • Drag to reorder
+              </p>
+            </div>
+
+            {/* Botón de refresh manual */}
+            <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={refreshPosts}
+                disabled={refreshing}
+                className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors disabled:opacity-50"
+                title="Refresh posts"
+            >
+              <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+            </motion.button>
           </div>
+
           <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -240,9 +289,9 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
                                 <span className="font-mono">/{post.slug}</span>
                                 <span>•</span>
                                 <span className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
+                                  <Calendar className="w-3 h-3" />
                                   {formatDate(post.createdAt)}
-                          </span>
+                                </span>
                                 <span>•</span>
                                 <span>Order: {post.order}</span>
                               </div>

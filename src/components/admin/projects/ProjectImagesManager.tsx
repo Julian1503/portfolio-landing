@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
 import {
     Plus,
@@ -10,12 +10,14 @@ import {
     Upload,
     Image as ImageIcon,
     Loader2,
-    CheckCircle2
+    CheckCircle2,
+    RefreshCw
 } from "lucide-react";
 import { ProjectImageDTO } from "@/types/ProjectDTO";
 import { Modal } from "./Modal";
 import {IMAGE_KINDS, ImageKind} from "@/types/projectEnums";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 
 type Props = {
     projectId: string;
@@ -36,6 +38,7 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
     const [uploading, setUploading] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+    const [refreshing, setRefreshing] = useState(false);
 
     const [formData, setFormData] = useState<ImageFormData>({
         url: "",
@@ -43,6 +46,36 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
         caption: "",
         kind: IMAGE_KINDS[1],
     });
+
+    // Función para refrescar imágenes del servidor
+    const refreshImages = useCallback(async () => {
+        if (refreshing) return;
+
+        setRefreshing(true);
+        try {
+            const res = await fetch(`/api/projects/${projectId}`);
+            if (!res.ok) throw new Error("Failed to fetch project");
+
+            const project = await res.json();
+            setImages(project.images);
+        } catch (error) {
+            console.error("Error refreshing images:", error);
+        } finally {
+            setRefreshing(false);
+        }
+    }, [projectId, refreshing]);
+
+    // Auto-refresh cuando la página vuelve a estar visible
+    usePageVisibility(() => {
+        if (!modalMode) {
+            refreshImages();
+        }
+    });
+
+    // Sincronizar con initialImages cuando cambian
+    useEffect(() => {
+        setImages(initialImages);
+    }, [initialImages]);
 
     const openCreate = () => {
         setFormData({ url: "", alt: "", caption: "", kind: IMAGE_KINDS[1] });
@@ -144,6 +177,7 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
     };
 
     const handleReorder = async (newOrder: ProjectImageDTO[]) => {
+        const oldOrder = images;
         setImages(newOrder);
 
         try {
@@ -156,7 +190,7 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
             if (!res.ok) throw new Error("Failed to reorder images");
         } catch (error) {
             console.error("Error reordering images:", error);
-            setImages(initialImages);
+            setImages(oldOrder);
         }
     };
 
@@ -177,15 +211,30 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
         <div className="space-y-6">
             {/* Header */}
             <div className="flex items-center justify-between">
-                <div>
-                    <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                        <ImageIcon className="w-5 h-5" />
-                        Project Images
-                    </h3>
-                    <p className="text-sm text-slate-600 mt-1">
-                        {images.length} {images.length === 1 ? "image" : "images"} • Drag to reorder
-                    </p>
+                <div className="flex items-center gap-3">
+                    <div>
+                        <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <ImageIcon className="w-5 h-5" />
+                            Project Images
+                        </h3>
+                        <p className="text-sm text-slate-600 mt-1">
+                            {images.length} {images.length === 1 ? "image" : "images"} • Drag to reorder
+                        </p>
+                    </div>
+
+                    {/* Botón de refresh manual */}
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={refreshImages}
+                        disabled={refreshing}
+                        className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors disabled:opacity-50"
+                        title="Refresh images"
+                    >
+                        <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+                    </motion.button>
                 </div>
+
                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -243,9 +292,9 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
 
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-1">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${getKindBadgeColor(image.kind)}`}>
-                        {String(image.kind).replace("_", " ")}
-                      </span>
+                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${getKindBadgeColor(image.kind)}`}>
+                                                {String(image.kind).replace("_", " ")}
+                                            </span>
                                             <span className="text-xs text-slate-500">Order: {image.order}</span>
                                         </div>
                                         {image.alt && (
@@ -330,8 +379,8 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
                                     <div className="flex flex-col items-center gap-2">
                                         <Upload className="w-8 h-8 text-slate-400" />
                                         <span className="text-sm font-medium text-slate-600">
-                      Click to upload image
-                    </span>
+                                            Click to upload image
+                                        </span>
                                         <span className="text-xs text-slate-500">PNG, JPG up to 10MB</span>
                                     </div>
                                 )}
@@ -343,9 +392,9 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
                                 <div className="w-full border-t border-slate-200"></div>
                             </div>
                             <div className="relative flex justify-center text-xs">
-                <span className="px-2 bg-white text-slate-500 uppercase tracking-wider font-semibold">
-                  Or enter URL
-                </span>
+                                <span className="px-2 bg-white text-slate-500 uppercase tracking-wider font-semibold">
+                                    Or enter URL
+                                </span>
                             </div>
                         </div>
 

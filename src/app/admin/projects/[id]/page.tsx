@@ -254,7 +254,7 @@ export default function ProjectAdminPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mb-6 flex gap-2 overflow-x-auto pb-2"
+              className="mb-6 flex gap-2 overflow-x-auto pb-2 pl-2"
           >
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -265,8 +265,8 @@ export default function ProjectAdminPage() {
                       onClick={() => setActiveTab(tab.id)}
                       className={`relative flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap ${
                           isActive
-                              ? "bg-white text-slate-900 shadow-lg scale-105"
-                              : "bg-white/60 text-slate-600 hover:bg-white/80 hover:scale-102"
+                              ? "bg-slate-400 text-slate-900 shadow-lg scale-105"
+                              : "bg-white/80 text-slate-600 hover:bg-white/80 shadow-lg  hover:scale-102"
                       }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -281,7 +281,7 @@ export default function ProjectAdminPage() {
                     {isActive && (
                         <motion.div
                             layoutId="activeTab"
-                            className="absolute inset-0 bg-white rounded-xl shadow-lg -z-10"
+                            className="absolute inset-0 bg-slate-300 rounded-xl shadow-lg -z-10"
                             transition={{ type: "spring", stiffness: 380, damping: 30 }}
                         />
                     )}

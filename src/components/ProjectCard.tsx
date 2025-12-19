@@ -16,7 +16,7 @@ export function ProjectCard({ slug, title, tag, location, year, coverImage }: Pr
 
     return (
         <motion.article
-            className="relative"
+            className="relative cursor-pointer"
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
         >
