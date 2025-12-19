@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import type { IThemeRepository } from "./interfaces";
 import type { ThemeTokensDTO, ThemeTokensUpdateDTO } from "./schemas";
 import { DEFAULT_THEME } from "./defaults";
+import { mapPrismaThemeToDTO, preparePrismaThemeData } from "./mappers";
 
 const THEME_ID = "theme_singleton";
 
@@ -19,20 +20,7 @@ export class PrismaThemeRepository implements IThemeRepository {
       return null;
     }
 
-    // Map Prisma model to DTO
-    return {
-      id: theme.id,
-      name: theme.name,
-      isDark: theme.isDark,
-      colors: theme.colors as any,
-      typography: theme.typography as any,
-      radii: theme.radii as any,
-      spacing: theme.spacing as any,
-      shadows: theme.shadows as any,
-      sectionOverrides: theme.sectionOverrides as any,
-      createdAt: theme.createdAt,
-      updatedAt: theme.updatedAt,
-    };
+    return mapPrismaThemeToDTO(theme);
   }
 
   async upsert(data: ThemeTokensUpdateDTO): Promise<ThemeTokensDTO> {
@@ -42,56 +30,30 @@ export class PrismaThemeRepository implements IThemeRepository {
     // Merge with defaults if no existing theme
     const baseTheme = existing || DEFAULT_THEME;
     
-    // Prepare update data
-    const updateData: any = {};
-    
-    if (data.name !== undefined) {
-      updateData.name = data.name;
-    }
-    
-    if (data.isDark !== undefined) {
-      updateData.isDark = data.isDark;
-    }
-    
-    // Merge token groups (partial updates supported)
-    if (data.colors) {
-      updateData.colors = {
-        ...baseTheme.colors,
-        ...data.colors,
-      };
-    }
-    
-    if (data.typography) {
-      updateData.typography = {
-        ...baseTheme.typography,
-        ...data.typography,
-      };
-    }
-    
-    if (data.radii) {
-      updateData.radii = {
-        ...baseTheme.radii,
-        ...data.radii,
-      };
-    }
-    
-    if (data.spacing) {
-      updateData.spacing = {
-        ...baseTheme.spacing,
-        ...data.spacing,
-      };
-    }
-    
-    if (data.shadows) {
-      updateData.shadows = {
-        ...baseTheme.shadows,
-        ...data.shadows,
-      };
-    }
-    
-    if (data.sectionOverrides !== undefined) {
-      updateData.sectionOverrides = data.sectionOverrides;
-    }
+    // Prepare update data with merged tokens
+    const mergedData = {
+      name: data.name,
+      isDark: data.isDark,
+      colors: data.colors ? { ...baseTheme.colors, ...data.colors } : undefined,
+      typography: data.typography ? { ...baseTheme.typography, ...data.typography } : undefined,
+      radii: data.radii ? { ...baseTheme.radii, ...data.radii } : undefined,
+      spacing: data.spacing ? { ...baseTheme.spacing, ...data.spacing } : undefined,
+      shadows: data.shadows ? { ...baseTheme.shadows, ...data.shadows } : undefined,
+      sectionOverrides: data.sectionOverrides,
+    };
+
+    const updateData = preparePrismaThemeData(mergedData);
+    const createData = preparePrismaThemeData({
+      name: baseTheme.name,
+      isDark: baseTheme.isDark,
+      colors: baseTheme.colors,
+      typography: baseTheme.typography,
+      radii: baseTheme.radii,
+      spacing: baseTheme.spacing,
+      shadows: baseTheme.shadows,
+      sectionOverrides: baseTheme.sectionOverrides,
+      ...mergedData,
+    });
 
     // Perform upsert
     const theme = await prisma.themeTokens.upsert({
@@ -99,31 +61,10 @@ export class PrismaThemeRepository implements IThemeRepository {
       update: updateData,
       create: {
         id: THEME_ID,
-        name: baseTheme.name,
-        isDark: baseTheme.isDark,
-        colors: baseTheme.colors,
-        typography: baseTheme.typography,
-        radii: baseTheme.radii,
-        spacing: baseTheme.spacing,
-        shadows: baseTheme.shadows,
-        sectionOverrides: baseTheme.sectionOverrides || null,
-        ...updateData,
+        ...createData,
       },
     });
 
-    // Map to DTO
-    return {
-      id: theme.id,
-      name: theme.name,
-      isDark: theme.isDark,
-      colors: theme.colors as any,
-      typography: theme.typography as any,
-      radii: theme.radii as any,
-      spacing: theme.spacing as any,
-      shadows: theme.shadows as any,
-      sectionOverrides: theme.sectionOverrides as any,
-      createdAt: theme.createdAt,
-      updatedAt: theme.updatedAt,
-    };
+    return mapPrismaThemeToDTO(theme);
   }
 }

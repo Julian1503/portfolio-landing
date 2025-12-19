@@ -5,6 +5,26 @@ import type { ThemeTokensDTO, SectionOverride } from "./schemas";
 // ============================================
 
 /**
+ * Safely get section override if it exists
+ */
+function getSectionOverride(
+  sectionOverrides: ThemeTokensDTO["sectionOverrides"],
+  section: string
+): SectionOverride | undefined {
+  if (!sectionOverrides) {
+    return undefined;
+  }
+  
+  // Type-safe access to section overrides
+  const validSections = ["hero", "projects", "about", "contact", "footer"] as const;
+  if (!validSections.includes(section as any)) {
+    return undefined;
+  }
+  
+  return sectionOverrides[section as keyof typeof sectionOverrides];
+}
+
+/**
  * Generate CSS variables from theme tokens
  * Returns a CSS string that can be injected into <style> tag
  */
@@ -13,8 +33,8 @@ export function generateThemeCSS(theme: ThemeTokensDTO, section?: string): strin
   
   // Get section-specific overrides if applicable
   let activeColors = colors;
-  if (section && sectionOverrides) {
-    const override = (sectionOverrides as any)?.[section] as SectionOverride | undefined;
+  if (section) {
+    const override = getSectionOverride(sectionOverrides, section);
     if (override) {
       activeColors = { ...colors, ...override };
     }
