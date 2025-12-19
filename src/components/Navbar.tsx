@@ -44,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({ options }) => {
                             onClick={() => handleNavigate(option.targetId)}
                             className="group flex flex-col items-center text-xs font-semibold tracking-wide cursor-pointer text-gray-800"
                         >
-                            {option.label.toUpperCase()}
+                            {option.label?.toUpperCase()}
                             <span className="mt-1 h-[2px] w-0 bg-black transition-all duration-300 ease-in-out group-hover:w-full" />
                         </li>
                     ))}
@@ -78,7 +78,7 @@ const Navbar: React.FC<NavbarProps> = ({ options }) => {
                                 className="cursor-pointer text-gray-800"
                                 onClick={() => handleNavigate(option.targetId)}
                             >
-                                {option.label.toUpperCase()}
+                                {option.label?.toUpperCase()}
                             </button>
                         </li>
                     ))}

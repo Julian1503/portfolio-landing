@@ -7,10 +7,14 @@ type Props = {
     params: Promise<{ slug: string }>;
 };
 
-async function getProjectBySlug(slug: string) {
-    // Intenta buscar por slug primero
-    let project = await prisma.project.findUnique({
-        where: { slug },
+async function getProjectWithAdjacent(slug: string) {
+    const project = await prisma.project.findFirst({
+        where: {
+            OR: [
+                { slug: slug },
+                { id: slug }
+            ]
+        },
         include: {
             images: { orderBy: { order: "asc" } },
             posts: {
@@ -20,47 +24,41 @@ async function getProjectBySlug(slug: string) {
         },
     });
 
-    // Si no existe, intenta por ID (por si acaso alguien usa el ID)
-    if (!project) {
-        project = await prisma.project.findUnique({
-            where: { id: slug },
-            include: {
-                images: { orderBy: { order: "asc" } },
-                posts: {
-                    where: { published: true },
-                    orderBy: { order: "asc" }
-                },
-            },
-        });
-    }
-
     if (!project) return null;
-    return mapProjectToDTO(project);
-}
 
-async function getAdjacentProjects(currentSlug: string) {
-    const allProjects = await prisma.project.findMany({
-        orderBy: { createdAt: "desc" },
-        select: { slug: true, title: true },
-    });
+    // 2. Query de adyacentes: más eficiente con cursores
+    const [prev, next] = await Promise.all([
+        // Proyecto anterior
+        prisma.project.findFirst({
+            where: { createdAt: { lt: project.createdAt } },
+            orderBy: { createdAt: "desc" },
+            select: { slug: true, title: true }
+        }),
+        // Proyecto siguiente
+        prisma.project.findFirst({
+            where: { createdAt: { gt: project.createdAt } },
+            orderBy: { createdAt: "asc" },
+            select: { slug: true, title: true }
+        })
+    ]);
 
-    const currentIndex = allProjects.findIndex((p) => p.slug === currentSlug);
-
-    const prev = currentIndex > 0 ? allProjects[currentIndex - 1] : null;
-    const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : null;
-
-    return { prev, next };
+    return {
+        project: mapProjectToDTO(project),
+        adjacent: { prev, next }
+    };
 }
 
 export async function generateMetadata({ params }: Props) {
     const { slug } = await params;
-    const project = await getProjectBySlug(slug);
+    const data = await getProjectWithAdjacent(slug);
 
-    if (!project) {
+    if (!data) {
         return {
             title: "Project Not Found",
         };
     }
+
+    const { project } = data;
 
     return {
         title: `${project.title} | Portfolio`,
@@ -70,15 +68,11 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function ProjectDetailPage({ params }: Props) {
     const { slug } = await params;
+    const data = await getProjectWithAdjacent(slug);
 
-    const [project, adjacent] = await Promise.all([
-        getProjectBySlug(slug),
-        getAdjacentProjects(slug),
-    ]);
-
-    if (!project) {
+    if (!data) {
         notFound();
     }
 
-    return <ProjectDetailClient project={project} adjacent={adjacent} />;
+    return <ProjectDetailClient project={data.project} adjacent={data.adjacent} />;
 }
