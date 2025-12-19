@@ -34,7 +34,7 @@ export function AdminLayout({
         <main className="min-h-screen w-full bg-[#f5f5f5] text-slate-900">
             <div className="mx-auto flex flex-col md:flex-row max-w-6xl gap-4 md:gap-6 px-4 py-6 md:py-12">
                 {/* Sidebar desktop */}
-                <aside className="hidden md:flex w-60 flex-shrink-0 flex-col rounded-2xl bg-white/90 border border-slate-200 shadow-sm">
+                <aside className="hidden max-h-max md:flex w-60 flex-shrink-0 flex-col rounded-2xl bg-white/90 border border-slate-200 shadow-sm">
                     <div className="px-5 py-4 border-b border-slate-100">
                         <div className="flex items-center justify-between">
                             <div>

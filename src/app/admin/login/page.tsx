@@ -8,7 +8,7 @@ export default function LoginPage() {
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Admin Panel</h1>
           <p className="text-slate-600 text-sm">Sign in to manage your portfolio</p>
         </div>
-        <SignIn 
+        <SignIn
           appearance={{
             elements: {
               rootBox: "mx-auto",
@@ -18,7 +18,6 @@ export default function LoginPage() {
               socialButtonsBlockButton: "rounded-xl",
               formButtonPrimary: "bg-slate-900 hover:bg-slate-800 rounded-xl",
               formFieldInput: "rounded-xl",
-              footerActionLink: "text-slate-900 hover:text-slate-700"
             }
           }}
         />
