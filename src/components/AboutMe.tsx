@@ -28,7 +28,7 @@ const AboutMe = () => {
 
     return (
         <Section
-            id="about me"
+            id="about"
             tone="light"
             maxWidth="6xl"
         >

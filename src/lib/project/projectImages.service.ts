@@ -45,23 +45,24 @@ export async function addProjectImage(projectId: string, input: CreateProjectIma
 }
 
 export async function updateProjectImage(projectId: string, imageId: string, input: UpdateProjectImageInput) {
-    const updated = await prisma.projectImage.updateMany({
-        where: { id: imageId, projectId },
+    const existing = await prisma.projectImage.findFirst({ where: { id: imageId, projectId } });
+
+    if (!existing) {
+        throw new Error("Image not found for project");
+    }
+
+    const updated = await prisma.projectImage.update({
+        where: { id: imageId },
         data: {
             url: input.url,
-            alt: input.alt === null ? null : input.alt,
-            caption: input.caption === null ? null : input.caption,
+            alt: input.alt === undefined ? undefined : input.alt,
+            caption: input.caption === undefined ? undefined : input.caption,
             kind: input.kind,
             order: input.order,
         },
     });
 
-    if (updated.count === 0) {
-        throw new Error("Image not found for project");
-    }
-
-    const img = await prisma.projectImage.findUnique({ where: { id: imageId } });
-    return mapProjectImageToDTO(img!);
+    return mapProjectImageToDTO(updated);
 }
 
 export async function deleteProjectImage(projectId: string, imageId: string) {
