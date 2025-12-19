@@ -8,7 +8,8 @@ export type AdminSectionId =
     | "projects"
     | "contact"
     | "navigation"
-    | "footer";
+    | "footer"
+    | "theme";
 
 export type AdminSection = {
     id: AdminSectionId;
