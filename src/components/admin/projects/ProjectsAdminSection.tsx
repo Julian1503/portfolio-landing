@@ -89,7 +89,6 @@ export function ProjectsAdminSection() {
         { key: "location", header: "Location" },
         { key: "year", header: "Year" },
         { key: "slug", header: "Slug" },
-        { key: "isFeatured", header: "★", render: (row) => row.isFeatured ? "⭐" : "" },
         {
             key: "coverImage",
             header: "Cover",
@@ -125,18 +124,6 @@ export function ProjectsAdminSection() {
         { name: "tag", label: "Tag", required: true },
         { name: "location", label: "Location", required: true },
         { name: "year", label: "Year", required: true },
-
-        { name: "excerpt", label: "Short description (excerpt)", required: false },
-        { name: "description", label: "Full description", required: false, inputProps: { as: "textarea" } },
-
-        { name: "status", label: "Status", required: true, inputProps: { as: "select", options: enumToOptions(PROJECT_STATUS) } },
-        { name: "type", label: "Type", required: false, inputProps: { as: "select", options: enumToOptions(PROJECT_TYPE) } },
-
-        { name: "role", label: "Your role", required: false },
-        { name: "client", label: "Client", required: false },
-
-        { name: "tools", label: "Tools (comma separated)", required: false },
-        { name: "isFeatured", label: "Featured", required: false, inputProps: { type: "checkbox" } },
 
         { name: "coverImage", label: "Cover image", required: false, inputProps: { type: "file" } },
     ];
@@ -284,10 +271,10 @@ export function ProjectsAdminSection() {
                     <div className="flex items-center gap-3">
                         {isMutating && (
                             <div className="flex items-center gap-2 text-[11px] text-slate-500 sm:text-xs">
-                <span
-                    className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-slate-400 border-t-transparent"
-                    aria-hidden="true"
-                />
+                                <span
+                                    className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-slate-400 border-t-transparent"
+                                    aria-hidden="true"
+                                />
                                 <span>Working on your changes…</span>
                             </div>
                         )}
@@ -296,7 +283,7 @@ export function ProjectsAdminSection() {
                             type="button"
                             onClick={openCreate}
                             disabled={isMutating}
-                            className={`self-start rounded-full px-4 py-2 text-xs font-semibold shadow-sm sm:self-auto sm:text-sm ${
+                            className={`self-start rounded-full px-4 py-2 text-xs w-35 h-10 font-semibold shadow-sm sm:self-auto sm:text-sm ${
                                 isMutating
                                     ? "cursor-not-allowed bg-slate-200 text-slate-400"
                                     : "bg-slate-900 text-white hover:bg-slate-800"
