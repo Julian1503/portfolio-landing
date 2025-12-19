@@ -2,9 +2,9 @@
 
 import React from "react";
 import { scrollToSection } from "@/hooks/scrollToSection";
-import HeroBackground from "@/components/HeroBackground";
-import HeroContentCard from "@/components/HeroContentCard";
-import ScrollCue from "@/components/ScrollCue";
+import HeroBackground from "./HeroBackground";
+import HeroContentCard from "./HeroContentCard";
+import ScrollCue from "./ScrollCue";
 
 const Hero = () => {
     const handleProjectsClick = () => scrollToSection("projects");

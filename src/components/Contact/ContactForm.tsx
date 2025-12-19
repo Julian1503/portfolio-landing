@@ -1,45 +1,8 @@
-"use client";
-
 import React from "react";
-import Link from "next/link";
-import { Section } from "@/components/Section";
-import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
 import { Button } from "@/components/Button";
 
-const ContactEmailCard = () => (
-    <InfoCard title="Email" variant="light">
-        <a
-            href="mailto:mlourdesynigo@gmail.com"
-            className="text-base md:text-lg font-semibold text-slate-900 underline underline-offset-4 decoration-slate-300 hover:decoration-slate-800 transition-colors"
-        >
-            mlourdesynigo@gmail.com
-        </a>
-
-        <p className="mt-3 text-xs md:text-sm text-slate-600">
-            Preferred way to get in touch. I usually reply within 1–2 business days.
-        </p>
-    </InfoCard>
-);
-
-const ContactDetails = () => (
-    <InfoCard title="Details" variant="light">
-        <div className="text-sm md:text-base text-slate-700 space-y-1">
-            <p className="font-medium">Based in Queensland, Australia.</p>
-            <p className="font-medium">Available for remote and local collaboration.</p>
-        </div>
-
-        <div className="flex flex-wrap gap-3 pt-4">
-            <Button asChild>
-                <Link href="https://calendly.com/mlourdesynigo/30min">
-                    Schedule a Call
-                </Link>
-            </Button>
-        </div>
-    </InfoCard>
-);
-
-const ContactForm = () => (
+export const ContactForm = () => (
     <InfoCard title="Quick message" variant="light">
         <form
             className="space-y-4"
@@ -110,32 +73,3 @@ const ContactForm = () => (
         </form>
     </InfoCard>
 );
-
-const ContactSection = () => {
-    return (
-        <Section
-            id="contact"
-            tone="light"
-            maxWidth="6xl"
-        >
-            <SectionHeader
-                id="contact-heading"
-                eyebrow="Contact"
-                title="Let's work together"
-                tone="light"
-                description="For collaborations, job opportunities or project enquiries, feel free to reach out by email or schedule a short call."
-            />
-
-            <div className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] items-start">
-                <div className="space-y-6">
-                    <ContactEmailCard />
-                    <ContactDetails />
-                </div>
-
-                <ContactForm />
-            </div>
-        </Section>
-    );
-};
-
-export default ContactSection;
