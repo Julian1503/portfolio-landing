@@ -217,3 +217,32 @@ model SocialLink {
   @@index([footerId])
   @@index([footerId, order])
 }
+
+// ============================================
+// Theme / Design System Model
+// ============================================
+
+// Singleton model for theme/design tokens
+// Uses JSON fields for structured token storage with type safety via Zod
+model ThemeTokens {
+  id              String   @id @default("theme_singleton")
+  
+  // Design tokens stored as JSON
+  // Structure validated by Zod schemas in application layer
+  colors          Json     // background, surface, text, mutedText, border, primary, secondary, link, danger, success
+  typography      Json     // fontFamily, baseFontSize, scaleRatio, headingSizes (h1-h6), lineHeightBase
+  radii           Json     // sm, md, lg
+  spacing         Json     // xs, sm, md, lg, xl
+  shadows         Json     // sm, md, lg (optional shadow presets)
+  
+  // Section-specific overrides (optional)
+  // Allows Hero/Projects/About/Contact/Footer to override specific tokens
+  sectionOverrides Json?   // { hero: {...}, projects: {...}, etc }
+  
+  // Metadata
+  name            String   @default("Default")
+  isDark          Boolean  @default(false)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

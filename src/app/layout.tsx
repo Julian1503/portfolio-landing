@@ -4,6 +4,8 @@ import "./globals.css";
 import {SmoothScroll} from "@/components/SmoothScroll";
 import {CustomCursor} from "@/components/CustomCursor";
 import {SITE_METADATA} from "@/lib/config/siteMetadata";
+import { getTheme } from "@/lib/theme/public";
+import { generateThemeCSS } from "@/lib/theme/utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,13 +25,20 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = SITE_METADATA;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch theme tokens server-side to avoid flash
+  const theme = await getTheme();
+  const themeCSS = generateThemeCSS(theme);
+
   return (
     <html lang="en">
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: themeCSS }} />
+      </head>
       <body
         className={`${geistSans.variable} ${montserrat.variable} ${geistMono.variable} antialiased`}
       >

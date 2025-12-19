@@ -204,6 +204,81 @@ async function main() {
     });
     
     console.log('Projects seeded successfully!');
+    
+    // Seed default theme
+    console.log('Seeding default theme...');
+    await prisma.themeTokens.upsert({
+        where: { id: 'theme_singleton' },
+        update: {},
+        create: {
+            id: 'theme_singleton',
+            name: 'Default',
+            isDark: false,
+            colors: {
+                background: '#FAFAF9',
+                backgroundSecondary: '#FFFFFF',
+                surface: '#FFFFFF',
+                surfaceHover: '#F5F5F4',
+                text: '#1C1917',
+                textSecondary: '#57534E',
+                textMuted: '#78716C',
+                border: '#E7E5E4',
+                borderLight: '#F5F5F4',
+                primary: '#65816A',
+                primaryHover: '#7D9982',
+                primaryText: '#FFFFFF',
+                secondary: '#1C1917',
+                secondaryHover: '#292524',
+                secondaryText: '#FFFFFF',
+                link: '#65816A',
+                linkHover: '#7D9982',
+                danger: '#DC2626',
+                success: '#16A34A',
+                warning: '#EA580C',
+            },
+            typography: {
+                fontFamily: 'Montserrat',
+                fontFamilyHeading: 'Montserrat',
+                fontFamilyMono: 'Geist Mono',
+                baseFontSize: 16,
+                h1Size: '3rem',
+                h2Size: '2.5rem',
+                h3Size: '2rem',
+                h4Size: '1.5rem',
+                h5Size: '1.25rem',
+                h6Size: '1rem',
+                lineHeightBase: 1.6,
+                lineHeightHeading: 1.2,
+                fontWeightNormal: 400,
+                fontWeightMedium: 500,
+                fontWeightBold: 700,
+            },
+            radii: {
+                none: '0',
+                sm: '0.25rem',
+                md: '0.5rem',
+                lg: '1rem',
+                xl: '1.5rem',
+                full: '9999px',
+            },
+            spacing: {
+                xs: '0.25rem',
+                sm: '0.5rem',
+                md: '1rem',
+                lg: '1.5rem',
+                xl: '2rem',
+                '2xl': '3rem',
+                '3xl': '4rem',
+            },
+            shadows: {
+                sm: 'sm',
+                md: 'md',
+                lg: 'lg',
+            },
+        },
+    });
+    
+    console.log('Default theme seeded successfully!');
 }
 
 main()

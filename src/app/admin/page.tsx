@@ -8,6 +8,7 @@ import {
     AboutAdminSection,
     ContactAdminSection,
     FooterAdminSection,
+    ThemeAdminSection,
 } from "@/components/admin/cms";
 
 const sections = [
@@ -17,6 +18,7 @@ const sections = [
     { id: "contact" as AdminSectionId, label: "Contact" },
     { id: "navigation" as AdminSectionId, label: "Navigation" },
     { id: "footer" as AdminSectionId, label: "Footer" },
+    { id: "theme" as AdminSectionId, label: "Theme / Design" },
 ];
 
 export default function AdminPage() {
@@ -33,6 +35,7 @@ export default function AdminPage() {
             {active === "projects" && <ProjectsAdminSection />}
             {active === "contact" && <ContactAdminSection />}
             {active === "footer" && <FooterAdminSection />}
+            {active === "theme" && <ThemeAdminSection />}
             {active === "navigation" && (
                 <p className="text-xs text-slate-500">
                     Navigation section - not yet implemented
