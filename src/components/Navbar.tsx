@@ -2,8 +2,10 @@
 import React, {useEffect, useState} from "react";
 import {motion} from "framer-motion";
 import {scrollToSection} from "@/hooks/scrollToSection";
+import type {NavigationItem} from "@/lib/config/navigation";
+
 type NavbarProps = {
-    options: string[];
+    options: NavigationItem[];
 };
 
 const Navbar: React.FC<NavbarProps> = ({ options }) => {
@@ -18,6 +20,13 @@ const Navbar: React.FC<NavbarProps> = ({ options }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const handleNavigate = (targetId: string) => {
+        const didScroll = scrollToSection(targetId);
+        if (didScroll) {
+            setOpen(false);
+        }
+    };
+
     return (
         <motion.header
             className="w-full sticky top-0 z-50 backdrop-blur border-b transition-all"
@@ -29,13 +38,13 @@ const Navbar: React.FC<NavbarProps> = ({ options }) => {
             <nav className="mx-auto flex max-w-6xl items-center justify-end px-6 py-4">
                 {/* Desktop menu */}
                 <ul className="hidden md:flex flex-row gap-10">
-                    {options.map((option, index) => (
+                    {options.map((option) => (
                         <li
-                            key={index}
-                            onClick={() => scrollToSection(option.toLowerCase())}
+                            key={option.targetId}
+                            onClick={() => handleNavigate(option.targetId)}
                             className="group flex flex-col items-center text-xs font-semibold tracking-wide cursor-pointer text-gray-800"
                         >
-                            {option.toUpperCase()}
+                            {option.label.toUpperCase()}
                             <span className="mt-1 h-[2px] w-0 bg-black transition-all duration-300 ease-in-out group-hover:w-full" />
                         </li>
                     ))}
@@ -62,9 +71,15 @@ const Navbar: React.FC<NavbarProps> = ({ options }) => {
                 }`}
             >
                 <ul className="flex flex-col gap-4 px-6 py-6 text-sm font-semibold">
-                    {options.map((option, index) => (
-                        <li key={index} className="cursor-pointer text-gray-800">
-                            {option.toUpperCase()}
+                    {options.map((option) => (
+                        <li key={option.targetId}>
+                            <button
+                                type="button"
+                                className="cursor-pointer text-gray-800"
+                                onClick={() => handleNavigate(option.targetId)}
+                            >
+                                {option.label.toUpperCase()}
+                            </button>
                         </li>
                     ))}
                 </ul>

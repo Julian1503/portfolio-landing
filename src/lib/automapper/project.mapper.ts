@@ -1,6 +1,8 @@
 import type { ProjectDTO, ProjectImageDTO, ProjectPostDTO, ProjectCardDTO } from "@/types/ProjectDTO";
 import {ProjectImage, ProjectPost, Project} from "@/types/projectEnums";
 
+// Normalize database nulls to undefined to align with optional fields in DTOs
+// and prevent callers from handling two separate “no data” states.
 function undefIfNull<T>(v: T | null): T | undefined {
     return v === null ? undefined : v;
 }

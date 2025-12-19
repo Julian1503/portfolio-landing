@@ -1,7 +1,10 @@
-export function scrollToSection (sectionId: string) {
+export function scrollToSection(sectionId: string): boolean {
     const element = document.getElementById(sectionId);
-    console.log(sectionId);
-    if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+
+    if (!element) {
+        return false;
     }
+
+    element.scrollIntoView({ behavior: "smooth", block: "start" });
+    return true;
 }
