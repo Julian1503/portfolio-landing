@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
-import { ProjectDetailClient } from "@/components/project-detail/ProjectDetailClient";
+import { ProjectDetailClient } from "@/components/ProjectDetail/ProjectDetailClient";
 import { mapProjectToDTO } from "@/lib/automapper/project.mapper";
 
 type Props = {

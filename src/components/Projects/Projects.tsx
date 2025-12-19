@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Section } from "@/components/Section";
 import { SectionHeader } from "@/components/SectionHeader";
-import { ProjectCard } from "@/components/ProjectCard";
+import { ProjectCard } from "./ProjectCard";
 import { Button } from "@/components/Button";
 import {ProjectCardDTO} from "@/types/ProjectDTO";
 
