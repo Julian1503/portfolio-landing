@@ -1,10 +1,10 @@
 "use client"
 import React from "react";
 import { Section } from "@/components/Section";
-import { AboutImagePanel } from "@/components/AboutImagePanel";
-import { AboutBio } from "@/components/AboutBio";
-import { AboutStats } from "@/components/AboutStats";
-import { AboutActions } from "@/components/AboutActions";
+import { AboutImagePanel } from "./AboutImagePanel";
+import { AboutBio } from "./AboutBio";
+import { AboutStats } from "./AboutStats";
+import { AboutActions } from "./AboutActions";
 
 const AboutMe = () => {
     return (
