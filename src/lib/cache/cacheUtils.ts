@@ -2,33 +2,33 @@
 import { revalidateTag, revalidatePath } from 'next/cache';
 
 /**
- * Invalida todo el caché de proyectos
+ * Invalidates the entire projects cache
  *
- * Úsalo después de:
- * - Crear un proyecto
- * - Actualizar un proyecto
- * - Eliminar un proyecto
- * - Modificar imágenes de un proyecto
- * - Modificar posts de un proyecto
+ * Use it after:
+ * - Creating a project
+ * - Updating a project
+ * - Deleting a project
+ * - Modifying project images
+ * - Modifying project posts
  *
- * Ejemplo:
+ * Example:
  * ```ts
  * await createProject(data);
- * invalidateProjectsCache(); // ✅ Caché invalidado
+ * invalidateProjectsCache(); // ✅ Cache invalidated
  * ```
  */
 export function invalidateProjectsCache() {
-    revalidateTag(`projects`,'projects');
+    revalidateTag('projects', 'projects');
     console.log('[CACHE] ♻️  Invalidated all projects cache');
 }
 
 /**
- * Invalida el caché de un proyecto específico por su slug
+ * Invalidates the cache for a specific project by its slug
  *
- * Úsalo después de:
- * - Actualizar detalles de un proyecto específico
+ * Use it after:
+ * - Updating details of a specific project
  *
- * Ejemplo:
+ * Example:
  * ```ts
  * await updateProject(id, data);
  * invalidateProjectCache(data.slug);
@@ -40,14 +40,14 @@ export function invalidateProjectCache(slug: string) {
 }
 
 /**
- * Invalida el caché de la homepage
+ * Invalidates the homepage cache
  *
- * Úsalo cuando:
- * - Cambien proyectos destacados (isFeatured)
- * - Se reordenen proyectos
- * - Cambien datos que afecten la homepage
+ * Use it when:
+ * - Featured projects change (isFeatured)
+ * - Projects are reordered
+ * - Data affecting the homepage changes
  *
- * Ejemplo:
+ * Example:
  * ```ts
  * await updateProject(id, { isFeatured: true });
  * invalidateHomepageCache();
@@ -59,18 +59,18 @@ export function invalidateHomepageCache() {
 }
 
 /**
- * Invalida todo el caché del sitio
+ * Invalidates the entire site cache
  *
- * Úsalo solo cuando:
- * - Estés en desarrollo y quieras forzar refresh total
- * - Hagas cambios estructurales masivos
- * - Tengas problemas de caché y necesites "reset"
+ * Use it only when:
+ * - You are in development and want to force a full refresh
+ * - You make massive structural changes
+ * - You have cache issues and need a full "reset"
  *
- * ⚠️  Usar con precaución en producción
+ * ⚠️  Use with caution in production
  *
- * Ejemplo:
+ * Example:
  * ```ts
- * // En desarrollo
+ * // In development
  * if (process.env.NODE_ENV === 'development') {
  *   invalidateAllCache();
  * }
@@ -84,12 +84,12 @@ export function invalidateAllCache() {
 }
 
 /**
- * Invalida el caché de admin
+ * Invalidates the admin cache
  *
- * Úsalo cuando:
- * - Se actualicen datos desde el panel de admin
+ * Use it when:
+ * - Data is updated from the admin panel
  *
- * Ejemplo:
+ * Example:
  * ```ts
  * await updateProjectFromAdmin(data);
  * invalidateAdminCache();
