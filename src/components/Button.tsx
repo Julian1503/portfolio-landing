@@ -29,13 +29,13 @@ export function Button({
     // Estilos por variante
     let variantStyles = "";
     if (variant === "primary") {
-        variantStyles = "bg-slate-900 text-white hover:bg-slate-800 disabled:bg-slate-300 disabled:text-slate-500 shadow-md hover:shadow-lg";
+        variantStyles = "bg-[var(--theme-primary)] text-[var(--theme-primary-text)] hover:bg-[var(--theme-primary-hover)] disabled:opacity-60 shadow-md hover:shadow-lg";
     } else if (variant === "secondary") {
-        variantStyles = "border-2 border-slate-900 text-slate-900 bg-transparent hover:bg-slate-900 hover:text-white disabled:border-slate-300 disabled:text-slate-500";
+        variantStyles = "border-2 border-[var(--theme-secondary)] text-[var(--theme-secondary)] bg-transparent hover:bg-[var(--theme-secondary)] hover:text-[var(--theme-secondary-text)] disabled:opacity-60";
     }
 
     // Estilos de focus
-    const focusStyles = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900";
+    const focusStyles = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--theme-primary)]";
 
     // Estilos de movimiento
     const motionStyles = "motion-safe:hover:-translate-y-[1px] motion-safe:active:translate-y-0";

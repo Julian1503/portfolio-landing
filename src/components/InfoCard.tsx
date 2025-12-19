@@ -14,23 +14,23 @@ export function InfoCard({
                              className = "",
                          }: InfoCardProps) {
     const base =
-        "rounded-2xl bg-white backdrop-blur-sm shadow-lg p-5 md:p-6 transition-all duration-300 hover:shadow-xl";
+        "rounded-2xl bg-[var(--theme-surface)] backdrop-blur-sm shadow-lg p-5 md:p-6 transition-all duration-300 hover:shadow-xl";
 
     const variants: Record<NonNullable<InfoCardProps["variant"]>, string> = {
         // Para fondos oscuros (como About Me con tone="dark")
-        primary: "border-2 border-white/30 hover:border-white/50",
+        primary: "border-2 border-[var(--theme-border)] hover:border-[var(--theme-primary)]",
 
         // Para fondos claros (como Contact con tone="light")
-        light: "border-2 border-slate-200 hover:border-slate-300",
+        light: "border-2 border-[var(--theme-border)] hover:border-[var(--theme-primary)]",
 
         // Alternativa
-        secondary: "border-2 border-slate-300 hover:border-slate-400",
+        secondary: "border-2 border-[var(--theme-border-light)] hover:border-[var(--theme-border)]",
     };
 
     const titleColors: Record<NonNullable<InfoCardProps["variant"]>, string> = {
-        primary: "text-slate-100 mb-3",
-        light: "text-slate-500 mb-3",
-        secondary: "text-slate-500 mb-3",
+        primary: "text-[var(--theme-text-muted)] mb-3",
+        light: "text-[var(--theme-text-muted)] mb-3",
+        secondary: "text-[var(--theme-text-muted)] mb-3",
     };
 
     const headingId = "card-" + title.toLowerCase().replace(/\s+/g, "-");

@@ -23,10 +23,10 @@ export const AboutBio = ({ eyebrow, title, paragraph1, paragraph2, paragraph3 }:
             className="space-y-6 flex flex-col justify-center lg:justify-start"
         >
             <div className="space-y-2">
-                <span className="text-xs md:text-sm tracking-[0.35em] uppercase text-amber-700 font-semibold">
+                <span className="text-xs md:text-sm tracking-[0.35em] uppercase text-[var(--theme-primary)] font-semibold">
                     {eyebrow}
                 </span>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--theme-text)] leading-tight">
                     {titleLines.map((line, idx) => (
                         <React.Fragment key={idx}>
                             {line}
@@ -36,7 +36,7 @@ export const AboutBio = ({ eyebrow, title, paragraph1, paragraph2, paragraph3 }:
                 </h2>
             </div>
 
-            <div className="space-y-4 text-sm md:text-base text-slate-600 leading-relaxed">
+            <div className="space-y-4 text-sm md:text-base text-[var(--theme-text-secondary)] leading-relaxed">
                 <p>{paragraph1}</p>
                 <p>{paragraph2}</p>
                 <p>{paragraph3}</p>

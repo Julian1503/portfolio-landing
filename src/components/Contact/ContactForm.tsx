@@ -11,7 +11,7 @@ export const ContactForm = () => (
             <div className="space-y-1.5">
                 <label
                     htmlFor="contact-name"
-                    className="text-xs uppercase tracking-[0.2em] text-slate-500 font-medium"
+                    className="text-xs uppercase tracking-[0.2em] text-[var(--theme-text-muted)] font-medium"
                 >
                     Name
                 </label>
@@ -21,9 +21,9 @@ export const ContactForm = () => (
                     type="text"
                     autoComplete="name"
                     required
-                    className="w-full rounded-xl border-2 border-slate-200 bg-slate-50
-                     px-3 py-2.5 text-sm text-slate-900 outline-none
-                     focus:border-slate-900 focus:bg-white transition-colors"
+                    className="w-full rounded-xl border-2 border-[var(--theme-border)] bg-[var(--theme-surface-hover)]
+                     px-3 py-2.5 text-sm text-[var(--theme-text)] outline-none
+                     focus:border-[var(--theme-primary)] focus:bg-[var(--theme-surface)] transition-colors"
                     placeholder="Your name"
                 />
             </div>
@@ -31,7 +31,7 @@ export const ContactForm = () => (
             <div className="space-y-1.5">
                 <label
                     htmlFor="contact-email"
-                    className="text-xs uppercase tracking-[0.2em] text-slate-500 font-medium"
+                    className="text-xs uppercase tracking-[0.2em] text-[var(--theme-text-muted)] font-medium"
                 >
                     Email
                 </label>
@@ -41,9 +41,9 @@ export const ContactForm = () => (
                     type="email"
                     autoComplete="email"
                     required
-                    className="w-full rounded-xl border-2 border-slate-200 bg-slate-50
-                     px-3 py-2.5 text-sm text-slate-900 outline-none
-                     focus:border-slate-900 focus:bg-white transition-colors"
+                    className="w-full rounded-xl border-2 border-[var(--theme-border)] bg-[var(--theme-surface-hover)]
+                     px-3 py-2.5 text-sm text-[var(--theme-text)] outline-none
+                     focus:border-[var(--theme-primary)] focus:bg-[var(--theme-surface)] transition-colors"
                     placeholder="your@email.com"
                 />
             </div>
@@ -51,7 +51,7 @@ export const ContactForm = () => (
             <div className="space-y-1.5">
                 <label
                     htmlFor="contact-message"
-                    className="text-xs uppercase tracking-[0.2em] text-slate-500 font-medium"
+                    className="text-xs uppercase tracking-[0.2em] text-[var(--theme-text-muted)] font-medium"
                 >
                     Message
                 </label>
@@ -60,9 +60,9 @@ export const ContactForm = () => (
                     name="message"
                     rows={4}
                     required
-                    className="w-full rounded-xl border-2 border-slate-200 bg-slate-50
-                     px-3 py-2.5 text-sm text-slate-900 outline-none
-                     resize-none focus:border-slate-900 focus:bg-white transition-colors"
+                    className="w-full rounded-xl border-2 border-[var(--theme-border)] bg-[var(--theme-surface-hover)]
+                     px-3 py-2.5 text-sm text-[var(--theme-text)] outline-none
+                     resize-none focus:border-[var(--theme-primary)] focus:bg-[var(--theme-surface)] transition-colors"
                     placeholder="Tell me briefly about your project or enquiry."
                 />
             </div>

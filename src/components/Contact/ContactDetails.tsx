@@ -11,7 +11,7 @@ type ContactDetailsProps = {
 
 export const ContactDetails = ({ location, availability, calendlyUrl }: ContactDetailsProps) => (
     <InfoCard title="Details" variant="light">
-        <div className="text-sm md:text-base text-slate-700 space-y-1">
+        <div className="text-sm md:text-base text-[var(--theme-text)] space-y-1">
             <p className="font-medium">Based in {location}.</p>
             <p className="font-medium">{availability}.</p>
         </div>
