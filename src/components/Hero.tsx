@@ -92,11 +92,8 @@ const Hero = () => {
                                 </Button>
                                 <Button
                                     onClick={() => scrollToSection('contact')}
-                                    style={{
-                                        backgroundColor: 'transparent',
-                                        color: 'white',
-                                        border: '2px solid white'
-                                    }}
+                                    className="bg-white/20 hover:bg-white/30 focus:ring-2 focus:ring-white"
+
                                 >
                                     Get in Touch
                                 </Button>
