@@ -36,7 +36,6 @@ export async function POST(req: NextRequest, { params }: Params) {
     } catch (error) {
         console.error("Error creating project post", error);
 
-        // si querés, podemos detectar el unique constraint de prisma para devolver 409
         return NextResponse.json({ error: "Failed to create project post" }, { status: 500 });
     }
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { ProjectDTO } from "@/types/ProjectDTO";
-import { getProjectById, updateProject, deleteProject } from "@/lib/project/projects.service";
+import {getProjectByIdOrSlug, updateProject, deleteProject} from "@/lib/project/projects.service";
 
 type Params = {
     params: Promise<{ id: string }>
@@ -10,7 +10,7 @@ type Params = {
 export async function GET(req: NextRequest, { params }: Params) {
     try {
         const { id } = await params;
-        const project = await getProjectById(id);
+        const project = await getProjectByIdOrSlug(id);
 
         if (!project) {
             return NextResponse.json({ error: "Not found" }, { status: 404 });
