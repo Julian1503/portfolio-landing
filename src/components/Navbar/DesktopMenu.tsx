@@ -13,10 +13,10 @@ export const DesktopMenu: React.FC<DesktopMenuProps> = ({ options, onNavigate })
                 <li
                     key={option.targetId}
                     onClick={() => onNavigate(option.targetId)}
-                    className="group flex flex-col items-center text-xs font-semibold tracking-wide cursor-pointer text-gray-800"
+                    className="group flex flex-col items-center text-xs font-semibold tracking-wide cursor-pointer text-[var(--theme-text)]"
                 >
                     {option.label.toUpperCase()}
-                    <span className="mt-1 h-[2px] w-0 bg-black transition-all duration-300 ease-in-out group-hover:w-full" />
+                    <span className="mt-1 h-[2px] w-0 bg-[var(--theme-primary)] transition-all duration-300 ease-in-out group-hover:w-full" />
                 </li>
             ))}
         </ul>

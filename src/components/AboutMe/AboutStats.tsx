@@ -9,9 +9,9 @@ interface StatItemProps {
 }
 
 const StatItem = ({ value, label }: StatItemProps) => (
-    <div className="text-center p-4 rounded-xl bg-white/80 border border-slate-200 shadow-sm">
-        <div className="text-2xl md:text-3xl font-bold text-slate-900">{value}</div>
-        <div className="text-[10px] md:text-xs text-slate-600 mt-1 uppercase tracking-wider">{label}</div>
+    <div className="text-center p-4 rounded-xl bg-[var(--theme-surface)] border border-[var(--theme-border)] shadow-sm">
+        <div className="text-2xl md:text-3xl font-bold text-[var(--theme-text)]">{value}</div>
+        <div className="text-[10px] md:text-xs text-[var(--theme-text-muted)] mt-1 uppercase tracking-wider">{label}</div>
     </div>
 );
 

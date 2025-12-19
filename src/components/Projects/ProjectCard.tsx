@@ -24,7 +24,7 @@ export function ProjectCard({ slug, title, tag, location, year, coverImage }: Pr
                 href={`/projects/${slug}`}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className="group block rounded-2xl overflow-hidden bg-white/60 border border-white/70 shadow-lg backdrop-blur-sm"
+                className="group block rounded-2xl overflow-hidden bg-[var(--theme-surface)] border border-[var(--theme-border)] shadow-lg backdrop-blur-sm"
             >
                 <div className="relative aspect-[4/3] overflow-hidden">
                     <motion.img
@@ -49,9 +49,9 @@ export function ProjectCard({ slug, title, tag, location, year, coverImage }: Pr
                             opacity: isHovered ? 1 : 0
                         }}
                         transition={{ duration: 0.3 }}
-                        className="absolute inset-0 bg-gradient-to-t from-amber-950/70 via-transparent to-transparent mix-blend-multiply flex items-center justify-center"
+                        className="absolute inset-0 bg-gradient-to-t from-[var(--theme-primary)]/70 via-transparent to-transparent mix-blend-multiply flex items-center justify-center"
                     >
-                        <p className="text-xs text-white/80 text-center px-4">
+                        <p className="text-xs text-[var(--theme-primary-text)] text-center px-4">
                             Click to explore this project →
                         </p>
                     </motion.div>
@@ -63,13 +63,13 @@ export function ProjectCard({ slug, title, tag, location, year, coverImage }: Pr
                         animate={{ y: isHovered ? -4 : 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <span className="inline-flex px-3 py-1 rounded-full text-[10px] md:text-xs tracking-[0.25em] uppercase bg-black/40 text-white/90 border border-white/30">
+                        <span className="inline-flex px-3 py-1 rounded-full text-[10px] md:text-xs tracking-[0.25em] uppercase bg-[var(--theme-surface)]/40 text-[var(--theme-text)] border border-[var(--theme-border)]">
                             {tag}
                         </span>
-                        <h3 className="text-lg md:text-xl font-semibold text-white leading-snug">
+                        <h3 className="text-lg md:text-xl font-semibold text-[var(--theme-text)] leading-snug">
                             {title}
                         </h3>
-                        <div className="flex items-center justify-between text-xs md:text-sm text-gray-100/90">
+                        <div className="flex items-center justify-between text-xs md:text-sm text-[var(--theme-text-secondary)]">
                             <span>{location}</span>
                             <span>{year}</span>
                         </div>

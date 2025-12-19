@@ -21,10 +21,8 @@ export function Section({
                             children,
                         }: SectionProps) {
     const bg = tone === "dark"
-        ? "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
-        : "bg-gradient-to-br from-stone-50 via-white to-amber-50/30";
-    const gradientFrom = tone === "dark" ? "from-slate-100/5" : "from-slate-900/5";
-    const gradientTo = tone === "dark" ? "to-slate-800/10" : "to-slate-900/10";
+        ? "bg-[var(--theme-bg-secondary)]"
+        : "bg-[var(--theme-bg-primary)]";
     const reduceMotion = useReducedMotion();
 
     return (
@@ -39,9 +37,9 @@ export function Section({
             transition={reduceMotion ? { duration: 0 } : { duration: 0.4, ease: "easeOut" }}
         >
             <div
-                className="pointer-events-none absolute inset-0 opacity-[0.07]"
+                className="pointer-events-none absolute inset-0 opacity-[0.03]"
                 style={{
-                    backgroundImage: `radial-gradient(circle, ${tone === 'dark' ? '#fff' : '#000'} 1px, transparent 1px)`,
+                    backgroundImage: `radial-gradient(circle, var(--theme-text) 1px, transparent 1px)`,
                     backgroundSize: '24px 24px'
                 }}
                 aria-hidden="true"
