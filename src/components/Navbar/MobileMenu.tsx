@@ -9,14 +9,14 @@ type MobileMenuButtonProps = {
 export const MobileMenuButton: React.FC<MobileMenuButtonProps> = ({ isOpen, onClick }) => {
     return (
         <button
-            className="md:hidden inline-flex items-center justify-center rounded-md border px-3 py-2 text-sm text-gray-800"
+            className="md:hidden inline-flex items-center justify-center rounded-md border border-[var(--theme-border)] px-3 py-2 text-sm text-[var(--theme-text)]"
             onClick={onClick}
             aria-label="Toggle navigation"
         >
             <div className="space-y-1">
-                <span className={`block h-0.5 w-5 bg-gray-800 transition ${isOpen ? "translate-y-1.5 rotate-45" : ""}`} />
-                <span className={`block h-0.5 w-5 bg-gray-800 transition ${isOpen ? "opacity-0" : ""}`} />
-                <span className={`block h-0.5 w-5 bg-gray-800 transition ${isOpen ? "-translate-y-1.5 -rotate-45" : ""}`} />
+                <span className={`block h-0.5 w-5 bg-[var(--theme-text)] transition ${isOpen ? "translate-y-1.5 rotate-45" : ""}`} />
+                <span className={`block h-0.5 w-5 bg-[var(--theme-text)] transition ${isOpen ? "opacity-0" : ""}`} />
+                <span className={`block h-0.5 w-5 bg-[var(--theme-text)] transition ${isOpen ? "-translate-y-1.5 -rotate-45" : ""}`} />
             </div>
         </button>
     );
@@ -31,7 +31,7 @@ type MobileMenuProps = {
 export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, options, onNavigate }) => {
     return (
         <div
-            className={`md:hidden border-t bg-white/95 transition-all overflow-hidden ${
+            className={`md:hidden border-t border-[var(--theme-border)] bg-[var(--theme-surface)] transition-all overflow-hidden ${
                 isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
             }`}
         >
@@ -40,7 +40,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, options, onNavig
                     <li key={option.targetId}>
                         <button
                             type="button"
-                            className="cursor-pointer text-gray-800"
+                            className="cursor-pointer text-[var(--theme-text)]"
                             onClick={() => onNavigate(option.targetId)}
                         >
                             {option.label.toUpperCase()}

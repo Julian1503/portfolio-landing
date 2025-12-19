@@ -66,7 +66,10 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
             {hasMore && (
                 <div className="mt-10 flex justify-center">
                     <Button
-                        className="bg-white/20 hover:bg-white/30 focus:ring-2 focus:ring-white"
+                        style={{ 
+                            backgroundColor: 'var(--theme-secondary)', 
+                            color: 'var(--theme-secondary-text)'
+                        }}
                         onClick={handleToggle}
                         aria-expanded={showAll}
                         aria-controls="projects-grid"

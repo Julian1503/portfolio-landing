@@ -48,7 +48,7 @@ export function ProjectDetailClient({ project, adjacent }: ProjectDetailClientPr
     }, [currentImageIndex, isPaused, galleryImages.length]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-amber-50/30">
+        <div className="min-h-screen bg-[var(--theme-bg-primary)]">
             <ProjectHeader adjacent={adjacent} />
 
             <ProjectGallery
