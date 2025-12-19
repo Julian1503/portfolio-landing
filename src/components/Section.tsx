@@ -37,7 +37,7 @@ export function Section({
             transition={reduceMotion ? { duration: 0 } : { duration: 0.4, ease: "easeOut" }}
         >
             <div
-                className="pointer-events-none absolute inset-0 opacity-[0.03]"
+                className="pointer-events-none absolute inset-0 opacity-[0.07]"
                 style={{
                     backgroundImage: `radial-gradient(circle, var(--theme-text) 1px, transparent 1px)`,
                     backgroundSize: '24px 24px'
