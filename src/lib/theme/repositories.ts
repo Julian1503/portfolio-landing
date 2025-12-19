@@ -46,13 +46,12 @@ export class PrismaThemeRepository implements IThemeRepository {
     const createData = preparePrismaThemeData({
       name: baseTheme.name,
       isDark: baseTheme.isDark,
-      colors: baseTheme.colors,
-      typography: baseTheme.typography,
-      radii: baseTheme.radii,
-      spacing: baseTheme.spacing,
-      shadows: baseTheme.shadows,
-      sectionOverrides: baseTheme.sectionOverrides,
-      ...mergedData,
+      colors: mergedData.colors || baseTheme.colors,
+      typography: mergedData.typography || baseTheme.typography,
+      radii: mergedData.radii || baseTheme.radii,
+      spacing: mergedData.spacing || baseTheme.spacing,
+      shadows: mergedData.shadows || baseTheme.shadows,
+      sectionOverrides: mergedData.sectionOverrides || baseTheme.sectionOverrides,
     });
 
     // Perform upsert

@@ -1,4 +1,19 @@
-import type { ThemeTokens as PrismaThemeTokens } from "@prisma/client";
+// Type alias for Prisma's ThemeTokens model
+// This will be properly typed once Prisma client is generated
+type PrismaThemeTokens = {
+  id: string;
+  colors: any;
+  typography: any;
+  radii: any;
+  spacing: any;
+  shadows: any;
+  sectionOverrides: any;
+  name: string;
+  isDark: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 import type { 
   ThemeTokensDTO, 
   ColorTokens, 
