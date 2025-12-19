@@ -51,7 +51,7 @@ export const ProjectContent: React.FC<ProjectContentProps> = ({ project }) => {
                             transition={{ duration: 0.5 }}
                             className="space-y-3"
                         >
-                            <h3 className="text-lg font-semibold text-slate-900 uppercase tracking-wide text-sm">
+                            <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wide">
                                 {post.title}
                             </h3>
                             <div className="prose prose-slate max-w-none text-slate-700 text-base leading-relaxed">

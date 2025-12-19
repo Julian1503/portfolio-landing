@@ -49,9 +49,9 @@ export function ProjectCard({ slug, title, tag, location, year, coverImage }: Pr
                             opacity: isHovered ? 1 : 0
                         }}
                         transition={{ duration: 0.3 }}
-                        className="absolute inset-0 bg-gradient-to-t from-amber-950/70 via-transparent to-transparent mix-blend-multiply"
+                        className="absolute inset-0 bg-gradient-to-t from-amber-950/70 via-transparent to-transparent mix-blend-multiply flex items-center justify-center"
                     >
-                        <p className="text-xs text-white/80">
+                        <p className="text-xs text-white/80 text-center px-4">
                             Click to explore this project →
                         </p>
                     </motion.div>

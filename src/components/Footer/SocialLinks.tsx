@@ -28,11 +28,12 @@ export const SocialLinks = () => {
                 Icon={PiLinkedinLogo}
                 hoverColor="hover:text-[#0077B5]"
             />
-            <SocialIcon
-                href="https://www.linkedin.com/in/mlourdesynigo/"
+            {/* TODO: Update with correct Facebook profile URL */}
+            {/* <SocialIcon
+                href="https://www.facebook.com/mlourdes.arch/"
                 Icon={PiFacebookLogo}
                 hoverColor="hover:text-[#1877F2]"
-            />
+            /> */}
         </div>
     );
 };

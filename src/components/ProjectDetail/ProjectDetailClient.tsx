@@ -36,7 +36,7 @@ export function ProjectDetailClient({ project, adjacent }: ProjectDetailClientPr
         );
     };
 
-    // Autoplay cada 5 segundos
+    // Autoplay every 4 seconds
     React.useEffect(() => {
         if (galleryImages.length <= 1 || isPaused) return;
 
