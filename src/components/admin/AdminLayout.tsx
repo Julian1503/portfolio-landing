@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { UserButton } from "@clerk/nextjs";
 
 export type AdminSectionId =
     | "hero"
@@ -35,12 +36,17 @@ export function AdminLayout({
                 {/* Sidebar desktop */}
                 <aside className="hidden md:flex w-60 flex-shrink-0 flex-col rounded-2xl bg-white/90 border border-slate-200 shadow-sm">
                     <div className="px-5 py-4 border-b border-slate-100">
-                        <h2 className="text-xs font-semibold tracking-[0.25em] uppercase text-slate-500">
-                            Admin
-                        </h2>
-                        <p className="mt-1 text-sm font-semibold text-slate-900">
-                            Portfolio Panel
-                        </p>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h2 className="text-xs font-semibold tracking-[0.25em] uppercase text-slate-500">
+                                    Admin
+                                </h2>
+                                <p className="mt-1 text-sm font-semibold text-slate-900">
+                                    Portfolio Panel
+                                </p>
+                            </div>
+                            <UserButton afterSignOutUrl="/" />
+                        </div>
                     </div>
                     <nav className="flex-1 px-2 py-3 space-y-1">
                         {sections.map((s) => {
@@ -64,19 +70,22 @@ export function AdminLayout({
 
                 {/* Selector mobile */}
                 <aside className="md:hidden w-full">
-                    <select
-                        className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm mb-3"
-                        value={activeSection}
-                        onChange={(e) =>
-                            onChangeSection(e.target.value as AdminSectionId)
-                        }
-                    >
-                        {sections.map((s) => (
-                            <option key={s.id} value={s.id}>
-                                {s.label}
-                            </option>
-                        ))}
-                    </select>
+                    <div className="flex items-center gap-3 mb-3">
+                        <select
+                            className="flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm"
+                            value={activeSection}
+                            onChange={(e) =>
+                                onChangeSection(e.target.value as AdminSectionId)
+                            }
+                        >
+                            {sections.map((s) => (
+                                <option key={s.id} value={s.id}>
+                                    {s.label}
+                                </option>
+                            ))}
+                        </select>
+                        <UserButton afterSignOutUrl="/" />
+                    </div>
                 </aside>
 
                 {/* Panel derecho */}
