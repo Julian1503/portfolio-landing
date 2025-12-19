@@ -49,48 +49,23 @@ export function mapPrismaThemeToDTO(prismaTheme: PrismaThemeTokens): ThemeTokens
  * Returns a properly typed object for database operations
  */
 export function preparePrismaThemeData(theme: {
-  name?: string;
-  isDark?: boolean;
-  colors?: ColorTokens;
-  typography?: TypographyTokens;
-  radii?: RadiiTokens;
-  spacing?: SpacingTokens;
-  shadows?: ShadowTokens;
+  name: string;
+  isDark: boolean;
+  colors: ColorTokens;
+  typography: TypographyTokens;
+  radii: RadiiTokens;
+  spacing: SpacingTokens;
+  shadows: ShadowTokens;
   sectionOverrides?: SectionOverrides;
-}): Partial<Omit<PrismaThemeTokens, "id" | "createdAt" | "updatedAt">> {
-  const data: Partial<Omit<PrismaThemeTokens, "id" | "createdAt" | "updatedAt">> = {};
-
-  if (theme.name !== undefined) {
-    data.name = theme.name;
-  }
-  
-  if (theme.isDark !== undefined) {
-    data.isDark = theme.isDark;
-  }
-  
-  if (theme.colors !== undefined) {
-    data.colors = theme.colors as any;
-  }
-  
-  if (theme.typography !== undefined) {
-    data.typography = theme.typography as any;
-  }
-  
-  if (theme.radii !== undefined) {
-    data.radii = theme.radii as any;
-  }
-  
-  if (theme.spacing !== undefined) {
-    data.spacing = theme.spacing as any;
-  }
-  
-  if (theme.shadows !== undefined) {
-    data.shadows = theme.shadows as any;
-  }
-  
-  if (theme.sectionOverrides !== undefined) {
-    data.sectionOverrides = theme.sectionOverrides as any;
-  }
-
-  return data;
+}): Omit<PrismaThemeTokens, "id" | "createdAt" | "updatedAt"> {
+  return {
+    name: theme.name,
+    isDark: theme.isDark,
+    colors: theme.colors as any,
+    typography: theme.typography as any,
+    radii: theme.radii as any,
+    spacing: theme.spacing as any,
+    shadows: theme.shadows as any,
+    sectionOverrides: theme.sectionOverrides as any,
+  };
 }

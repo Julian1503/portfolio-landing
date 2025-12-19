@@ -17,7 +17,7 @@ const Hero = ({ content }: HeroProps) => {
     const handleScrollCueClick = () => scrollToSection("about");
 
     return (
-        <section id="home" className="relative w-full h-[100svh] min-h-[540px] overflow-hidden bg-white">
+        <section id="home" className="relative w-full h-[100svh] min-h-[540px] overflow-hidden bg-[var(--theme-bg-primary)]">
             <HeroBackground 
                 backgroundImage={content.backgroundImage}
                 backgroundVideo={content.backgroundVideo}

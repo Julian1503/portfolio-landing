@@ -30,37 +30,27 @@ export class PrismaThemeRepository implements IThemeRepository {
     // Merge with defaults if no existing theme
     const baseTheme = existing || DEFAULT_THEME;
     
-    // Prepare update data with merged tokens
-    const mergedData = {
-      name: data.name,
-      isDark: data.isDark,
-      colors: data.colors ? { ...baseTheme.colors, ...data.colors } : undefined,
-      typography: data.typography ? { ...baseTheme.typography, ...data.typography } : undefined,
-      radii: data.radii ? { ...baseTheme.radii, ...data.radii } : undefined,
-      spacing: data.spacing ? { ...baseTheme.spacing, ...data.spacing } : undefined,
-      shadows: data.shadows ? { ...baseTheme.shadows, ...data.shadows } : undefined,
-      sectionOverrides: data.sectionOverrides,
+    // Prepare fully merged data for create or update
+    const mergedTheme = {
+      name: data.name ?? baseTheme.name,
+      isDark: data.isDark ?? baseTheme.isDark,
+      colors: data.colors ? { ...baseTheme.colors, ...data.colors } : baseTheme.colors,
+      typography: data.typography ? { ...baseTheme.typography, ...data.typography } : baseTheme.typography,
+      radii: data.radii ? { ...baseTheme.radii, ...data.radii } : baseTheme.radii,
+      spacing: data.spacing ? { ...baseTheme.spacing, ...data.spacing } : baseTheme.spacing,
+      shadows: data.shadows ? { ...baseTheme.shadows, ...data.shadows } : baseTheme.shadows,
+      sectionOverrides: data.sectionOverrides ?? baseTheme.sectionOverrides,
     };
 
-    const updateData = preparePrismaThemeData(mergedData);
-    const createData = preparePrismaThemeData({
-      name: baseTheme.name,
-      isDark: baseTheme.isDark,
-      colors: mergedData.colors || baseTheme.colors,
-      typography: mergedData.typography || baseTheme.typography,
-      radii: mergedData.radii || baseTheme.radii,
-      spacing: mergedData.spacing || baseTheme.spacing,
-      shadows: mergedData.shadows || baseTheme.shadows,
-      sectionOverrides: mergedData.sectionOverrides || baseTheme.sectionOverrides,
-    });
+    const prismaData = preparePrismaThemeData(mergedTheme);
 
     // Perform upsert
     const theme = await prisma.themeTokens.upsert({
       where: { id: THEME_ID },
-      update: updateData,
+      update: prismaData,
       create: {
         id: THEME_ID,
-        ...createData,
+        ...prismaData,
       },
     });
 

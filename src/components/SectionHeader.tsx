@@ -23,18 +23,10 @@ export function SectionHeader({
             ? "items-center text-center"
             : "items-start text-left";
 
-    // Colores más sofisticados
-    const eyebrowColor = tone === "dark"
-        ? "text-amber-400/90"
-        : "text-amber-700";
-
-    const titleColor = tone === "dark"
-        ? "text-slate-100"
-        : "text-slate-900";
-
-    const descColor = tone === "dark"
-        ? "text-slate-300"
-        : "text-slate-600";
+    // Colores usando variables de tema
+    const eyebrowColor = "text-[var(--theme-primary)]";
+    const titleColor = "text-[var(--theme-text)]";
+    const descColor = "text-[var(--theme-text-secondary)]";
 
     return (
         <header className={`mb-10 md:mb-14 flex flex-col gap-3 ${alignment}`}>
