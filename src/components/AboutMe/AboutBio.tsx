@@ -3,7 +3,15 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-export const AboutBio = () => (
+type AboutBioProps = {
+    eyebrow: string;
+    title: string;
+    paragraph1: string;
+    paragraph2: string;
+    paragraph3: string;
+};
+
+export const AboutBio = ({ eyebrow, title, paragraph1, paragraph2, paragraph3 }: AboutBioProps) => (
     <motion.div
         initial={{ opacity: 0, x: 20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -13,30 +21,22 @@ export const AboutBio = () => (
     >
         <div className="space-y-2">
             <span className="text-xs md:text-sm tracking-[0.35em] uppercase text-amber-700 font-semibold">
-                Meet the Architect
+                {eyebrow}
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
-                Design with purpose,
-                <br />
-                built with care
+                {title.split(',').map((line, idx) => (
+                    <React.Fragment key={idx}>
+                        {line.trim()}
+                        {idx < title.split(',').length - 1 && <br />}
+                    </React.Fragment>
+                ))}
             </h2>
         </div>
 
         <div className="space-y-4 text-sm md:text-base text-slate-600 leading-relaxed">
-            <p>
-                I&apos;m Maria Lourdes Ynigo, an architect with over 5 years of experience
-                creating thoughtful spaces that balance functionality, aesthetics, and
-                human connection.
-            </p>
-            <p>
-                Trained in Argentina and now based in Queensland, Australia, I bring
-                a unique perspective to every project—combining Latin American warmth
-                with Australian pragmatism.
-            </p>
-            <p>
-                My approach is simple: listen deeply, design intentionally, and deliver
-                spaces that feel timeless rather than trendy.
-            </p>
+            <p>{paragraph1}</p>
+            <p>{paragraph2}</p>
+            <p>{paragraph3}</p>
         </div>
     </motion.div>
 );

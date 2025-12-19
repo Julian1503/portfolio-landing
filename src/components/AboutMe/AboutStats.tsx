@@ -15,7 +15,23 @@ const StatItem = ({ value, label }: StatItemProps) => (
     </div>
 );
 
-export const AboutStats = () => (
+type AboutStatsProps = {
+    stat1Value: string;
+    stat1Label: string;
+    stat2Value: string;
+    stat2Label: string;
+    stat3Value: string;
+    stat3Label: string;
+};
+
+export const AboutStats = ({ 
+    stat1Value, 
+    stat1Label, 
+    stat2Value, 
+    stat2Label, 
+    stat3Value, 
+    stat3Label 
+}: AboutStatsProps) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -23,9 +39,9 @@ export const AboutStats = () => (
         transition={{ duration: 0.5 }}
         className="grid grid-cols-3 gap-4 pt-4"
     >
-        <StatItem value="5+" label="Years" />
-        <StatItem value="20+" label="Projects" />
-        <StatItem value="2" label="Countries" />
+        <StatItem value={stat1Value} label={stat1Label} />
+        <StatItem value={stat2Value} label={stat2Label} />
+        <StatItem value={stat3Value} label={stat3Label} />
     </motion.div>
 );
 

@@ -3,19 +3,27 @@ import Link from "next/link";
 import { InfoCard } from "@/components/InfoCard";
 import { Button } from "@/components/Button";
 
-export const ContactDetails = () => (
+type ContactDetailsProps = {
+    location: string;
+    availability: string;
+    calendlyUrl?: string | null;
+};
+
+export const ContactDetails = ({ location, availability, calendlyUrl }: ContactDetailsProps) => (
     <InfoCard title="Details" variant="light">
         <div className="text-sm md:text-base text-slate-700 space-y-1">
-            <p className="font-medium">Based in Queensland, Australia.</p>
-            <p className="font-medium">Available for remote and local collaboration.</p>
+            <p className="font-medium">Based in {location}.</p>
+            <p className="font-medium">{availability}.</p>
         </div>
 
-        <div className="flex flex-wrap gap-3 pt-4">
-            <Button asChild>
-                <Link href="https://calendly.com/mlourdesynigo/30min">
-                    Schedule a Call
-                </Link>
-            </Button>
-        </div>
+        {calendlyUrl && (
+            <div className="flex flex-wrap gap-3 pt-4">
+                <Button asChild>
+                    <Link href={calendlyUrl} target="_blank" rel="noopener noreferrer">
+                        Schedule a Call
+                    </Link>
+                </Button>
+            </div>
+        )}
     </InfoCard>
 );
