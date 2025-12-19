@@ -1,4 +1,5 @@
 // prisma/schema.prisma
+// Define your database models
 datasource db {
   provider = "postgresql"
 }
@@ -33,9 +34,6 @@ model Project {
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  @@index([createdAt(sort: Desc)])
-  @@index([isFeatured])
 }
 
 model ProjectImage {
@@ -102,4 +100,120 @@ enum ImageKind {
   SECTION
   DETAIL
   BEFORE_AFTER
+}
+
+// ============================================
+// CMS Models for editable site sections
+// ============================================
+
+// Singleton model for Hero section content
+model HeroSection {
+  id              String   @id @default("hero_singleton")
+  
+  // Main content
+  eyebrow         String   @default("Portfolio")
+  name            String   @default("Maria Lourdes Ynigo")
+  tagline         String   @default("Residential and commercial design with a focus on context, light and everyday life.")
+  
+  // Badges/tags
+  badge1          String   @default("Architect")
+  badge2          String   @default("Architecture Technician")
+  
+  // CTA button labels
+  projectsLabel   String   @default("View Projects")
+  contactLabel    String   @default("Get in Touch")
+  
+  // Background
+  backgroundImage String?
+  backgroundVideo String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Singleton model for About Me section content
+model AboutSection {
+  id              String   @id @default("about_singleton")
+  
+  // Header
+  eyebrow         String   @default("Meet the Architect")
+  title           String   @default("Design with purpose, built with care")
+  
+  // Biography paragraphs
+  paragraph1      String   @default("I'm Maria Lourdes Ynigo, an architect with over 5 years of experience creating thoughtful spaces that balance functionality, aesthetics, and human connection.")
+  paragraph2      String   @default("Trained in Argentina and now based in Queensland, Australia, I bring a unique perspective to every project—combining Latin American warmth with Australian pragmatism.")
+  paragraph3      String   @default("My approach is simple: listen deeply, design intentionally, and deliver spaces that feel timeless rather than trendy.")
+  
+  // Image
+  imageUrl        String?
+  imageAlt        String   @default("Maria Lourdes Ynigo")
+  
+  // Stats
+  stat1Value      String   @default("5+")
+  stat1Label      String   @default("Years of Experience")
+  stat2Value      String   @default("20+")
+  stat2Label      String   @default("Projects Completed")
+  stat3Value      String   @default("100%")
+  stat3Label      String   @default("Client Satisfaction")
+  
+  // CTA buttons
+  cta1Label       String   @default("Download Resume")
+  cta1Url         String   @default("#")
+  cta2Label       String   @default("View LinkedIn")
+  cta2Url         String   @default("https://www.linkedin.com/in/mlourdesynigo/")
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Singleton model for Contact section content
+model ContactSection {
+  id              String   @id @default("contact_singleton")
+  
+  // Header
+  eyebrow         String   @default("Contact")
+  title           String   @default("Let's work together")
+  description     String   @default("For collaborations, job opportunities or project enquiries, feel free to reach out by email or schedule a short call.")
+  
+  // Contact details
+  email           String   @default("mlourdes.ynigo@example.com")
+  location        String   @default("Queensland, Australia")
+  availability    String   @default("Available for projects")
+  
+  // Calendar/scheduling
+  calendlyUrl     String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Singleton model for Footer settings
+model FooterSection {
+  id              String       @id @default("footer_singleton")
+  
+  // Optional footer text
+  copyrightText   String?
+  
+  // Social links (one-to-many)
+  socialLinks     SocialLink[]
+  
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+// Social media links for footer
+model SocialLink {
+  id              String         @id @default(cuid())
+  footerId        String
+  footer          FooterSection  @relation(fields: [footerId], references: [id], onDelete: Cascade)
+  
+  platform        String         // e.g., "instagram", "linkedin", "facebook"
+  url             String
+  order           Int            @default(0)
+  isVisible       Boolean        @default(true)
+  
+  createdAt       DateTime       @default(now())
+  
+  @@index([footerId])
+  @@index([footerId, order])
 }

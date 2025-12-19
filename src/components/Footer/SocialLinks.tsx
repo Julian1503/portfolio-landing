@@ -1,5 +1,6 @@
 import React from "react";
 import { PiFacebookLogo, PiInstagramLogo, PiLinkedinLogo } from "react-icons/pi";
+import type { SocialLinkDTO } from "@/lib/cms/schemas";
 
 type SocialIconProps = {
     href: string;
@@ -15,25 +16,37 @@ const SocialIcon: React.FC<SocialIconProps> = ({ href, Icon, hoverColor }) => (
     />
 );
 
-export const SocialLinks = () => {
+const platformIcons: Record<string, {
+    Icon: typeof PiInstagramLogo;
+    hoverColor: string;
+}> = {
+    instagram: { Icon: PiInstagramLogo, hoverColor: "hover:text-[#E1306C]" },
+    linkedin: { Icon: PiLinkedinLogo, hoverColor: "hover:text-[#0077B5]" },
+    facebook: { Icon: PiFacebookLogo, hoverColor: "hover:text-[#1877F2]" },
+};
+
+type SocialLinksProps = {
+    links: SocialLinkDTO[];
+};
+
+export const SocialLinks = ({ links }: SocialLinksProps) => {
+    const visibleLinks = links.filter(link => link.isVisible);
+    
     return (
         <div className="flex flex-row gap-2">
-            <SocialIcon
-                href="https://www.instagram.com/mlourdes.arch/"
-                Icon={PiInstagramLogo}
-                hoverColor="hover:text-[#E1306C]"
-            />
-            <SocialIcon
-                href="https://www.linkedin.com/in/mlourdesynigo/"
-                Icon={PiLinkedinLogo}
-                hoverColor="hover:text-[#0077B5]"
-            />
-            {/* TODO: Update with correct Facebook profile URL */}
-            {/* <SocialIcon
-                href="https://www.facebook.com/mlourdes.arch/"
-                Icon={PiFacebookLogo}
-                hoverColor="hover:text-[#1877F2]"
-            /> */}
+            {visibleLinks.map((link) => {
+                const platformConfig = platformIcons[link.platform.toLowerCase()];
+                if (!platformConfig) return null;
+                
+                return (
+                    <SocialIcon
+                        key={link.id}
+                        href={link.url}
+                        Icon={platformConfig.Icon}
+                        hoverColor={platformConfig.hoverColor}
+                    />
+                );
+            })}
         </div>
     );
 };
