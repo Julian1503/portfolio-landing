@@ -30,7 +30,8 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
 
     return (
         <section
-            className="relative h-[50vh] sm:h-[60vh] lg:h-[70vh] bg-slate-900"
+            className="relative h-[50vh] sm:h-[60vh] lg:h-[70vh]"
+            style={{ backgroundColor: 'var(--theme-surface)' }}
             onMouseEnter={() => onSetPaused(true)}
             onMouseLeave={() => onSetPaused(false)}
         >
@@ -57,17 +58,17 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
                 <>
                     <button
                         onClick={onPrevImage}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow-lg hover:bg-white transition-all hover:scale-110"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-[var(--theme-surface)] p-2 shadow-lg hover:bg-[var(--theme-surface-hover)] transition-all hover:scale-110"
                         aria-label="Previous image"
                     >
-                        <ChevronLeft className="h-6 w-6 text-slate-900" />
+                        <ChevronLeft className="h-6 w-6 text-[var(--theme-text)]" />
                     </button>
                     <button
                         onClick={onNextImage}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow-lg hover:bg-white transition-all hover:scale-110"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-[var(--theme-surface)] p-2 shadow-lg hover:bg-[var(--theme-surface-hover)] transition-all hover:scale-110"
                         aria-label="Next image"
                     >
-                        <ChevronRight className="h-6 w-6 text-slate-900" />
+                        <ChevronRight className="h-6 w-6 text-[var(--theme-text)]" />
                     </button>
 
                     {/* Image Counter with Progress */}

@@ -39,7 +39,10 @@ export function ProjectCard({ slug, title, tag, location, year, coverImage }: Pr
                     <motion.div
                         initial={{ opacity: 0.8 }}
                         animate={{ opacity: isHovered ? 0.95 : 0.8 }}
-                        className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-accent/10 to-transparent opacity-90"
+                        className="absolute inset-0 bg-gradient-to-t opacity-90"
+                        style={{ 
+                            backgroundImage: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)'
+                        }}
                     />
 
                     <motion.div

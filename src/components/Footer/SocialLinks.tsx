@@ -12,7 +12,7 @@ const SocialIcon: React.FC<SocialIconProps> = ({ href, Icon, hoverColor }) => (
     <Icon
         size={22}
         onClick={() => window.open(href, '_blank')}
-        className={`text-slate-400 transition-all duration-300 cursor-pointer hover:scale-110 ${hoverColor}`}
+        className={`text-[var(--theme-text-muted)] transition-all duration-300 cursor-pointer hover:scale-110 ${hoverColor}`}
     />
 );
 

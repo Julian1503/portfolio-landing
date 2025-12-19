@@ -15,8 +15,8 @@ export const ThumbnailGallery: React.FC<ThumbnailGalleryProps> = ({
     if (galleryImages.length <= 1) return null;
 
     return (
-        <div className="mt-12 border-t border-slate-200 pt-8">
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-500">
+        <div className="mt-12 border-t border-[var(--theme-border)] pt-8">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[var(--theme-text-muted)]">
                 Gallery
             </h3>
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-5 lg:grid-cols-6">
@@ -26,9 +26,10 @@ export const ThumbnailGallery: React.FC<ThumbnailGalleryProps> = ({
                         onClick={() => onSetImageIndex(i)}
                         className={`relative aspect-square overflow-hidden rounded-lg transition-all ${
                             i === currentImageIndex
-                                ? "ring-2 ring-slate-900 ring-offset-2"
+                                ? "ring-2 ring-offset-2"
                                 : "opacity-60 hover:opacity-100"
                         }`}
+                        style={i === currentImageIndex ? { ringColor: 'var(--theme-primary)' } : {}}
                     >
                         <img
                             src={img.url}
