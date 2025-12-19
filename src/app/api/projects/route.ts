@@ -1,11 +1,13 @@
+
 import { NextRequest, NextResponse } from "next/server";
 import { createProject, getProjects } from "@/lib/project/projects.service";
-import type {ProjectCreateRequestDTO, ProjectDTO} from "@/types/ProjectDTO";
+import type { ProjectCreateRequestDTO, ProjectDTO } from "@/types/ProjectDTO";
+import {invalidateProjectsCache} from "@/lib/cache/cacheUtils";
 
 // GET /api/projects
 export async function GET() {
     try {
-        const projects = await getProjects(); // ProjectCardDTO[]
+        const projects = await getProjects();
         return NextResponse.json(projects, { status: 200 });
     } catch (error) {
         console.error("Error fetching projects", error);
@@ -36,7 +38,6 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        // defaults razonables para campos nuevos
         const dto: ProjectCreateRequestDTO = {
             slug: body.slug!,
             title: body.title!,
@@ -60,6 +61,8 @@ export async function POST(req: NextRequest) {
         };
 
         const created = await createProject(dto);
+
+        invalidateProjectsCache();
 
         return NextResponse.json(created, { status: 201 });
     } catch (error) {

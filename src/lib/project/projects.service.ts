@@ -54,25 +54,15 @@ export async function getProjects(): Promise<ProjectCardDTO[]> {
 }
 
 export async function getProjectByIdOrSlug(idOrSlug: string): Promise<ProjectDTO | null> {
-    // Intenta por slug primero (más común en URLs públicas)
-    let project = await prisma.project.findUnique({
-        where: { slug: idOrSlug },
-        include: {
-            images: { orderBy: { order: "asc" } },
-            posts: { orderBy: { order: "asc" } },
+    const project = await prisma.project.findFirst({
+        where: {
+            OR: [
+                { slug: idOrSlug },
+                { id: idOrSlug }
+            ]
         },
+        include: projectRelationsInclude,
     });
-
-    // Si no existe, intenta por ID
-    if (!project) {
-        project = await prisma.project.findUnique({
-            where: { id: idOrSlug },
-            include: {
-                images: { orderBy: { order: "asc" } },
-                posts: { orderBy: { order: "asc" } },
-            },
-        });
-    }
 
     if (!project) return null;
 

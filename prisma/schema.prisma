@@ -1,5 +1,4 @@
 // prisma/schema.prisma
-// Define your database models
 datasource db {
   provider = "postgresql"
 }
@@ -34,6 +33,9 @@ model Project {
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([createdAt(sort: Desc)])
+  @@index([isFeatured])
 }
 
 model ProjectImage {

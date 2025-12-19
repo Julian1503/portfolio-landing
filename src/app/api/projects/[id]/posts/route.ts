@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import {addProjectPost} from "@/lib/projectPost.service";
-import {ProjectPostDTO} from "@/types/ProjectDTO";
+import { addProjectPost } from "@/lib/projectPost.service";
+import { ProjectPostDTO } from "@/types/ProjectDTO";
+import {invalidateProjectsCache} from "@/lib/cache/cacheUtils";
 
 type Params = {
     params: Promise<{ id: string }>
@@ -13,7 +14,7 @@ function isNonEmptyString(v: unknown): v is string {
 export async function POST(req: NextRequest, { params }: Params) {
     try {
         const body = (await req.json()) as ProjectPostDTO;
-        const {id} = await params;
+        const { id } = await params;
         if (!isNonEmptyString(body.slug)) {
             return NextResponse.json({ error: "Missing field: slug" }, { status: 400 });
         }
@@ -29,8 +30,10 @@ export async function POST(req: NextRequest, { params }: Params) {
             title: body.title,
             content: body.content,
             order: body.order,
-            published:body.published,
+            published: body.published,
         });
+
+        invalidateProjectsCache();
 
         return NextResponse.json(created, { status: 201 });
     } catch (error) {

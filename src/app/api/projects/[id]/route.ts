@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { ProjectDTO } from "@/types/ProjectDTO";
-import {getProjectByIdOrSlug, updateProject, deleteProject} from "@/lib/project/projects.service";
+import { getProjectByIdOrSlug, updateProject, deleteProject } from "@/lib/project/projects.service";
+import {invalidateProjectCache, invalidateProjectsCache} from "@/lib/cache/cacheUtils";
 
 type Params = {
     params: Promise<{ id: string }>
@@ -31,6 +32,10 @@ export async function PUT(req: NextRequest, { params }: Params) {
 
         const updated = await updateProject(id, body);
 
+        // ✅ Invalidar caché después de actualizar
+        invalidateProjectsCache();
+        invalidateProjectCache(updated.slug);
+
         return NextResponse.json(updated, { status: 200 });
     } catch (error) {
         console.error("Error updating project", error);
@@ -42,7 +47,15 @@ export async function PUT(req: NextRequest, { params }: Params) {
 export async function DELETE(req: NextRequest, { params }: Params) {
     try {
         const { id } = await params;
+
+        const project = await getProjectByIdOrSlug(id);
+
         await deleteProject(id);
+
+        invalidateProjectsCache();
+        if (project) {
+            invalidateProjectCache(project.slug);
+        }
 
         return NextResponse.json({ ok: true }, { status: 200 });
     } catch (error) {

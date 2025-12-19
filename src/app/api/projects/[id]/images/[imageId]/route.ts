@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import {updateProjectImage, deleteProjectImage } from "@/lib/project/projectImages.service";
+import { updateProjectImage, deleteProjectImage } from "@/lib/project/projectImages.service";
+import {invalidateProjectsCache} from "@/lib/cache/cacheUtils";
 
 type Params = { params: { id: string; imageId: string } };
 
@@ -21,6 +22,8 @@ export async function PATCH(req: NextRequest, { params }: Params) {
             order: typeof body.order === "number" ? body.order : undefined,
         });
 
+        invalidateProjectsCache();
+
         return NextResponse.json(updated, { status: 200 });
     } catch (error) {
         console.error("Error updating project image", error);
@@ -35,6 +38,9 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 export async function DELETE(_: NextRequest, { params }: Params) {
     try {
         await deleteProjectImage(params.id, params.imageId);
+
+        invalidateProjectsCache();
+
         return NextResponse.json({ ok: true }, { status: 200 });
     } catch (error) {
         console.error("Error deleting project image", error);

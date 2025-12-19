@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import {updateProjectPost, deleteProjectPost} from "@/lib/projectPost.service";
+import { updateProjectPost, deleteProjectPost } from "@/lib/projectPost.service";
+import {invalidateProjectsCache} from "@/lib/cache/cacheUtils";
 
 type Params = { params: { id: string; postId: string } };
 
@@ -21,6 +22,8 @@ export async function PATCH(req: NextRequest, { params }: Params) {
             published: typeof body.published === "boolean" ? body.published : undefined,
         });
 
+        invalidateProjectsCache();
+
         return NextResponse.json(updated, { status: 200 });
     } catch (error) {
         console.error("Error updating project post", error);
@@ -35,6 +38,8 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 export async function DELETE(_: NextRequest, { params }: Params) {
     try {
         await deleteProjectPost(params.id, params.postId);
+
+        invalidateProjectsCache();
 
         return NextResponse.json({ ok: true }, { status: 200 });
     } catch (error) {

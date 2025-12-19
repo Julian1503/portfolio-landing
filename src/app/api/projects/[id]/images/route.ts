@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import {parseCreateProjectImageBody} from "@/lib/project/projectImages.dto";
-import {addProjectImage} from "@/lib/project/projectImages.service";
-import {isNonEmptyString} from "@/lib/http/validators";
+import { parseCreateProjectImageBody } from "@/lib/project/projectImages.dto";
+import { addProjectImage } from "@/lib/project/projectImages.service";
+import { isNonEmptyString } from "@/lib/http/validators";
+import {invalidateProjectsCache} from "@/lib/cache/cacheUtils";
 
 type Params = {
     params: Promise<{ id: string }>
 };
 
 export async function POST(req: NextRequest, { params }: Params) {
-    const {id} = await params;
+    const { id } = await params;
     if (!isNonEmptyString(id)) {
         return NextResponse.json({ error: "Missing/invalid route param: id" }, { status: 400 });
     }
@@ -27,6 +28,9 @@ export async function POST(req: NextRequest, { params }: Params) {
 
     try {
         const created = await addProjectImage(id, parsed.value);
+
+        invalidateProjectsCache();
+
         return NextResponse.json(created, { status: 201 });
     } catch (error) {
         console.error("Error creating project image", error);
