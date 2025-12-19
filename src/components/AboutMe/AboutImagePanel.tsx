@@ -29,7 +29,7 @@ export const AboutImagePanel = ({ imageUrl, imageAlt }: AboutImagePanelProps) =>
                     className="object-cover"
                     priority
                 />
-                <div className="absolute inset-0 rounded-2xl border-8 border-white/10 pointer-events-none" />
+                <div className="absolute inset-0 rounded-2xl border-8 pointer-events-none" style={{ borderColor: 'var(--theme-border)' }} />
             </div>
 
             <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full blur-3xl opacity-30 -z-10" style={{ backgroundColor: 'var(--theme-primary)' }} />

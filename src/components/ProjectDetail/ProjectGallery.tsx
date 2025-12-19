@@ -73,7 +73,7 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
 
                     {/* Image Counter with Progress */}
                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-                        <div className="rounded-full bg-black/60 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
+                        <div className="rounded-full px-3 py-1.5 text-xs font-medium backdrop-blur-sm" style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)', color: 'var(--theme-primary-text)' }}>
                             {currentImageIndex + 1} / {galleryImages.length}
                         </div>
 
@@ -83,11 +83,13 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
                                 <button
                                     key={i}
                                     onClick={() => onSetImageIndex(i)}
-                                    className={`h-1.5 rounded-full transition-all ${
-                                        i === currentImageIndex
-                                            ? "w-8 bg-white"
-                                            : "w-1.5 bg-white/50 hover:bg-white/75"
-                                    }`}
+                                    className="h-1.5 rounded-full transition-all"
+                                    style={{
+                                        width: i === currentImageIndex ? '2rem' : '0.375rem',
+                                        backgroundColor: i === currentImageIndex 
+                                            ? 'var(--theme-primary)' 
+                                            : 'var(--theme-border)'
+                                    }}
                                     aria-label={`Go to image ${i + 1}`}
                                 />
                             ))}
@@ -99,7 +101,8 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="absolute top-4 right-4 rounded-full bg-black/60 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm"
+                            className="absolute top-4 right-4 rounded-full px-3 py-1.5 text-xs font-medium backdrop-blur-sm"
+                            style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)', color: 'var(--theme-primary-text)' }}
                         >
                             Paused
                         </motion.div>
@@ -109,7 +112,7 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
 
             {/* Caption */}
             {currentImage.caption && (
-                <div className="absolute bottom-4 left-4 right-4 sm:left-8 sm:right-8 text-xs sm:text-sm text-white/90">
+                <div className="absolute bottom-4 left-4 right-4 sm:left-8 sm:right-8 text-xs sm:text-sm" style={{ color: 'var(--theme-primary-text)' }}>
                     {currentImage.caption}
                 </div>
             )}
