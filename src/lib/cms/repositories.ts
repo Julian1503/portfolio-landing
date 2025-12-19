@@ -41,8 +41,16 @@ export class HeroRepository implements IHeroRepository {
       update: data,
       create: {
         id: HERO_ID,
-        ...data,
-      } as never,
+        eyebrow: data.eyebrow ?? "Portfolio",
+        name: data.name ?? "Your Name",
+        tagline: data.tagline ?? "Your tagline here",
+        badge1: data.badge1 ?? "Badge 1",
+        badge2: data.badge2 ?? "Badge 2",
+        projectsLabel: data.projectsLabel ?? "View Projects",
+        contactLabel: data.contactLabel ?? "Get in Touch",
+        backgroundImage: data.backgroundImage,
+        backgroundVideo: data.backgroundVideo,
+      },
     });
     return hero;
   }
@@ -66,8 +74,24 @@ export class AboutRepository implements IAboutRepository {
       update: data,
       create: {
         id: ABOUT_ID,
-        ...data,
-      } as never,
+        eyebrow: data.eyebrow ?? "About",
+        title: data.title ?? "Title",
+        paragraph1: data.paragraph1 ?? "",
+        paragraph2: data.paragraph2 ?? "",
+        paragraph3: data.paragraph3 ?? "",
+        imageUrl: data.imageUrl,
+        imageAlt: data.imageAlt ?? "Profile image",
+        stat1Value: data.stat1Value ?? "1",
+        stat1Label: data.stat1Label ?? "Label 1",
+        stat2Value: data.stat2Value ?? "2",
+        stat2Label: data.stat2Label ?? "Label 2",
+        stat3Value: data.stat3Value ?? "3",
+        stat3Label: data.stat3Label ?? "Label 3",
+        cta1Label: data.cta1Label ?? "CTA 1",
+        cta1Url: data.cta1Url ?? "#",
+        cta2Label: data.cta2Label ?? "CTA 2",
+        cta2Url: data.cta2Url ?? "#",
+      },
     });
     return about;
   }
@@ -91,8 +115,14 @@ export class ContactRepository implements IContactRepository {
       update: data,
       create: {
         id: CONTACT_ID,
-        ...data,
-      } as never,
+        eyebrow: data.eyebrow ?? "Contact",
+        title: data.title ?? "Get in Touch",
+        description: data.description ?? "",
+        email: data.email ?? "email@example.com",
+        location: data.location ?? "Location",
+        availability: data.availability ?? "Available",
+        calendlyUrl: data.calendlyUrl,
+      },
     });
     return contact;
   }
@@ -124,8 +154,8 @@ export class FooterRepository implements IFooterRepository {
       update: footerData,
       create: {
         id: FOOTER_ID,
-        ...footerData,
-      } as never,
+        copyrightText: footerData.copyrightText,
+      },
       include: {
         socialLinks: {
           where: { isVisible: true },

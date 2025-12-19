@@ -19,9 +19,7 @@ export const HeroSectionSchema = z.object({
 
 export type HeroSectionDTO = z.infer<typeof HeroSectionSchema>;
 
-export const HeroSectionUpdateSchema = HeroSectionSchema.partial().required({
-  id: false,
-});
+export const HeroSectionUpdateSchema = HeroSectionSchema.omit({ id: true }).partial();
 
 export type HeroSectionUpdateDTO = z.infer<typeof HeroSectionUpdateSchema>;
 
@@ -52,9 +50,7 @@ export const AboutSectionSchema = z.object({
 
 export type AboutSectionDTO = z.infer<typeof AboutSectionSchema>;
 
-export const AboutSectionUpdateSchema = AboutSectionSchema.partial().required({
-  id: false,
-});
+export const AboutSectionUpdateSchema = AboutSectionSchema.omit({ id: true }).partial();
 
 export type AboutSectionUpdateDTO = z.infer<typeof AboutSectionUpdateSchema>;
 
@@ -75,9 +71,7 @@ export const ContactSectionSchema = z.object({
 
 export type ContactSectionDTO = z.infer<typeof ContactSectionSchema>;
 
-export const ContactSectionUpdateSchema = ContactSectionSchema.partial().required({
-  id: false,
-});
+export const ContactSectionUpdateSchema = ContactSectionSchema.omit({ id: true }).partial();
 
 export type ContactSectionUpdateDTO = z.infer<typeof ContactSectionUpdateSchema>;
 
@@ -104,8 +98,6 @@ export const FooterSectionSchema = z.object({
 
 export type FooterSectionDTO = z.infer<typeof FooterSectionSchema>;
 
-export const FooterSectionUpdateSchema = FooterSectionSchema.partial().required({
-  id: false,
-});
+export const FooterSectionUpdateSchema = FooterSectionSchema.omit({ id: true }).partial();
 
 export type FooterSectionUpdateDTO = z.infer<typeof FooterSectionUpdateSchema>;
