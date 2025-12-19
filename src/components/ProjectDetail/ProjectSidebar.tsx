@@ -105,7 +105,7 @@ export const ProjectSidebar: React.FC<ProjectSidebarProps> = ({ project }) => {
                     Interested in working together?
                 </h3>
                 <p className="mb-4 text-xs text-[var(--theme-text-secondary)]">
-                    Let's discuss your next project.
+                    Let&apos;s discuss your next project.
                 </p>
                 <Button asChild className="w-full">
                     <Link href="/#contact">Get in Touch</Link>
