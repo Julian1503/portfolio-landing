@@ -36,7 +36,7 @@ export interface IFooterRepository {
 
 export interface ISocialLinkRepository {
   findMany(footerId: string): Promise<SocialLinkDTO[]>;
-  create(data: Omit<SocialLinkDTO, "id" | "createdAt">): Promise<SocialLinkDTO>;
+  create(data: Omit<SocialLinkDTO, "id">): Promise<SocialLinkDTO>;
   update(id: string, data: Partial<SocialLinkDTO>): Promise<SocialLinkDTO>;
   delete(id: string): Promise<void>;
   reorder(footerId: string, linkIds: string[]): Promise<void>;
@@ -65,7 +65,7 @@ export interface IFooterService {
   getFooter(): Promise<FooterSectionDTO>;
   updateFooter(data: FooterSectionUpdateDTO): Promise<FooterSectionDTO>;
   getSocialLinks(): Promise<SocialLinkDTO[]>;
-  createSocialLink(data: Omit<SocialLinkDTO, "id" | "createdAt">): Promise<SocialLinkDTO>;
+  createSocialLink(data: Omit<SocialLinkDTO, "id">): Promise<SocialLinkDTO>;
   updateSocialLink(id: string, data: Partial<SocialLinkDTO>): Promise<SocialLinkDTO>;
   deleteSocialLink(id: string): Promise<void>;
   reorderSocialLinks(linkIds: string[]): Promise<void>;

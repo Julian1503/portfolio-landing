@@ -116,7 +116,7 @@ export class FooterService implements IFooterService {
     return await this.socialLinkRepository.findMany(FOOTER_ID);
   }
 
-  async createSocialLink(data: Omit<SocialLinkDTO, "id" | "createdAt">): Promise<SocialLinkDTO> {
+  async createSocialLink(data: Omit<SocialLinkDTO, "id">): Promise<SocialLinkDTO> {
     return await this.socialLinkRepository.create({
       ...data,
       footerId: FOOTER_ID,

@@ -338,7 +338,11 @@ export function FooterAdminSection() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => link.id && handleDeleteLink(link.id)}
+                    onClick={() => {
+                      if (link.id) {
+                        handleDeleteLink(link.id);
+                      }
+                    }}
                     disabled={isSaving}
                     className="text-sm text-red-600 hover:text-red-800 disabled:text-red-400"
                   >

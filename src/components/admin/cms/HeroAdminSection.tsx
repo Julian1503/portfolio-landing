@@ -62,9 +62,9 @@ export function HeroAdminSection() {
     }
   };
 
-  const handleChange = (field: keyof HeroSectionDTO, value: string) => {
+  const handleChange = (field: keyof HeroSectionDTO, value: string | null) => {
     if (!hero) return;
-    setHero({ ...hero, [field]: value });
+    setHero({ ...hero, [field]: value || null });
   };
 
   if (isLoading) {

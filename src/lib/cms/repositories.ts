@@ -181,7 +181,7 @@ export class SocialLinkRepository implements ISocialLinkRepository {
     return links;
   }
 
-  async create(data: Omit<SocialLinkDTO, "id" | "createdAt">): Promise<SocialLinkDTO> {
+  async create(data: Omit<SocialLinkDTO, "id">): Promise<SocialLinkDTO> {
     const link = await prisma.socialLink.create({
       data: {
         footerId: data.footerId ?? FOOTER_ID,

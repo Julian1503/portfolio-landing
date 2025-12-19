@@ -13,6 +13,7 @@ type HeroContentCardProps = {
 
 const HeroContentCard = ({ content, onProjectsClick, onContactClick }: HeroContentCardProps) => {
     const reduceMotion = useReducedMotion();
+    const nameLines = React.useMemo(() => content.name.split(' '), [content.name]);
 
     return (
         <motion.div
@@ -26,10 +27,10 @@ const HeroContentCard = ({ content, onProjectsClick, onContactClick }: HeroConte
             </span>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight uppercase">
-                {content.name.split(' ').map((word, idx) => (
+                {nameLines.map((word, idx) => (
                     <React.Fragment key={idx}>
                         {word}
-                        {idx < content.name.split(' ').length - 1 && <br />}
+                        {idx < nameLines.length - 1 && <br />}
                     </React.Fragment>
                 ))}
             </h1>
