@@ -20,7 +20,7 @@ export const AboutBio = ({ eyebrow, title, paragraph1, paragraph2, paragraph3 }:
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="order-1 lg:order-2 space-y-6 flex flex-col justify-center lg:justify-start"
+            className="space-y-6 flex flex-col justify-center lg:justify-start"
         >
             <div className="space-y-2">
                 <span className="text-xs md:text-sm tracking-[0.35em] uppercase text-amber-700 font-semibold">

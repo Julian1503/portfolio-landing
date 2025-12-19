@@ -26,26 +26,25 @@ const montserrat = Montserrat({
 export const metadata: Metadata = SITE_METADATA;
 
 export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
+                                             children,
+                                         }: Readonly<{
+    children: React.ReactNode;
 }>) {
-  // Fetch theme tokens server-side to avoid flash
-  const theme = await getTheme();
-  const themeCSS = generateThemeCSS(theme);
+    const theme = await getTheme();
+    const themeCSS = generateThemeCSS(theme);
 
-  return (
-    <html lang="en">
-      <head>
-        <style dangerouslySetInnerHTML={{ __html: themeCSS }} />
-      </head>
-      <body
-        className={`${geistSans.variable} ${montserrat.variable} ${geistMono.variable} antialiased`}
-      >
-      <CustomCursor/>
-      <SmoothScroll/>
+    return (
+        <html lang="en">
+        <head>
+            <style dangerouslySetInnerHTML={{ __html: themeCSS }} />
+        </head>
+        <body
+            className={`${geistSans.variable} ${montserrat.variable} ${geistMono.variable} antialiased`}
+        >
+        <CustomCursor />
+        <SmoothScroll />
         {children}
-      </body>
-    </html>
-  );
+        </body>
+        </html>
+    );
 }

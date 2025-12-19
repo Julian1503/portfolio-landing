@@ -13,6 +13,7 @@ export function ThemeAdminSection() {
   const [theme, setTheme] = React.useState<ThemeTokensDTO | null>(null);
   const [presets, setPresets] = React.useState<PresetInfo[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [sectionOverrides, setSectionOverrides] = React.useState({});
   const [isSaving, setIsSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
@@ -49,17 +50,16 @@ export function ThemeAdminSection() {
   }, []);
 
   const handleSave = async () => {
-    if (!theme) return;
-
-    setIsSaving(true);
     setError(null);
-    setSuccessMessage(null);
 
     try {
       const res = await fetch("/api/admin/theme", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(theme),
+        body: JSON.stringify({
+          ...theme,
+          sectionOverrides: sectionOverrides || {}, // Ensure it is never null
+        }),
       });
 
       if (!res.ok) {
@@ -70,13 +70,8 @@ export function ThemeAdminSection() {
       const updated = await res.json();
       setTheme(updated);
       setIsDirty(false);
-      setSuccessMessage("Theme updated successfully!");
-      
-      setTimeout(() => setSuccessMessage(null), 3000);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update theme");
-    } finally {
-      setIsSaving(false);
+    } catch (err : Error | any) {
+      setError(err.message || "Failed to update theme");
     }
   };
 

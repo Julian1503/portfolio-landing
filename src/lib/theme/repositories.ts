@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import type { Prisma } from "../../../generated/prisma/client";
 import type { IThemeRepository } from "./interfaces";
 import type { ThemeTokensDTO, ThemeTokensUpdateDTO } from "./schemas";
 import { DEFAULT_THEME } from "./defaults";
@@ -12,7 +13,7 @@ const THEME_ID = "theme_singleton";
 
 export class PrismaThemeRepository implements IThemeRepository {
   async findUnique(): Promise<ThemeTokensDTO | null> {
-    const theme = await prisma.themeTokens.findUnique({
+    const theme = await prisma.themeTokens?.findUnique({
       where: { id: THEME_ID },
     });
 
@@ -61,9 +62,8 @@ export class PrismaThemeRepository implements IThemeRepository {
       create: {
         id: THEME_ID,
         ...createData,
-      },
+      } as unknown as Prisma.ThemeTokensCreateInput,
     });
-
     return mapPrismaThemeToDTO(theme);
   }
 }

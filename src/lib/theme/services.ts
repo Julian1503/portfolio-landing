@@ -40,7 +40,6 @@ export class ThemeService implements IThemeService {
   async getTheme(): Promise<ThemeTokensDTO> {
     const theme = await this.repository.findUnique();
     
-    // Return default theme if none exists
     if (!theme) {
       return DEFAULT_THEME;
     }

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import  { NextRequest, NextResponse } from "next/server";
 import { createThemeService } from "@/lib/theme/services";
 import { ThemeTokensUpdateSchema } from "@/lib/theme/schemas";
 import { ZodError } from "zod";
@@ -30,31 +30,27 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   try {
     const body = await req.json();
-    
-    // Validate request body
-    const validatedData = ThemeTokensUpdateSchema.parse(body);
-    
+
+    const validatedData = ThemeTokensUpdateSchema.parse({
+      ...body,
+      sectionOverrides: body.sectionOverrides || {},
+    });
+
     const service = createThemeService();
     const updatedTheme = await service.updateTheme(validatedData);
-    
+
     return NextResponse.json(updatedTheme, { status: 200 });
   } catch (error) {
-    console.error("[PUT /api/admin/theme]", error);
-    
-    // Validation errors
     if (error instanceof ZodError) {
       return NextResponse.json(
-        {
-          error: "Validation failed",
-          details: error.issues,
-        },
-        { status: 400 }
+          { error: "Validation failed", details: error.issues },
+          { status: 400 }
       );
     }
-    
+
     return NextResponse.json(
-      { error: "Failed to update theme" },
-      { status: 500 }
+        { error: "Failed to update theme" },
+        { status: 500 }
     );
   }
 }
