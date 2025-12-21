@@ -1,4 +1,4 @@
-import {ProjectStatus, ProjectType} from "../../../generated/prisma/enums";
+import {ProjectStatus, ProjectType} from "@/generated/prisma/enums";
 
 export type ProjectCreateRequestDTO = {
     slug: string;
