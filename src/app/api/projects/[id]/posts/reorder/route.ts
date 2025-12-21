@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import {reorderProjectPosts} from "@/lib/projectPost.service";
 
-type Params = { params: { id: string } };
-
-export async function PATCH(req: NextRequest, { params }: Params) {
+type RouteContext = {
+    params: Promise<{ id: string }>;
+};
+export async function PATCH(req: NextRequest, { params }: RouteContext) {
     try {
         const body = (await req.json()) as { postIds?: unknown };
 
         if (!Array.isArray(body.postIds) || !body.postIds.every((x) => typeof x === "string")) {
             return NextResponse.json({ error: "postIds must be string[]" }, { status: 400 });
         }
-
-        const updated = await reorderProjectPosts(params.id, body.postIds);
+        const {id} = await params;
+        const updated = await reorderProjectPosts(id, body.postIds);
 
         return NextResponse.json(updated, { status: 200 });
     } catch (error) {

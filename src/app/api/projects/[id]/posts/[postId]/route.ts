@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { updateProjectPost, deleteProjectPost } from "@/lib/projectPost.service";
 import {invalidateProjectsCache} from "@/lib/cache/cacheUtils";
 
-type Params = { params: { id: string; postId: string } };
-
-export async function PATCH(req: NextRequest, { params }: Params) {
+type RouteContext = {
+    params: Promise<{ id: string; postId: string }>;
+};
+export async function PATCH(req: NextRequest, { params }: RouteContext) {
     try {
+        const { id, postId } = await params;
         const body = (await req.json()) as {
             slug?: unknown;
             title?: unknown;
@@ -14,7 +16,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
             published?: unknown;
         };
 
-        const updated = await updateProjectPost(params.id, params.postId, {
+        const updated = await updateProjectPost(id, postId, {
             slug: typeof body.slug === "string" ? body.slug : undefined,
             title: typeof body.title === "string" ? body.title : undefined,
             content: typeof body.content === "string" ? body.content : undefined,
@@ -35,9 +37,10 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     }
 }
 
-export async function DELETE(_: NextRequest, { params }: Params) {
+export async function DELETE(_: NextRequest, { params }: RouteContext) {
     try {
-        await deleteProjectPost(params.id, params.postId);
+        const { id, postId } = await params;
+        await deleteProjectPost(id, postId);
 
         invalidateProjectsCache();
 

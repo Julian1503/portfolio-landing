@@ -4,7 +4,11 @@ import {invalidateProjectsCache} from "@/lib/cache/cacheUtils";
 
 type Params = { params: { id: string; imageId: string } };
 
-export async function PATCH(req: NextRequest, { params }: Params) {
+type RouteContext = {
+    params: Promise<{ id: string; imageId: string }>;
+};
+
+export async function PATCH(req: NextRequest, {params}: RouteContext) {
     try {
         const body = (await req.json()) as {
             url?: unknown;
@@ -13,8 +17,8 @@ export async function PATCH(req: NextRequest, { params }: Params) {
             kind?: unknown;
             order?: unknown;
         };
-
-        const updated = await updateProjectImage(params.id, params.imageId, {
+        const { id, imageId } = await params;
+        const updated = await updateProjectImage(id, imageId, {
             url: typeof body.url === "string" ? body.url : undefined,
             alt: body.alt === null ? null : typeof body.alt === "string" ? body.alt : undefined,
             caption: body.caption === null ? null : typeof body.caption === "string" ? body.caption : undefined,
@@ -35,9 +39,10 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     }
 }
 
-export async function DELETE(_: NextRequest, { params }: Params) {
+export async function DELETE(_: NextRequest, { params }: RouteContext) {
     try {
-        await deleteProjectImage(params.id, params.imageId);
+        const { id, imageId } = await params;
+        await deleteProjectImage(id, imageId);
 
         invalidateProjectsCache();
 
