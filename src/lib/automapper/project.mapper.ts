@@ -1,5 +1,5 @@
 import type { ProjectDTO, ProjectImageDTO, ProjectPostDTO, ProjectCardDTO } from "@/types/ProjectDTO";
-import {ProjectImage, ProjectPost, Project} from "@/types/projectEnums";
+import {Project, ProjectImage, ProjectPost} from "@/generated/prisma/client";
 
 // Normalize database nulls to undefined to align with optional fields in DTOs
 // and prevent callers from handling two separate “no data” states.

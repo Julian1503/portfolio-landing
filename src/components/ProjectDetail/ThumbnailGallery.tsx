@@ -26,10 +26,9 @@ export const ThumbnailGallery: React.FC<ThumbnailGalleryProps> = ({
                         onClick={() => onSetImageIndex(i)}
                         className={`relative aspect-square overflow-hidden rounded-lg transition-all ${
                             i === currentImageIndex
-                                ? "ring-2 ring-offset-2"
+                                ? "ring-2 ring-offset-2 ring-[var(--theme-primary)]"
                                 : "opacity-60 hover:opacity-100"
                         }`}
-                        style={i === currentImageIndex ? { ringColor: 'var(--theme-primary)' } : {}}
                     >
                         <img
                             src={img.url}

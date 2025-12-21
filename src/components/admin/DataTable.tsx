@@ -11,41 +11,41 @@ export type Column<T> = {
 type DataTableProps<T> = {
     columns: Column<T>[];
     data: T[];
-    getRowId: (row: T) => string;
+    getRowIdAction: (row: T) => string;
     page: number;
     pageSize: number;
     totalCount: number;
-    onPageChange: (page: number) => void;
-    renderRowActions?: (row: T) => React.ReactNode;
+    onPageChangeAction: (page: number) => void;
+    renderRowAction?: (row: T) => React.ReactNode;
     emptyMessage?: string;
 
     // orden
     sortKey?: keyof T | null;
     sortDirection?: "asc" | "desc";
-    onSortChange?: (key: keyof T) => void;
+    onSortChangeAction?: (key: keyof T) => void;
 };
 
 export function DataTable<T>({
                                  columns,
                                  data,
-                                 getRowId,
+                                 getRowIdAction,
                                  page,
                                  pageSize,
                                  totalCount,
-                                 onPageChange,
-                                 renderRowActions,
+                                 onPageChangeAction,
+                                 renderRowAction,
                                  emptyMessage = "No data.",
                                  sortKey = null,
                                  sortDirection,
-                                 onSortChange,
+                                 onSortChangeAction,
                              }: DataTableProps<T>) {
     const pageCount = Math.max(1, Math.ceil(totalCount / pageSize));
     const isPaginated = totalCount > pageSize;
 
-    const colCount = columns.length + (renderRowActions ? 1 : 0);
+    const colCount = columns.length + (renderRowAction ? 1 : 0);
 
-    const goPrevPage = () => onPageChange(Math.max(0, page - 1));
-    const goNextPage = () => onPageChange(Math.min(pageCount - 1, page + 1));
+    const goPrevPage = () => onPageChangeAction(Math.max(0, page - 1));
+    const goNextPage = () => onPageChangeAction(Math.min(pageCount - 1, page + 1));
 
     return (
         <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -63,7 +63,7 @@ export function DataTable<T>({
                             <button
                                 key={String(col.key)}
                                 type="button"
-                                onClick={() => onSortChange && onSortChange(col.key)}
+                                onClick={() => onSortChangeAction && onSortChangeAction(col.key)}
                                 className={`flex items-center gap-1 text-left ${
                                     isSorted
                                         ? "text-slate-900"
@@ -80,7 +80,7 @@ export function DataTable<T>({
                         );
                     })}
 
-                    {renderRowActions && (
+                    {renderRowAction && (
                         <span className="text-right text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
               Actions
             </span>
@@ -97,7 +97,7 @@ export function DataTable<T>({
                 ) : (
                     <div className="divide-y divide-slate-100">
                         {data.map((row) => {
-                            const id = getRowId(row);
+                            const id = getRowIdAction(row);
                             return (
                                 <div
                                     key={id}
@@ -118,9 +118,9 @@ export function DataTable<T>({
                                         </div>
                                     ))}
 
-                                    {renderRowActions && (
+                                    {renderRowAction && (
                                         <div className="flex justify-end gap-2 text-[11px] sm:text-xs">
-                                            {renderRowActions(row)}
+                                            {renderRowAction(row)}
                                         </div>
                                     )}
                                 </div>

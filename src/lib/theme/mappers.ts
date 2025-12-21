@@ -48,16 +48,7 @@ export function mapPrismaThemeToDTO(prismaTheme: PrismaThemeTokens): ThemeTokens
  * Prepare theme data for Prisma upsert
  * Returns a properly typed object for database operations
  */
-export function preparePrismaThemeData(theme: {
-  name: string;
-  isDark: boolean;
-  colors: ColorTokens;
-  typography: TypographyTokens;
-  radii: RadiiTokens;
-  spacing: SpacingTokens;
-  shadows: ShadowTokens;
-  sectionOverrides?: SectionOverrides;
-}): Omit<PrismaThemeTokens, "id" | "createdAt" | "updatedAt"> {
+export function preparePrismaThemeData(theme: ThemeTokensDTO ): Omit<PrismaThemeTokens, "id" | "createdAt" | "updatedAt"> {
   return {
     name: theme.name,
     isDark: theme.isDark,

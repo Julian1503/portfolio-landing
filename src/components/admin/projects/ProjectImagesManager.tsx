@@ -54,7 +54,11 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
         setRefreshing(true);
         try {
             const res = await fetch(`/api/projects/${projectId}`);
-            if (!res.ok) throw new Error("Failed to fetch project");
+            if (!res.ok) {
+                const errText = await res.text().catch(() => res.statusText || "Unknown error");
+                console.error("Failed to refresh images:", res.status, errText);
+                return;
+            }
 
             const project = await res.json();
             setImages(project.images);
@@ -111,7 +115,11 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
                 body: formData,
             });
 
-            if (!res.ok) throw new Error("Upload failed");
+            if (!res.ok) {
+                const errText = await res.text().catch(() => res.statusText || "Unknown error");
+                console.error("Failed to upload image:", res.status, errText);
+                return;
+            }
 
             const data = await res.json();
             setFormData((prev) => ({ ...prev, url: data.url }));
@@ -141,7 +149,11 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
                 body: JSON.stringify(formData),
             });
 
-            if (!res.ok) throw new Error("Failed to save image");
+            if (!res.ok) {
+                const errText = await res.text().catch(() => res.statusText || "Unknown error");
+                console.error(`Failed to ${isCreate ? "create" : "update"} image:`, res.status, errText);
+                return;
+            }
 
             const savedImage = await res.json();
 
@@ -167,7 +179,11 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
                 method: "DELETE",
             });
 
-            if (!res.ok) throw new Error("Failed to delete image");
+            if (!res.ok) {
+                const errText = await res.text().catch(() => res.statusText || "Unknown error");
+                console.error("Failed to delete image:", res.status, errText);
+                return;
+            }
 
             setImages((prev) => prev.filter((img) => img.id !== imageId));
             setDeleteConfirm(null);
@@ -187,7 +203,12 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
                 body: JSON.stringify({ imageIds: newOrder.map((img) => img.id) }),
             });
 
-            if (!res.ok) throw new Error("Failed to reorder images");
+            if (!res.ok) {
+                const errText = await res.text().catch(() => res.statusText || "Unknown error");
+                console.error("Failed to reorder images:", res.status, errText);
+                setImages(oldOrder);
+                return;
+            }
         } catch (error) {
             console.error("Error reordering images:", error);
             setImages(oldOrder);
@@ -338,7 +359,7 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
             {/* Modal: Create/Edit */}
             <Modal
                 open={modalMode !== null}
-                onClose={closeModal}
+                onCloseAction={closeModal}
                 title={modalMode === "create" ? "Add New Image" : "Edit Image"}
                 maxWidth="lg"
                 preventClose={submitting}
@@ -512,8 +533,8 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
             {/* Delete Confirmation */}
             <ConfirmDialog
                 open={deleteConfirm !== null}
-                onClose={() => setDeleteConfirm(null)}
-                onConfirm={() => deleteConfirm && handleDelete(deleteConfirm)}
+                onCloseAction={() => setDeleteConfirm(null)}
+                onConfirmAction={() => deleteConfirm && handleDelete(deleteConfirm)}
                 title="Delete Image?"
                 message="This action cannot be undone. The image will be permanently removed from this project."
                 confirmText="Delete"

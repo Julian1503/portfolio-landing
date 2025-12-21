@@ -28,7 +28,7 @@ export default function AdminPage() {
         <AdminLayout
             sections={sections}
             activeSection={active}
-            onChangeSection={setActive}
+            onChangeSectionAction={setActive}
         >
             {active === "hero" && <HeroAdminSection />}
             {active === "about" && <AboutAdminSection />}

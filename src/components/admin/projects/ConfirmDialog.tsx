@@ -8,8 +8,8 @@ import {useLockBodyScroll, useModalKeyboardAndFocus} from "@/hooks/modalUtils";
 
 type ConfirmDialogProps = {
     open: boolean;
-    onClose: () => void;
-    onConfirm: () => void;
+    onCloseAction: () => void;
+    onConfirmAction: () => void;
     title: string;
     message: string;
     confirmText?: string;
@@ -20,8 +20,8 @@ type ConfirmDialogProps = {
 
 export function ConfirmDialog({
                                   open,
-                                  onClose,
-                                  onConfirm,
+                                  onCloseAction,
+                                  onConfirmAction,
                                   title,
                                   message,
                                   confirmText = "Confirm",
@@ -32,8 +32,7 @@ export function ConfirmDialog({
     const panelRef = React.useRef<HTMLDivElement>(null);
 
     useLockBodyScroll(open);
-    useModalKeyboardAndFocus(open, onClose, panelRef, false);
-
+    useModalKeyboardAndFocus(open, onCloseAction, panelRef, false);
     const variantStyles = {
         danger: { iconBg: "bg-red-100", iconColor: "text-red-600", buttonBg: "bg-red-600 hover:bg-red-700" },
         warning: { iconBg: "bg-amber-100", iconColor: "text-amber-600", buttonBg: "bg-amber-600 hover:bg-amber-700" },
@@ -52,7 +51,7 @@ export function ConfirmDialog({
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-                        onClick={onClose}
+                        onClick={onCloseAction}
                     >
                         <motion.div
                             ref={panelRef}
@@ -77,7 +76,7 @@ export function ConfirmDialog({
 
                             <div className="flex items-center gap-3">
                                 <button
-                                    onClick={onClose}
+                                    onClick={onCloseAction}
                                     className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
                                 >
                                     {cancelText}
@@ -85,7 +84,7 @@ export function ConfirmDialog({
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    onClick={onConfirm}
+                                    onClick={onConfirmAction}
                                     className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors shadow-lg ${styles.buttonBg}`}
                                 >
                                     {confirmText}

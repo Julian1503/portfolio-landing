@@ -54,7 +54,11 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
     setRefreshing(true);
     try {
       const res = await fetch(`/api/projects/${projectId}`);
-      if (!res.ok) throw new Error("Failed to fetch project");
+      if (!res.ok) {
+        const errText = await res.text().catch(() => res.statusText || "Unknown error");
+        console.error("Failed to fetch project:", res.status, errText);
+        return;
+      }
 
       const project = await res.json();
       setPosts(project.posts);
@@ -126,7 +130,11 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error("Failed to save post");
+      if (!res.ok) {
+        const errText = await res.text().catch(() => res.statusText || "Unknown error");
+        console.error("Failed to save post:", res.status, errText);
+        return;
+      }
 
       const savedPost = await res.json();
 
@@ -152,7 +160,11 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
         method: "DELETE",
       });
 
-      if (!res.ok) throw new Error("Failed to delete post");
+      if (!res.ok) {
+        const errText = await res.text().catch(() => res.statusText || "Unknown error");
+        console.error("Failed to delete post:", res.status, errText);
+        return;
+      }
 
       setPosts((prev) => prev.filter((post) => post.id !== postId));
       setDeleteConfirm(null);
@@ -169,7 +181,11 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
         body: JSON.stringify({ published: !post.published }),
       });
 
-      if (!res.ok) throw new Error("Failed to update post");
+      if (!res.ok) {
+        const errText = await res.text().catch(() => res.statusText || "Unknown error");
+        console.error("Failed to update post:", res.status, errText);
+        return;
+      }
 
       const updatedPost = await res.json();
       setPosts((prev) => prev.map((p) => (p.id === post.id ? updatedPost : p)));
@@ -189,7 +205,12 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
         body: JSON.stringify({ postIds: newOrder.map((post) => post.id) }),
       });
 
-      if (!res.ok) throw new Error("Failed to reorder posts");
+      if (!res.ok) {
+        const errText = await res.text().catch(() => res.statusText || "Unknown error");
+        console.error("Failed to reorder posts:", res.status, errText);
+        setPosts(oldOrder);
+        return;
+      }
     } catch (error) {
       console.error("Error reordering posts:", error);
       setPosts(oldOrder);
@@ -356,7 +377,7 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
         {/* Modal: Create/Edit */}
         <Modal
             open={modalMode !== null}
-            onClose={closeModal}
+            onCloseAction={closeModal}
             title={modalMode === "create" ? "Create New Post" : "Edit Post"}
             maxWidth="3xl"
             preventClose={submitting}
@@ -491,8 +512,8 @@ export default function ProjectPostsManager({ projectId, initialPosts }: Props) 
         {/* Delete Confirmation */}
         <ConfirmDialog
             open={deleteConfirm !== null}
-            onClose={() => setDeleteConfirm(null)}
-            onConfirm={() => deleteConfirm && handleDelete(deleteConfirm)}
+            onCloseAction={() => setDeleteConfirm(null)}
+            onConfirmAction={() => deleteConfirm && handleDelete(deleteConfirm)}
             title="Delete Post?"
             message="This action cannot be undone. The post will be permanently removed from this project."
             confirmText="Delete"

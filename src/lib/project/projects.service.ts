@@ -84,7 +84,7 @@ export async function updateProject(
 ): Promise<ProjectDTO> {
     const project = await prisma.project.update({
         where: { id },
-        data: mapProjectWriteData(dto),
+        data: mapProjectWriteData(dto as ProjectWritableFields),
         include: projectRelationsInclude,
     });
 

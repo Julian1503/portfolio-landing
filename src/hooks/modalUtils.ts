@@ -7,17 +7,17 @@ const FOCUSABLE_SELECTOR =
 
 export function useModalKeyboardAndFocus(
     open: boolean,
-    onClose: () => void,
-    panelRef: React.RefObject<HTMLElement>,
+    onCloseAction: () => void,
+    panelRef: React.RefObject<HTMLElement | null>,
     preventClose = false
 ) {
     const lastActiveRef = React.useRef<HTMLElement | null>(null);
-    const onCloseRef = React.useRef(onClose);
+    const onCloseRef = React.useRef(onCloseAction);
     const didAutoFocusRef = React.useRef(false);
 
     React.useEffect(() => {
-        onCloseRef.current = onClose;
-    }, [onClose]);
+        onCloseRef.current = onCloseAction;
+    }, [onCloseAction]);
 
     React.useEffect(() => {
         if (!open) {

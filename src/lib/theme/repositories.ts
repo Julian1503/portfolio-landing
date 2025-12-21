@@ -31,14 +31,14 @@ export class PrismaThemeRepository implements IThemeRepository {
     const baseTheme = existing || DEFAULT_THEME;
     
     // Prepare update data with merged tokens
-    const mergedData = {
-      name: data.name,
-      isDark: data.isDark,
-      colors: data.colors ? { ...baseTheme.colors, ...data.colors } : undefined,
-      typography: data.typography ? { ...baseTheme.typography, ...data.typography } : undefined,
-      radii: data.radii ? { ...baseTheme.radii, ...data.radii } : undefined,
-      spacing: data.spacing ? { ...baseTheme.spacing, ...data.spacing } : undefined,
-      shadows: data.shadows ? { ...baseTheme.shadows, ...data.shadows } : undefined,
+    const mergedData : ThemeTokensDTO = {
+      name: data.name || baseTheme.name,
+      isDark: data.isDark || baseTheme.isDark,
+      colors: data.colors ? { ...baseTheme.colors, ...data.colors } : baseTheme.colors,
+      typography: data.typography ? { ...baseTheme.typography, ...data.typography } : baseTheme.typography,
+      radii: data.radii ? { ...baseTheme.radii, ...data.radii } : baseTheme.radii,
+      spacing: data.spacing ? { ...baseTheme.spacing, ...data.spacing } : baseTheme.spacing,
+      shadows: data.shadows ? { ...baseTheme.shadows, ...data.shadows } : baseTheme.shadows,
       sectionOverrides: data.sectionOverrides,
     };
 

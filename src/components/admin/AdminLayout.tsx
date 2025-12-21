@@ -20,14 +20,14 @@ export type AdminSection = {
 type AdminLayoutProps = {
     sections: AdminSection[];
     activeSection: AdminSectionId;
-    onChangeSection: (id: AdminSectionId) => void;
+    onChangeSectionAction: (id: AdminSectionId) => void;
     children: React.ReactNode;
 };
 
 export function AdminLayout({
                                 sections,
                                 activeSection,
-                                onChangeSection,
+                                onChangeSectionAction,
                                 children,
                             }: AdminLayoutProps) {
     return (
@@ -54,7 +54,7 @@ export function AdminLayout({
                             return (
                                 <button
                                     key={s.id}
-                                    onClick={() => onChangeSection(s.id)}
+                                    onClick={() => onChangeSectionAction(s.id)}
                                     className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium transition ${
                                         isActive
                                             ? "bg-slate-900 text-white shadow-sm"
@@ -75,7 +75,7 @@ export function AdminLayout({
                             className="flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm"
                             value={activeSection}
                             onChange={(e) =>
-                                onChangeSection(e.target.value as AdminSectionId)
+                                onChangeSectionAction(e.target.value as AdminSectionId)
                             }
                         >
                             {sections.map((s) => (

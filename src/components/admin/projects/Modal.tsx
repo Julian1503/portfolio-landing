@@ -8,7 +8,7 @@ import {useLockBodyScroll, useModalKeyboardAndFocus} from "@/hooks/modalUtils";
 
 type ModalProps = {
     open: boolean;
-    onClose: () => void;
+    onCloseAction: () => void;
     title: string;
     children: React.ReactNode;
     maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
@@ -26,7 +26,7 @@ const maxWidthClasses = {
 
 export function Modal({
                           open,
-                          onClose,
+                          onCloseAction,
                           title,
                           children,
                           maxWidth = "lg",
@@ -35,14 +35,14 @@ export function Modal({
     const panelRef = React.useRef<HTMLDivElement>(null);
 
     useLockBodyScroll(open);
-    useModalKeyboardAndFocus(open, onClose, panelRef, preventClose);
+    useModalKeyboardAndFocus(open, onCloseAction, panelRef, preventClose);
 
     const handleOverlayClick = () => {
-        if (!preventClose) onClose();
+        if (!preventClose) onCloseAction();
     };
 
     const handleCloseClick = () => {
-        if (!preventClose) onClose();
+        if (!preventClose) onCloseAction();
     };
 
     return (

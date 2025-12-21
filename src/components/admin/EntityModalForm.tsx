@@ -25,8 +25,8 @@ type EntityModalFormProps<T> = {
     open: boolean;
     initialValues?: Partial<T>;
     fields: FieldConfig<T>[];
-    onClose: () => void;
-    onSubmit: (formData: FormData) => Promise<void> | void;
+    onCloseAction: () => void;
+    onSubmitAction: (formData: FormData) => Promise<void> | void;
     submitting?: boolean;
 };
 
@@ -36,8 +36,8 @@ export function EntityModalForm<T>({
                                        open,
                                        initialValues,
                                        fields,
-                                       onClose,
-                                       onSubmit,
+                                       onCloseAction,
+                                       onSubmitAction,
                                        submitting = false,
                                    }: EntityModalFormProps<T>) {
     const [filePreviews, setFilePreviews] = React.useState<Record<string, string>>({});
@@ -60,7 +60,7 @@ export function EntityModalForm<T>({
         const data = new FormData(form);
 
         try {
-            await onSubmit(data);
+            await onSubmitAction(data);
         } catch (error) {
             console.error("Failed to submit form:", error);
         }
@@ -74,7 +74,7 @@ export function EntityModalForm<T>({
                         {mode === "create" ? `Create ${title}` : `Edit ${title}`}
                     </h2>
                     <button
-                        onClick={onClose}
+                        onClick={onCloseAction}
                         disabled={submitting}
                         className={`text-xs ${
                             submitting
@@ -251,7 +251,7 @@ export function EntityModalForm<T>({
                     <div className="flex flex-wrap items-center justify-end gap-2 pt-2">
                         <button
                             type="button"
-                            onClick={onClose}
+                            onClick={onCloseAction}
                             disabled={submitting}
                             className={`text-xs ${
                                 submitting

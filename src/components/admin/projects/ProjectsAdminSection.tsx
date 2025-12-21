@@ -5,7 +5,6 @@ import { DataTable, Column } from "../DataTable";
 import { EntityModalForm, FieldConfig } from "../EntityModalForm";
 import type { ProjectDTO, ProjectCardDTO } from "@/types/ProjectDTO";
 import { useRouter } from 'next/navigation';
-import {PROJECT_TYPES, PROJECT_STATUS, PROJECT_TYPE} from "@/types/projectEnums";
 
 const PAGE_SIZE = 6;
 
@@ -46,16 +45,8 @@ export function ProjectsAdminSection() {
         fetchProjects();
     }, [fetchProjects]);
 
-    // ───────────────────── fetch full project for edit ─────────────────────
-    const fetchProjectById = React.useCallback(async (id: string) => {
-        const res = await fetch(`/api/projects/${id}`);
-        if (!res.ok) throw new Error("Failed to fetch project");
-        return (await res.json()) as ProjectDTO;
-    }, []);
-
     // ───────────────────── search ─────────────────────
     const normalizedQuery = searchQuery.trim().toLowerCase();
-
     const filteredProjects = React.useMemo(() => {
         if (!normalizedQuery) return projects;
         return projects.filter((p) => {
@@ -78,7 +69,6 @@ export function ProjectsAdminSection() {
         return copy;
     }, [filteredProjects, sort]);
 
-    const pageCount = Math.max(1, Math.ceil(sortedProjects.length / PAGE_SIZE));
     const startIndex = page * PAGE_SIZE;
     const pageItems = sortedProjects.slice(startIndex, startIndex + PAGE_SIZE);
 
@@ -112,11 +102,6 @@ export function ProjectsAdminSection() {
             .split("_")
             .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
             .join(" ");
-
-    const enumToOptions = (en: Record<string, string>) =>
-        Object.values(en)
-            .filter((v): v is string => typeof v === "string")
-            .map((v) => ({ value: v, label: humanize(v) }));
 
     const fields: FieldConfig<ProjectDTO>[] = [
         { name: "title", label: "Title", required: true },
@@ -298,12 +283,12 @@ export function ProjectsAdminSection() {
             <DataTable<ProjectCardDTO>
                 columns={columns}
                 data={pageItems}
-                getRowId={(row) => row.id}
+                getRowIdAction={(row) => row.id}
                 page={page}
                 pageSize={PAGE_SIZE}
                 totalCount={sortedProjects.length}
-                onPageChange={setPage}
-                renderRowActions={(row) => (
+                onPageChangeAction={setPage}
+                renderRowAction={(row) => (
                     <>
                         <button
                             onClick={() => openEdit(row)}
@@ -327,7 +312,7 @@ export function ProjectsAdminSection() {
                 emptyMessage={normalizedQuery ? "No projects match your search." : "No projects yet."}
                 sortKey={sort.key ?? undefined}
                 sortDirection={sort.key ? sort.direction : undefined}
-                onSortChange={handleSortChange}
+                onSortChangeAction={handleSortChange}
             />
 
             <EntityModalForm<ProjectDTO>
@@ -336,8 +321,8 @@ export function ProjectsAdminSection() {
                 open={modalMode !== null}
                 initialValues={selected ?? undefined}
                 fields={fields}
-                onClose={closeModal}
-                onSubmit={handleSubmit}
+                onCloseAction={closeModal}
+                onSubmitAction={handleSubmit}
                 submitting={isMutating}
             />
         </div>
