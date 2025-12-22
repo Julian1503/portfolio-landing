@@ -5,6 +5,7 @@ import {scrollToSection} from "@/hooks/scrollToSection";
 import type {NavigationItem} from "@/lib/config/navigation";
 import { DesktopMenu } from "./DesktopMenu";
 import { MobileMenuButton, MobileMenu } from "./MobileMenu";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 type NavbarProps = {
     options: NavigationItem[];
@@ -37,8 +38,9 @@ const Navbar: React.FC<NavbarProps> = ({ options }) => {
                 boxShadow: scrolled ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : '0 0 0 0 rgba(0, 0, 0, 0)'
             }}
         >
-            <nav className="mx-auto flex max-w-6xl items-center justify-end px-6 py-4">
+            <nav className="mx-auto flex max-w-6xl items-center justify-end px-6 py-4 gap-4">
                 <DesktopMenu options={options} onNavigate={handleNavigate} />
+                <ThemeSwitcher />
                 <MobileMenuButton isOpen={open} onClick={() => setOpen((prev) => !prev)} />
             </nav>
 
