@@ -6,6 +6,7 @@ import {CustomCursor} from "@/components/CustomCursor";
 import {SITE_METADATA} from "@/lib/config/siteMetadata";
 import { getTheme } from "@/lib/theme/public";
 import { generateThemeCSS } from "@/lib/theme/utils";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,9 +42,11 @@ export default async function RootLayout({
         <body
             className={`${geistSans.variable} ${montserrat.variable} ${geistMono.variable} antialiased`}
         >
-        <CustomCursor />
-        <SmoothScroll />
-        {children}
+        <ThemeProvider>
+            <CustomCursor />
+            <SmoothScroll />
+            {children}
+        </ThemeProvider>
         </body>
         </html>
     );

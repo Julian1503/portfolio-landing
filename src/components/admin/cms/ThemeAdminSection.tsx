@@ -2,6 +2,7 @@
 
 import React from "react";
 import type { ThemeTokensDTO, ColorTokens, TypographyTokens, RadiiTokens, SpacingTokens } from "@/lib/theme/schemas";
+import { ThemePreview } from "./ThemePreview";
 
 type PresetInfo = {
   key: string;
@@ -626,69 +627,7 @@ export function ThemeAdminSection() {
       </div>
 
       {/* Preview Panel */}
-      <div className="rounded-lg border border-slate-200 bg-white p-6">
-        <h3 className="text-sm font-medium text-slate-700 mb-4">Live Preview</h3>
-        <div 
-          className="space-y-4 p-6 rounded-lg" 
-          style={{
-            backgroundColor: theme.colors.background,
-            color: theme.colors.text,
-          }}
-        >
-          <div 
-            className="p-4 rounded-lg"
-            style={{
-              backgroundColor: theme.colors.surface,
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: theme.radii.lg,
-            }}
-          >
-            <h4 
-              className="font-bold mb-2"
-              style={{
-                color: theme.colors.text,
-                fontSize: theme.typography.h4Size,
-              }}
-            >
-              Card Title
-            </h4>
-            <p 
-              className="mb-3"
-              style={{
-                color: theme.colors.textSecondary,
-                fontSize: `${theme.typography.baseFontSize}px`,
-              }}
-            >
-              This is a preview of how your theme will look.
-            </p>
-            <div className="flex gap-2">
-              <button
-                className="px-4 py-2 rounded font-medium"
-                style={{
-                  backgroundColor: theme.colors.primary,
-                  color: theme.colors.primaryText,
-                  borderRadius: theme.radii.md,
-                }}
-              >
-                Primary Button
-              </button>
-              <button
-                className="px-4 py-2 rounded font-medium"
-                style={{
-                  backgroundColor: theme.colors.secondary,
-                  color: theme.colors.secondaryText,
-                  borderRadius: theme.radii.md,
-                }}
-              >
-                Secondary Button
-              </button>
-            </div>
-          </div>
-          <p style={{ color: theme.colors.textMuted, fontSize: `${theme.typography.baseFontSize - 2}px` }}>
-            Muted text example with a <a href="#" style={{ color: theme.colors.link }}>sample link</a>.
-          </p>
-        </div>
-      </div>
+      <ThemePreview theme={theme} />
 
       {/* Actions */}
       <div className="flex justify-end space-x-3 border-t pt-6">
