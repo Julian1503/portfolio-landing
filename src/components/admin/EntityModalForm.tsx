@@ -2,6 +2,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 export type FieldConfig<T> = {
     name: keyof T;
@@ -237,11 +238,15 @@ export function EntityModalForm<T>({
                                         <p className="text-[11px] text-slate-500 mb-1">
                                             {previewUrl ? "New image preview:" : "Current image:"}
                                         </p>
-                                        <img
-                                            src={previewUrl ?? existingValue}
-                                            alt="Preview"
-                                            className="w-full max-h-48 object-cover rounded-md border"
-                                        />
+                                        <div className="relative w-full max-h-48 h-48 rounded-md border overflow-hidden">
+                                            <Image
+                                                src={previewUrl ?? existingValue}
+                                                alt="Preview"
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, 50vw"
+                                                className="object-cover"
+                                            />
+                                        </div>
                                     </div>
                                 )}
                             </div>

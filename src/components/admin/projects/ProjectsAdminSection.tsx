@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { DataTable, Column } from "../DataTable";
 import { EntityModalForm, FieldConfig } from "../EntityModalForm";
 import type { ProjectDTO, ProjectCardDTO } from "@/types/ProjectDTO";
@@ -84,11 +85,15 @@ export function ProjectsAdminSection() {
             header: "Cover",
             render: (row) =>
                 row.coverImage ? (
-                    <img
-                        src={row.coverImage}
-                        alt={row.title}
-                        className="h-10 w-14 rounded-md object-cover border border-slate-200"
-                    />
+                    <div className="relative h-10 w-14 rounded-md overflow-hidden border border-slate-200">
+                        <Image
+                            src={row.coverImage}
+                            alt={row.title}
+                            fill
+                            sizes="56px"
+                            className="object-cover"
+                        />
+                    </div>
                 ) : (
                     <span className="text-slate-400">—</span>
                 ),

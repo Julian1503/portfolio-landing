@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
 import {
     Plus,
@@ -304,10 +305,12 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
                                     </div>
 
                                     <div className="relative w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden border-2 border-slate-200 bg-slate-100">
-                                        <img
+                                        <Image
                                             src={image.url}
                                             alt={image.alt || "Project image"}
-                                            className="w-full h-full object-cover"
+                                            fill
+                                            sizes="96px"
+                                            className="object-cover"
                                         />
                                     </div>
 
@@ -437,11 +440,15 @@ export default function ProjectImagesManager({ projectId, initialImages }: Props
                                     exit={{ opacity: 0, height: 0 }}
                                     className="overflow-hidden"
                                 >
-                                    <img
-                                        src={formData.url}
-                                        alt="Preview"
-                                        className="w-full h-48 object-cover rounded-xl border-2 border-slate-200 shadow-md"
-                                    />
+                                    <div className="relative w-full h-48 rounded-xl border-2 border-slate-200 shadow-md overflow-hidden">
+                                        <Image
+                                            src={formData.url}
+                                            alt="Preview"
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                            className="object-cover"
+                                        />
+                                    </div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
