@@ -53,7 +53,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
           if (!response.ok) throw new Error("Failed to fetch theme");
           
           const data = await response.json();
-          cssContent = data.css;
+          cssContent = data.css as string;
           
           // Store in cache
           themeCache.set(currentTheme, cssContent);
@@ -68,7 +68,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         // Inject new theme CSS
         const style = document.createElement("style");
         style.id = "dynamic-theme";
-        style.textContent = cssContent;
+        style.textContent = cssContent || "";
         document.head.appendChild(style);
       } catch (error) {
         console.error("Failed to apply theme:", error);

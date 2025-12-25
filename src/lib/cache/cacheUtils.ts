@@ -1,5 +1,5 @@
 // src/lib/cache/cacheUtils.ts
-import { revalidateTag, revalidatePath } from 'next/cache';
+import { updateTag, revalidatePath } from 'next/cache';
 
 /**
  * Invalidates the entire projects cache
@@ -18,7 +18,7 @@ import { revalidateTag, revalidatePath } from 'next/cache';
  * ```
  */
 export function invalidateProjectsCache() {
-    revalidateTag('projects');
+    updateTag('projects');
     console.log('[CACHE] ♻️  Invalidated all projects cache');
 }
 
@@ -77,7 +77,7 @@ export function invalidateHomepageCache() {
  * ```
  */
 export function invalidateAllCache() {
-    revalidateTag('projects');
+    updateTag('projects');
     revalidatePath('/');
     revalidatePath('/projects/[slug]', 'page');
     console.log('[CACHE] ♻️  Invalidated ALL cache');

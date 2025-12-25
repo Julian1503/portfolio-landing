@@ -14,12 +14,12 @@ type NavbarProps = {
 const Navbar: React.FC<NavbarProps> = ({ options }) => {
     const [open, setOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const rafRef = useRef<number>();
+    const rafRef = useRef<number | undefined>(undefined);
 
     useEffect(() => {
         const handleScroll = () => {
             // Cancel any pending animation frame
-            if (rafRef.current) {
+            if (rafRef.current !== undefined) {
                 cancelAnimationFrame(rafRef.current);
             }
 
@@ -37,7 +37,7 @@ const Navbar: React.FC<NavbarProps> = ({ options }) => {
         
         return () => {
             window.removeEventListener('scroll', handleScroll);
-            if (rafRef.current) {
+            if (rafRef.current !== undefined) {
                 cancelAnimationFrame(rafRef.current);
             }
         };

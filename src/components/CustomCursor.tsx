@@ -7,12 +7,12 @@ import { motion } from 'framer-motion';
 export function CustomCursor() {
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [isPointer, setIsPointer] = useState(false);
-    const rafRef = useRef<number>();
+    const rafRef = useRef<number | undefined>(undefined);
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
             // Cancel any pending animation frame
-            if (rafRef.current) {
+            if (rafRef.current !== undefined) {
                 cancelAnimationFrame(rafRef.current);
             }
 
@@ -37,7 +37,7 @@ export function CustomCursor() {
         
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
-            if (rafRef.current) {
+            if (rafRef.current !== undefined) {
                 cancelAnimationFrame(rafRef.current);
             }
         };
