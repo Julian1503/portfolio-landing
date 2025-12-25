@@ -1,5 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 type ProjectCardProps = {
@@ -11,8 +12,11 @@ type ProjectCardProps = {
     coverImage?: string;
 };
 
-export function ProjectCard({ slug, title, tag, location, year, coverImage }: ProjectCardProps) {
+export const ProjectCard = React.memo(function ProjectCard({ slug, title, tag, location, year, coverImage }: ProjectCardProps) {
     const [isHovered, setIsHovered] = React.useState(false);
+
+    const handleMouseEnter = React.useCallback(() => setIsHovered(true), []);
+    const handleMouseLeave = React.useCallback(() => setIsHovered(false), []);
 
     return (
         <motion.article
@@ -22,18 +26,29 @@ export function ProjectCard({ slug, title, tag, location, year, coverImage }: Pr
         >
             <Link
                 href={`/projects/${slug}`}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
                 className="group block rounded-2xl overflow-hidden bg-[var(--theme-surface)] border border-[var(--theme-border)] shadow-lg backdrop-blur-sm"
             >
                 <div className="relative aspect-[4/3] overflow-hidden">
-                    <motion.img
-                        src={coverImage}
-                        alt={title}
-                        animate={{ scale: isHovered ? 1.1 : 1 }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
-                        className="h-full w-full object-cover"
-                    />
+                    {coverImage ? (
+                        <motion.div
+                            animate={{ scale: isHovered ? 1.1 : 1 }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
+                            className="h-full w-full"
+                        >
+                            <Image
+                                src={coverImage}
+                                alt={title}
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                className="object-cover"
+                                loading="lazy"
+                            />
+                        </motion.div>
+                    ) : (
+                        <div className="h-full w-full bg-gray-200" />
+                    )}
 
                     {/* Animated overlay */}
                     <motion.div
@@ -81,4 +96,4 @@ export function ProjectCard({ slug, title, tag, location, year, coverImage }: Pr
             </Link>
         </motion.article>
     );
-}
+});

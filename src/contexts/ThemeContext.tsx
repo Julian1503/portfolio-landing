@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 
 type ThemePreset = "default" | "dark" | "warm" | "minimal";
 
@@ -12,9 +12,13 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+// Cache for theme CSS to avoid repeated API calls
+const themeCache = new Map<ThemePreset, string>();
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [currentTheme, setCurrentTheme] = useState<ThemePreset>("default");
   const [isLoaded, setIsLoaded] = useState(false);
+  const isApplyingTheme = useRef(false);
 
   const availableThemes = [
     { key: "default" as ThemePreset, name: "Default", isDark: false },
@@ -34,14 +38,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Apply theme by fetching and injecting CSS
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded || isApplyingTheme.current) return;
 
     const applyTheme = async () => {
+      isApplyingTheme.current = true;
+      
       try {
-        const response = await fetch(`/api/theme/preview?preset=${currentTheme}`);
-        if (!response.ok) throw new Error("Failed to fetch theme");
+        // Check cache first
+        let cssContent = themeCache.get(currentTheme);
         
-        const data = await response.json();
+        if (!cssContent) {
+          // Only fetch if not cached
+          const response = await fetch(`/api/theme/preview?preset=${currentTheme}`);
+          if (!response.ok) throw new Error("Failed to fetch theme");
+          
+          const data = await response.json();
+          cssContent = data.css;
+          
+          // Store in cache
+          themeCache.set(currentTheme, cssContent);
+        }
         
         // Remove existing theme style if any
         const existingStyle = document.getElementById("dynamic-theme");
@@ -52,10 +68,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         // Inject new theme CSS
         const style = document.createElement("style");
         style.id = "dynamic-theme";
-        style.textContent = data.css;
+        style.textContent = cssContent;
         document.head.appendChild(style);
       } catch (error) {
         console.error("Failed to apply theme:", error);
+      } finally {
+        isApplyingTheme.current = false;
       }
     };
 

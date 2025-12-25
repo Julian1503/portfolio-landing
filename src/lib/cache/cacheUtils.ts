@@ -18,7 +18,7 @@ import { revalidateTag, revalidatePath } from 'next/cache';
  * ```
  */
 export function invalidateProjectsCache() {
-    revalidateTag('projects', 'projects');
+    revalidateTag('projects');
     console.log('[CACHE] ♻️  Invalidated all projects cache');
 }
 
@@ -77,7 +77,7 @@ export function invalidateHomepageCache() {
  * ```
  */
 export function invalidateAllCache() {
-    revalidateTag('projects', 'projects');
+    revalidateTag('projects');
     revalidatePath('/');
     revalidatePath('/projects/[slug]', 'page');
     console.log('[CACHE] ♻️  Invalidated ALL cache');

@@ -1,5 +1,5 @@
 "use client"
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {motion} from "framer-motion";
 import {scrollToSection} from "@/hooks/scrollToSection";
 import type {NavigationItem} from "@/lib/config/navigation";
@@ -14,14 +14,34 @@ type NavbarProps = {
 const Navbar: React.FC<NavbarProps> = ({ options }) => {
     const [open, setOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const rafRef = useRef<number>();
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
+            // Cancel any pending animation frame
+            if (rafRef.current) {
+                cancelAnimationFrame(rafRef.current);
+            }
+
+            // Use requestAnimationFrame to throttle updates
+            rafRef.current = requestAnimationFrame(() => {
+                const newScrolled = window.scrollY > 20;
+                // Only update if state actually changed
+                if (newScrolled !== scrolled) {
+                    setScrolled(newScrolled);
+                }
+            });
         };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            if (rafRef.current) {
+                cancelAnimationFrame(rafRef.current);
+            }
+        };
+    }, [scrolled]);
 
     const handleNavigate = (targetId: string) => {
         const didScroll = scrollToSection(targetId);
