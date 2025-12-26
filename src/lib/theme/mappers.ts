@@ -7,6 +7,9 @@ type PrismaThemeTokens = {
   radii: any;
   spacing: any;
   shadows: any;
+  layout: any;
+  breakpoints: any;
+  animations: any;
   sectionOverrides: any;
   name: string;
   isDark: boolean;
@@ -20,7 +23,10 @@ import type {
   TypographyTokens, 
   RadiiTokens, 
   SpacingTokens, 
-  ShadowTokens, 
+  ShadowTokens,
+  LayoutTokens,
+  Breakpoints,
+  AnimationTokens,
   SectionOverrides 
 } from "./schemas";
 
@@ -38,6 +44,9 @@ export function mapPrismaThemeToDTO(prismaTheme: PrismaThemeTokens): ThemeTokens
     radii: prismaTheme.radii as RadiiTokens,
     spacing: prismaTheme.spacing as SpacingTokens,
     shadows: prismaTheme.shadows as ShadowTokens,
+    layout: prismaTheme.layout as LayoutTokens,
+    breakpoints: prismaTheme.breakpoints as Breakpoints,
+    animations: prismaTheme.animations as AnimationTokens,
     sectionOverrides: prismaTheme.sectionOverrides as SectionOverrides | undefined,
     createdAt: prismaTheme.createdAt,
     updatedAt: prismaTheme.updatedAt,
@@ -57,6 +66,9 @@ export function preparePrismaThemeData(theme: ThemeTokensDTO ): Omit<PrismaTheme
     radii: theme.radii as any,
     spacing: theme.spacing as any,
     shadows: theme.shadows as any,
+    layout: theme.layout as any,
+    breakpoints: theme.breakpoints as any,
+    animations: theme.animations as any,
     sectionOverrides: theme.sectionOverrides as any,
   };
 }
