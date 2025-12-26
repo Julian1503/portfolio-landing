@@ -34,7 +34,7 @@ const Navbar: React.FC<NavbarProps> = ({ options }) => {
         <motion.header
             className="w-full sticky top-0 z-50 backdrop-blur border-b border-[var(--theme-border)] transition-all"
             animate={{
-                backgroundColor: scrolled ? 'var(--theme-surface)' : 'rgba(255, 255, 255, 0.8)',
+                backgroundColor: scrolled ? 'var(--theme-surface)' : 'var(--theme-bg-primary)',
                 boxShadow: scrolled ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : '0 0 0 0 rgba(0, 0, 0, 0)'
             }}
         >

@@ -1,5 +1,6 @@
 import React from "react";
 import { ProjectDTO } from "@/types/ProjectDTO";
+import Image from "next/image";
 
 type ThumbnailGalleryProps = {
     galleryImages: ProjectDTO["images"];
@@ -30,10 +31,12 @@ export const ThumbnailGallery: React.FC<ThumbnailGalleryProps> = ({
                                 : "opacity-60 hover:opacity-100"
                         }`}
                     >
-                        <img
+                        <Image
                             src={img.url}
                             alt={img.alt || `Image ${i + 1}`}
-                            className="h-full w-full object-cover"
+                            fill
+                            sizes="(max-width: 640px) 33vw, (max-width: 768px) 25vw, (max-width: 1024px) 20vw, 16vw"
+                            className="object-cover"
                         />
                     </button>
                 ))}

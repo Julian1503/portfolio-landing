@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Save, Loader2, AlertCircle, CheckCircle2, Image as ImageIcon, FileText, Settings } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import ProjectImagesManager from "@/components/admin/projects/ProjectImagesManager";
 import ProjectPostsManager from "@/components/admin/projects/ProjectPostsManager";
 import type { ProjectDTO } from "@/types/ProjectDTO";
@@ -517,11 +518,15 @@ export default function ProjectAdminPage() {
                                     exit={{ opacity: 0, height: 0 }}
                                     className="overflow-hidden"
                                 >
-                                  <img
-                                      src={project.coverImage}
-                                      alt="Cover preview"
-                                      className="mt-2 w-full max-w-md h-48 object-cover rounded-xl border-2 border-slate-200 shadow-lg"
-                                  />
+                                  <div className="relative mt-2 w-full max-w-md h-48 rounded-xl border-2 border-slate-200 shadow-lg overflow-hidden">
+                                    <Image
+                                        src={project.coverImage}
+                                        alt="Cover preview"
+                                        fill
+                                        sizes="(max-width: 768px) 100vw, 448px"
+                                        className="object-cover"
+                                    />
+                                  </div>
                                 </motion.div>
                             )}
                           </AnimatePresence>

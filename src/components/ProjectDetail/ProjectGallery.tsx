@@ -2,6 +2,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ProjectDTO } from "@/types/ProjectDTO";
+import Image from "next/image";
 
 type ProjectGalleryProps = {
     galleryImages: ProjectDTO["images"];
@@ -14,7 +15,7 @@ type ProjectGalleryProps = {
     onSetPaused: (paused: boolean) => void;
 };
 
-export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
+export const ProjectGallery = React.memo<ProjectGalleryProps>(function ProjectGallery({
     galleryImages,
     currentImageIndex,
     isPaused,
@@ -23,7 +24,9 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
     onNextImage,
     onSetImageIndex,
     onSetPaused,
-}) => {
+}) {
+    const handleMouseEnter = React.useCallback(() => onSetPaused(true), [onSetPaused]);
+    const handleMouseLeave = React.useCallback(() => onSetPaused(false), [onSetPaused]);
     if (galleryImages.length === 0) return null;
 
     const currentImage = galleryImages[currentImageIndex];
@@ -32,8 +35,8 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
         <section
             className="relative h-[50vh] sm:h-[60vh] lg:h-[70vh]"
             style={{ backgroundColor: 'var(--theme-surface)' }}
-            onMouseEnter={() => onSetPaused(true)}
-            onMouseLeave={() => onSetPaused(false)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
         >
             <AnimatePresence mode="wait">
                 <motion.div
@@ -44,10 +47,14 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
                     transition={{ duration: 0.7, ease: "easeInOut" }}
                     className="absolute inset-0"
                 >
-                    <img
+                    <Image
                         src={currentImage.url}
                         alt={currentImage.alt || projectTitle}
-                        className="h-full w-full object-cover"
+                        fill
+                        sizes="100vw"
+                        className="object-cover"
+                        priority={currentImageIndex === 0}
+                        loading={currentImageIndex === 0 ? "eager" : "lazy"}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                 </motion.div>
@@ -118,4 +125,4 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
             )}
         </section>
     );
-};
+});
