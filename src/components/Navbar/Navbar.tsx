@@ -1,5 +1,5 @@
 "use client"
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {motion} from "framer-motion";
 import {scrollToSection} from "@/hooks/scrollToSection";
 import type {NavigationItem} from "@/lib/config/navigation";
@@ -14,14 +14,31 @@ type NavbarProps = {
 const Navbar: React.FC<NavbarProps> = ({ options }) => {
     const [open, setOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const rafRef = useRef<number | undefined>(undefined);
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
+            if (rafRef.current !== undefined) {
+                cancelAnimationFrame(rafRef.current);
+            }
+
+            rafRef.current = requestAnimationFrame(() => {
+                const newScrolled = window.scrollY > 20;
+                if (newScrolled !== scrolled) {
+                    setScrolled(newScrolled);
+                }
+            });
         };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            if (rafRef.current !== undefined) {
+                cancelAnimationFrame(rafRef.current);
+            }
+        };
+}, [scrolled]);
 
     const handleNavigate = (targetId: string) => {
         const didScroll = scrollToSection(targetId);
