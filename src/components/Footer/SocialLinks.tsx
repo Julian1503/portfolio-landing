@@ -20,9 +20,9 @@ const platformIcons: Record<string, {
     Icon: typeof PiInstagramLogo;
     hoverColor: string;
 }> = {
-    instagram: { Icon: PiInstagramLogo, hoverColor: "hover:text-[#E1306C]" },
-    linkedin: { Icon: PiLinkedinLogo, hoverColor: "hover:text-[#0077B5]" },
-    facebook: { Icon: PiFacebookLogo, hoverColor: "hover:text-[#1877F2]" },
+    instagram: { Icon: PiInstagramLogo, hoverColor: "hover:text-[var(--theme-accent1)]" },
+    linkedin: { Icon: PiLinkedinLogo, hoverColor: "hover:text-[var(--theme-link)]" },
+    facebook: { Icon: PiFacebookLogo, hoverColor: "hover:text-[var(--theme-accent2)]" },
 };
 
 type SocialLinksProps = {

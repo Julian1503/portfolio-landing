@@ -46,7 +46,7 @@ export const ProjectCard = React.memo(function ProjectCard({ slug, title, tag, l
                             />
                         </motion.div>
                     ) : (
-                        <div className="h-full w-full bg-gray-200" />
+                        <div className="h-full w-full bg-[var(--theme-surface-hover)]" />
                     )}
 
                     {/* Animated overlay */}
