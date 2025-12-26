@@ -44,10 +44,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         let cssContent = themeCache.get(currentTheme);
 
         if (!cssContent) {
-          const response = await fetch(`/api/theme/preview?preset=${currentTheme}`);
-          if (!response.ok) throw new Error("Failed to fetch theme");
+          const res = await fetch(`/api/theme/preview?preset=${currentTheme}`);
+          if (!res.ok) {
+            const errText = await res.text().catch(() => res.statusText || "Unknown error");
+            console.error("Failed to fetch theme:", res.status, errText);
+            return;
+          }
 
-          const data = await response.json();
+          const data = await res.json();
           cssContent = data.css as string;
 
           themeCache.set(currentTheme, cssContent);

@@ -1,5 +1,5 @@
 // src/lib/cache/cacheUtils.ts
-import {revalidateTag, revalidatePath, updateTag} from 'next/cache';
+import {revalidatePath, updateTag} from 'next/cache';
 
 /**
  * Invalidates the entire projects cache

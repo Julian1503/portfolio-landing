@@ -101,13 +101,6 @@ export function ProjectsAdminSection() {
     ];
 
     // ───────────────────── fields (modal) ─────────────────────
-    const humanize = (s: string) =>
-        s
-            .toLowerCase()
-            .split("_")
-            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-            .join(" ");
-
     const fields: FieldConfig<ProjectDTO>[] = [
         { name: "title", label: "Title", required: true },
         { name: "slug", label: "Slug", required: true },

@@ -29,7 +29,11 @@ export default function ProjectAdminPage() {
       setLoading(true);
       try {
         const res = await fetch(`/api/projects/${id}`);
-        if (!res.ok) throw new Error("Failed to load project");
+        if (!res.ok) {
+          const errText = await res.text().catch(() => res.statusText || "Unknown error");
+          console.error("Failed to upload project:", res.status, errText);
+          return;
+        }
         const data = await res.json();
         if (mounted) setProject(data);
       } catch (e) {
@@ -62,7 +66,11 @@ export default function ProjectAdminPage() {
         body: JSON.stringify(project),
       });
 
-      if (!res.ok) throw new Error("Failed to save project");
+      if (!res.ok) {
+        const errText = await res.text().catch(() => res.statusText || "Unknown error");
+        console.error("Failed to save project:", res.status, errText);
+        return;
+      }
 
       setHasChanges(false);
       setSaveSuccess(true);
