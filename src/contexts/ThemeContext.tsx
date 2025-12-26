@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 
 type ThemePreset = "default" | "dark" | "warm" | "minimal";
 
@@ -9,12 +9,14 @@ interface ThemeContextType {
   setTheme: (theme: ThemePreset) => void;
   availableThemes: { key: ThemePreset; name: string; isDark: boolean }[];
 }
+const themeCache = new Map<ThemePreset, string>();
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [currentTheme, setCurrentTheme] = useState<ThemePreset>("default");
   const [isLoaded, setIsLoaded] = useState(false);
+  const isApplyingTheme = useRef(false);
 
   const availableThemes = [
     { key: "default" as ThemePreset, name: "Default", isDark: false },
@@ -34,28 +36,36 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Apply theme by fetching and injecting CSS
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded || isApplyingTheme.current) return;
 
     const applyTheme = async () => {
+      isApplyingTheme.current = true;
       try {
-        const response = await fetch(`/api/theme/preview?preset=${currentTheme}`);
-        if (!response.ok) throw new Error("Failed to fetch theme");
+        let cssContent = themeCache.get(currentTheme);
+
+        if (!cssContent) {
+          const response = await fetch(`/api/theme/preview?preset=${currentTheme}`);
+          if (!response.ok) throw new Error("Failed to fetch theme");
+
+          const data = await response.json();
+          cssContent = data.css as string;
+
+          themeCache.set(currentTheme, cssContent);
+        }
         
-        const data = await response.json();
-        
-        // Remove existing theme style if any
         const existingStyle = document.getElementById("dynamic-theme");
         if (existingStyle) {
           existingStyle.remove();
         }
         
-        // Inject new theme CSS
         const style = document.createElement("style");
         style.id = "dynamic-theme";
-        style.textContent = data.css;
+        style.textContent = cssContent || "";
         document.head.appendChild(style);
       } catch (error) {
         console.error("Failed to apply theme:", error);
+      } finally {
+        isApplyingTheme.current = false;
       }
     };
 
