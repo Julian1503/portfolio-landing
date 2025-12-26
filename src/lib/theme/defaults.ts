@@ -5,6 +5,9 @@ import type {
   RadiiTokens,
   SpacingTokens,
   ShadowTokens,
+  LayoutTokens,
+  Breakpoints,
+  AnimationTokens,
 } from "./schemas";
 
 // ============================================
@@ -39,6 +42,14 @@ export const DEFAULT_COLORS: ColorTokens = {
   secondary: "#1C1917", // Stone-900
   secondaryHover: "#292524", // Stone-800
   secondaryText: "#FFFFFF",
+  
+  // Tertiary action colors (light)
+  tertiary: "#F5F5F4", // Stone-100
+  tertiaryHover: "#E7E5E4", // Stone-200
+  
+  // Accent colors
+  accent1: "#9BB19F", // Light sage
+  accent2: "#92400E", // Amber-800
   
   // Semantic colors
   link: "#65816A",
@@ -76,6 +87,8 @@ export const DEFAULT_RADII: RadiiTokens = {
   md: "0.5rem",
   lg: "1rem",
   xl: "1.5rem",
+  xxl: "2rem",
+  round: "50%",
   full: "9999px",
 };
 
@@ -93,6 +106,29 @@ export const DEFAULT_SHADOWS: ShadowTokens = {
   sm: "sm",
   md: "md",
   lg: "lg",
+  xl: "xl",
+  xxl: "2xl",
+};
+
+export const DEFAULT_LAYOUT: LayoutTokens = {
+  containerSmall: "48rem",
+  containerMedium: "64rem",
+  containerLarge: "80rem",
+  gridGutters: "1.5rem",
+  flexGap: "1rem",
+};
+
+export const DEFAULT_BREAKPOINTS: Breakpoints = {
+  sm: "640px",
+  md: "768px",
+  lg: "1024px",
+  xl: "1280px",
+};
+
+export const DEFAULT_ANIMATIONS: AnimationTokens = {
+  fast: "150ms",
+  default: "300ms",
+  slow: "500ms",
 };
 
 // Complete default theme
@@ -104,6 +140,9 @@ export const DEFAULT_THEME: ThemeTokensDTO = {
   radii: DEFAULT_RADII,
   spacing: DEFAULT_SPACING,
   shadows: DEFAULT_SHADOWS,
+  layout: DEFAULT_LAYOUT,
+  breakpoints: DEFAULT_BREAKPOINTS,
+  animations: DEFAULT_ANIMATIONS,
   sectionOverrides: undefined,
 };
 
@@ -130,6 +169,10 @@ export const DARK_THEME: ThemeTokensDTO = {
     secondary: "#F5F5F5",
     secondaryHover: "#FFFFFF",
     secondaryText: "#0F0F0F",
+    tertiary: "#262626",
+    tertiaryHover: "#404040",
+    accent1: "#9BB19F",
+    accent2: "#B45309",
     link: "#7D9982",
     linkHover: "#9BB19F",
     danger: "#EF4444",
@@ -140,6 +183,9 @@ export const DARK_THEME: ThemeTokensDTO = {
   radii: DEFAULT_RADII,
   spacing: DEFAULT_SPACING,
   shadows: DEFAULT_SHADOWS,
+  layout: DEFAULT_LAYOUT,
+  breakpoints: DEFAULT_BREAKPOINTS,
+  animations: DEFAULT_ANIMATIONS,
   sectionOverrides: undefined,
 };
 
@@ -166,6 +212,10 @@ export const WARM_THEME: ThemeTokensDTO = {
     secondary: "#451A03",
     secondaryHover: "#78350F",
     secondaryText: "#FFFFFF",
+    tertiary: "#FFEDD5",
+    tertiaryHover: "#FED7AA",
+    accent1: "#FBBF24",
+    accent2: "#F59E0B",
     link: "#D97706",
     linkHover: "#B45309",
     danger: "#DC2626",
@@ -176,6 +226,9 @@ export const WARM_THEME: ThemeTokensDTO = {
   radii: DEFAULT_RADII,
   spacing: DEFAULT_SPACING,
   shadows: DEFAULT_SHADOWS,
+  layout: DEFAULT_LAYOUT,
+  breakpoints: DEFAULT_BREAKPOINTS,
+  animations: DEFAULT_ANIMATIONS,
   sectionOverrides: undefined,
 };
 
@@ -202,6 +255,10 @@ export const MINIMAL_THEME: ThemeTokensDTO = {
     secondary: "#FFFFFF",
     secondaryHover: "#F5F5F5",
     secondaryText: "#000000",
+    tertiary: "#FAFAFA",
+    tertiaryHover: "#E5E5E5",
+    accent1: "#737373",
+    accent2: "#525252",
     link: "#000000",
     linkHover: "#262626",
     danger: "#DC2626",
@@ -215,6 +272,8 @@ export const MINIMAL_THEME: ThemeTokensDTO = {
     md: "0",
     lg: "0.125rem",
     xl: "0.25rem",
+    xxl: "0.375rem",
+    round: "50%",
     full: "9999px",
   },
   spacing: DEFAULT_SPACING,
@@ -222,7 +281,12 @@ export const MINIMAL_THEME: ThemeTokensDTO = {
     sm: "none",
     md: "sm",
     lg: "md",
+    xl: "lg",
+    xxl: "xl",
   },
+  layout: DEFAULT_LAYOUT,
+  breakpoints: DEFAULT_BREAKPOINTS,
+  animations: DEFAULT_ANIMATIONS,
   sectionOverrides: undefined,
 };
 

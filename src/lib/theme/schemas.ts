@@ -38,6 +38,14 @@ export const ColorTokensSchema = z.object({
   secondaryHover: hexColorSchema,
   secondaryText: hexColorSchema,
   
+  // Tertiary action colors
+  tertiary: hexColorSchema,
+  tertiaryHover: hexColorSchema,
+  
+  // Accent colors
+  accent1: hexColorSchema,
+  accent2: hexColorSchema,
+  
   // Semantic colors
   link: hexColorSchema,
   linkHover: hexColorSchema,
@@ -109,6 +117,8 @@ export const RadiiTokensSchema = z.object({
   md: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("0.5rem"),
   lg: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("1rem"),
   xl: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("1.5rem"),
+  xxl: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("2rem"),
+  round: z.string().default("50%"),
   full: z.string().default("9999px"),
 });
 
@@ -131,6 +141,33 @@ export const SpacingTokensSchema = z.object({
 export type SpacingTokens = z.infer<typeof SpacingTokensSchema>;
 
 // ============================================
+// Layout Token Validation
+// ============================================
+
+export const LayoutTokensSchema = z.object({
+  containerSmall: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("48rem"),
+  containerMedium: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("64rem"),
+  containerLarge: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("80rem"),
+  gridGutters: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("1.5rem"),
+  flexGap: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("1rem"),
+});
+
+export type LayoutTokens = z.infer<typeof LayoutTokensSchema>;
+
+// ============================================
+// Breakpoint Token Validation
+// ============================================
+
+export const BreakpointsSchema = z.object({
+  sm: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("640px"),
+  md: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("768px"),
+  lg: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("1024px"),
+  xl: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default("1280px"),
+});
+
+export type Breakpoints = z.infer<typeof BreakpointsSchema>;
+
+// ============================================
 // Shadow Token Validation
 // ============================================
 
@@ -148,9 +185,23 @@ export const ShadowTokensSchema = z.object({
   sm: shadowPresetSchema.default("sm"),
   md: shadowPresetSchema.default("md"),
   lg: shadowPresetSchema.default("lg"),
+  xl: shadowPresetSchema.default("xl"),
+  xxl: shadowPresetSchema.default("2xl"),
 });
 
 export type ShadowTokens = z.infer<typeof ShadowTokensSchema>;
+
+// ============================================
+// Animation Token Validation
+// ============================================
+
+export const AnimationTokensSchema = z.object({
+  fast: z.string().regex(/^\d+(\.\d+)?(ms|s)$/).default("150ms"),
+  default: z.string().regex(/^\d+(\.\d+)?(ms|s)$/).default("300ms"),
+  slow: z.string().regex(/^\d+(\.\d+)?(ms|s)$/).default("500ms"),
+});
+
+export type AnimationTokens = z.infer<typeof AnimationTokensSchema>;
 
 // ============================================
 // Section Override Schema
@@ -193,6 +244,9 @@ export const ThemeTokensSchema = z.object({
   radii: RadiiTokensSchema,
   spacing: SpacingTokensSchema,
   shadows: ShadowTokensSchema,
+  layout: LayoutTokensSchema,
+  breakpoints: BreakpointsSchema,
+  animations: AnimationTokensSchema,
   sectionOverrides: SectionOverridesSchema,
   
   createdAt: z.date().optional(),
@@ -210,6 +264,9 @@ export const ThemeTokensUpdateSchema = z.object({
   radii: RadiiTokensSchema.partial().optional(),
   spacing: SpacingTokensSchema.partial().optional(),
   shadows: ShadowTokensSchema.partial().optional(),
+  layout: LayoutTokensSchema.partial().optional(),
+  breakpoints: BreakpointsSchema.partial().optional(),
+  animations: AnimationTokensSchema.partial().optional(),
   sectionOverrides: SectionOverridesSchema.optional(),
 });
 

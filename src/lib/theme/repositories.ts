@@ -39,6 +39,9 @@ export class PrismaThemeRepository implements IThemeRepository {
       radii: data.radii ? { ...baseTheme.radii, ...data.radii } : baseTheme.radii,
       spacing: data.spacing ? { ...baseTheme.spacing, ...data.spacing } : baseTheme.spacing,
       shadows: data.shadows ? { ...baseTheme.shadows, ...data.shadows } : baseTheme.shadows,
+      layout: data.layout ? { ...baseTheme.layout, ...data.layout } : baseTheme.layout,
+      breakpoints: data.breakpoints ? { ...baseTheme.breakpoints, ...data.breakpoints } : baseTheme.breakpoints,
+      animations: data.animations ? { ...baseTheme.animations, ...data.animations } : baseTheme.animations,
       sectionOverrides: data.sectionOverrides,
     };
 
@@ -51,6 +54,9 @@ export class PrismaThemeRepository implements IThemeRepository {
       radii: mergedData.radii || baseTheme.radii,
       spacing: mergedData.spacing || baseTheme.spacing,
       shadows: mergedData.shadows || baseTheme.shadows,
+      layout: mergedData.layout || baseTheme.layout,
+      breakpoints: mergedData.breakpoints || baseTheme.breakpoints,
+      animations: mergedData.animations || baseTheme.animations,
       sectionOverrides: mergedData.sectionOverrides || baseTheme.sectionOverrides,
     });
 

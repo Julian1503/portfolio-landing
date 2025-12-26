@@ -29,7 +29,7 @@ function getSectionOverride(
  * Returns a CSS string that can be injected into <style> tag
  */
 export function generateThemeCSS(theme: ThemeTokensDTO, section?: string): string {
-  const { colors, typography, radii, spacing, shadows, sectionOverrides } = theme;
+  const { colors, typography, radii, spacing, shadows, layout, breakpoints, animations, sectionOverrides } = theme;
   
   // Get section-specific overrides if applicable
   let activeColors = colors;
@@ -60,6 +60,10 @@ export function generateThemeCSS(theme: ThemeTokensDTO, section?: string): strin
   cssVars.push(`  --theme-secondary: ${activeColors.secondary};`);
   cssVars.push(`  --theme-secondary-hover: ${activeColors.secondaryHover};`);
   cssVars.push(`  --theme-secondary-text: ${activeColors.secondaryText};`);
+  cssVars.push(`  --theme-tertiary: ${activeColors.tertiary};`);
+  cssVars.push(`  --theme-tertiary-hover: ${activeColors.tertiaryHover};`);
+  cssVars.push(`  --theme-accent1: ${activeColors.accent1};`);
+  cssVars.push(`  --theme-accent2: ${activeColors.accent2};`);
   cssVars.push(`  --theme-link: ${activeColors.link};`);
   cssVars.push(`  --theme-link-hover: ${activeColors.linkHover};`);
   cssVars.push(`  --theme-danger: ${activeColors.danger};`);
@@ -95,6 +99,8 @@ export function generateThemeCSS(theme: ThemeTokensDTO, section?: string): strin
   cssVars.push(`  --theme-radius-md: ${radii.md};`);
   cssVars.push(`  --theme-radius-lg: ${radii.lg};`);
   cssVars.push(`  --theme-radius-xl: ${radii.xl};`);
+  cssVars.push(`  --theme-radius-xxl: ${radii.xxl};`);
+  cssVars.push(`  --theme-radius-round: ${radii.round};`);
   cssVars.push(`  --theme-radius-full: ${radii.full};`);
   
   // Spacing
@@ -112,6 +118,29 @@ export function generateThemeCSS(theme: ThemeTokensDTO, section?: string): strin
   cssVars.push(`  --theme-shadow-sm: ${getShadowValue(shadows.sm)};`);
   cssVars.push(`  --theme-shadow-md: ${getShadowValue(shadows.md)};`);
   cssVars.push(`  --theme-shadow-lg: ${getShadowValue(shadows.lg)};`);
+  cssVars.push(`  --theme-shadow-xl: ${getShadowValue(shadows.xl)};`);
+  cssVars.push(`  --theme-shadow-xxl: ${getShadowValue(shadows.xxl)};`);
+  
+  // Layout
+  cssVars.push(`\n  /* Theme Layout */`);
+  cssVars.push(`  --theme-container-sm: ${layout.containerSmall};`);
+  cssVars.push(`  --theme-container-md: ${layout.containerMedium};`);
+  cssVars.push(`  --theme-container-lg: ${layout.containerLarge};`);
+  cssVars.push(`  --theme-grid-gutters: ${layout.gridGutters};`);
+  cssVars.push(`  --theme-flex-gap: ${layout.flexGap};`);
+  
+  // Breakpoints
+  cssVars.push(`\n  /* Theme Breakpoints */`);
+  cssVars.push(`  --theme-breakpoint-sm: ${breakpoints.sm};`);
+  cssVars.push(`  --theme-breakpoint-md: ${breakpoints.md};`);
+  cssVars.push(`  --theme-breakpoint-lg: ${breakpoints.lg};`);
+  cssVars.push(`  --theme-breakpoint-xl: ${breakpoints.xl};`);
+  
+  // Animations
+  cssVars.push(`\n  /* Theme Animations */`);
+  cssVars.push(`  --theme-animation-fast: ${animations.fast};`);
+  cssVars.push(`  --theme-animation-default: ${animations.default};`);
+  cssVars.push(`  --theme-animation-slow: ${animations.slow};`);
   
   return `:root {\n${cssVars.join("\n")}\n}`;
 }

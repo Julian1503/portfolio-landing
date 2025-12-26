@@ -229,11 +229,14 @@ model ThemeTokens {
   
   // Design tokens stored as JSON
   // Structure validated by Zod schemas in application layer
-  colors          Json     // background, surface, text, mutedText, border, primary, secondary, link, danger, success
+  colors          Json     // background, surface, text, mutedText, border, primary, secondary, tertiary, accent1, accent2, link, danger, success
   typography      Json     // fontFamily, baseFontSize, scaleRatio, headingSizes (h1-h6), lineHeightBase
-  radii           Json     // sm, md, lg
-  spacing         Json     // xs, sm, md, lg, xl
-  shadows         Json     // sm, md, lg (optional shadow presets)
+  radii           Json     // none, sm, md, lg, xl, xxl, round, full
+  spacing         Json     // xs, sm, md, lg, xl, 2xl, 3xl
+  shadows         Json     // sm, md, lg, xl, xxl (shadow presets)
+  layout          Json     // containerSmall, containerMedium, containerLarge, gridGutters, flexGap
+  breakpoints     Json     // sm, md, lg, xl (responsive breakpoints)
+  animations      Json     // fast, default, slow (animation durations)
   
   // Section-specific overrides (optional)
   // Allows Hero/Projects/About/Contact/Footer to override specific tokens
