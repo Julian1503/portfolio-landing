@@ -149,14 +149,14 @@ export function ThemeAdminSection() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-slate-900" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--theme-border)] border-t-[var(--theme-text)]" />
       </div>
     );
   }
 
   if (!theme) {
     return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+      <div className="rounded-lg border border-[var(--theme-danger)] bg-[var(--theme-danger)]/10 p-4 text-sm text-[var(--theme-danger)]">
         {error || "Theme not found"}
       </div>
     );
@@ -167,39 +167,39 @@ export function ThemeAdminSection() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">Theme & Design System</h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <h2 className="text-lg font-semibold text-[var(--theme-text)]">Theme & Design System</h2>
+          <p className="mt-1 text-sm text-[var(--theme-text-secondary)]">
             Configure colors, typography, and layout for your portfolio.
           </p>
         </div>
         {isDirty && (
-          <span className="text-xs text-amber-600 font-medium">● Unsaved changes</span>
+          <span className="text-xs text-[var(--theme-warning)] font-medium">● Unsaved changes</span>
         )}
       </div>
 
       {/* Messages */}
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+        <div className="rounded-lg border border-[var(--theme-danger)] bg-[var(--theme-danger)]/10 p-4 text-sm text-[var(--theme-danger)]">
           {error}
         </div>
       )}
 
       {successMessage && (
-        <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-800">
+        <div className="rounded-lg border border-[var(--theme-success)] bg-[var(--theme-success)]/10 p-4 text-sm text-[var(--theme-success)]">
           {successMessage}
         </div>
       )}
 
       {/* Presets */}
-      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-        <h3 className="text-sm font-medium text-slate-700 mb-3">Quick Presets</h3>
+      <div className="rounded-lg border border-[var(--theme-border)] bg-[var(--theme-surface)] p-4">
+        <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Quick Presets</h3>
         <div className="flex flex-wrap gap-2">
           {presets.map((preset) => (
             <button
               key={preset.key}
               onClick={() => handleLoadPreset(preset.key)}
               disabled={isSaving}
-              className="px-4 py-2 text-sm rounded-lg border border-slate-300 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm rounded-lg border border-[var(--theme-border)] bg-[var(--theme-surface)] hover:bg-[var(--theme-surface-hover)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {preset.name} {preset.isDark && "🌙"}
             </button>
@@ -208,14 +208,14 @@ export function ThemeAdminSection() {
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-slate-200">
+      <div className="border-b border-[var(--theme-border)]">
         <nav className="flex space-x-4">
           <button
             onClick={() => setActiveTab("colors")}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === "colors"
-                ? "border-slate-900 text-slate-900"
-                : "border-transparent text-slate-500 hover:text-slate-700"
+                ? "border-[var(--theme-primary)] text-[var(--theme-primary)]"
+                : "border-transparent text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)]"
             }`}
           >
             Colors
@@ -224,8 +224,8 @@ export function ThemeAdminSection() {
             onClick={() => setActiveTab("typography")}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === "typography"
-                ? "border-slate-900 text-slate-900"
-                : "border-transparent text-slate-500 hover:text-slate-700"
+                ? "border-[var(--theme-primary)] text-[var(--theme-primary)]"
+                : "border-transparent text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)]"
             }`}
           >
             Typography
@@ -234,8 +234,8 @@ export function ThemeAdminSection() {
             onClick={() => setActiveTab("layout")}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === "layout"
-                ? "border-slate-900 text-slate-900"
-                : "border-transparent text-slate-500 hover:text-slate-700"
+                ? "border-[var(--theme-primary)] text-[var(--theme-primary)]"
+                : "border-transparent text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)]"
             }`}
           >
             Layout
@@ -250,7 +250,7 @@ export function ThemeAdminSection() {
           <div className="space-y-6">
             {/* Background Colors */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Background Colors</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Background Colors</h3>
               <div className="grid gap-4 md:grid-cols-2">
                 <ColorInput
                   label="Primary Background"
@@ -267,7 +267,7 @@ export function ThemeAdminSection() {
 
             {/* Surface Colors */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Surface/Card Colors</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Surface/Card Colors</h3>
               <div className="grid gap-4 md:grid-cols-2">
                 <ColorInput
                   label="Surface"
@@ -284,7 +284,7 @@ export function ThemeAdminSection() {
 
             {/* Text Colors */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Text Colors</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Text Colors</h3>
               <div className="grid gap-4 md:grid-cols-3">
                 <ColorInput
                   label="Primary Text"
@@ -306,7 +306,7 @@ export function ThemeAdminSection() {
 
             {/* Border Colors */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Border Colors</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Border Colors</h3>
               <div className="grid gap-4 md:grid-cols-2">
                 <ColorInput
                   label="Border"
@@ -323,7 +323,7 @@ export function ThemeAdminSection() {
 
             {/* Primary Colors */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Primary Action Colors</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Primary Action Colors</h3>
               <div className="grid gap-4 md:grid-cols-3">
                 <ColorInput
                   label="Primary"
@@ -345,7 +345,7 @@ export function ThemeAdminSection() {
 
             {/* Secondary Colors */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Secondary Action Colors</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Secondary Action Colors</h3>
               <div className="grid gap-4 md:grid-cols-3">
                 <ColorInput
                   label="Secondary"
@@ -367,7 +367,7 @@ export function ThemeAdminSection() {
 
             {/* Link and Semantic Colors */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Links & Semantic Colors</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Links & Semantic Colors</h3>
               <div className="grid gap-4 md:grid-cols-3">
                 <ColorInput
                   label="Link"
@@ -404,16 +404,16 @@ export function ThemeAdminSection() {
           <div className="space-y-6">
             {/* Font Families */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Font Families</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Font Families</h3>
               <div className="grid gap-4 md:grid-cols-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1">
+                  <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
                     Body Font
                   </label>
                   <select
                     value={theme.typography.fontFamily}
                     onChange={(e) => handleTypographyChange("fontFamily", e.target.value)}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm"
                   >
                     <option value="Montserrat">Montserrat</option>
                     <option value="Inter">Inter</option>
@@ -423,7 +423,7 @@ export function ThemeAdminSection() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1">
+                  <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
                     Base Font Size (px)
                   </label>
                   <input
@@ -432,11 +432,11 @@ export function ThemeAdminSection() {
                     max="22"
                     value={theme.typography.baseFontSize}
                     onChange={(e) => handleTypographyChange("baseFontSize", parseInt(e.target.value))}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1">
+                  <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
                     Base Line Height
                   </label>
                   <input
@@ -446,7 +446,7 @@ export function ThemeAdminSection() {
                     step="0.1"
                     value={theme.typography.lineHeightBase}
                     onChange={(e) => handleTypographyChange("lineHeightBase", parseFloat(e.target.value))}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm"
                   />
                 </div>
               </div>
@@ -454,7 +454,7 @@ export function ThemeAdminSection() {
 
             {/* Heading Sizes */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Heading Sizes</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Heading Sizes</h3>
               <div className="grid gap-4 md:grid-cols-3">
                 <TextInput
                   label="H1 Size"
@@ -497,10 +497,10 @@ export function ThemeAdminSection() {
 
             {/* Font Weights */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Font Weights</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Font Weights</h3>
               <div className="grid gap-4 md:grid-cols-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1">
+                  <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
                     Normal Weight
                   </label>
                   <input
@@ -510,11 +510,11 @@ export function ThemeAdminSection() {
                     step="100"
                     value={theme.typography.fontWeightNormal}
                     onChange={(e) => handleTypographyChange("fontWeightNormal", parseInt(e.target.value))}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1">
+                  <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
                     Medium Weight
                   </label>
                   <input
@@ -524,11 +524,11 @@ export function ThemeAdminSection() {
                     step="100"
                     value={theme.typography.fontWeightMedium}
                     onChange={(e) => handleTypographyChange("fontWeightMedium", parseInt(e.target.value))}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1">
+                  <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
                     Bold Weight
                   </label>
                   <input
@@ -538,7 +538,7 @@ export function ThemeAdminSection() {
                     step="100"
                     value={theme.typography.fontWeightBold}
                     onChange={(e) => handleTypographyChange("fontWeightBold", parseInt(e.target.value))}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                    className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm"
                   />
                 </div>
               </div>
@@ -551,7 +551,7 @@ export function ThemeAdminSection() {
           <div className="space-y-6">
             {/* Border Radii */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Border Radii</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Border Radii</h3>
               <div className="grid gap-4 md:grid-cols-3">
                 <TextInput
                   label="Small"
@@ -582,7 +582,7 @@ export function ThemeAdminSection() {
 
             {/* Spacing */}
             <div>
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Spacing Scale</h3>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Spacing Scale</h3>
               <div className="grid gap-4 md:grid-cols-3">
                 <TextInput
                   label="Extra Small"
@@ -630,15 +630,15 @@ export function ThemeAdminSection() {
       <ThemePreview theme={theme} />
 
       {/* Actions */}
-      <div className="flex justify-end space-x-3 border-t pt-6">
+      <div className="flex justify-end space-x-3 border-t border-[var(--theme-border)] pt-6">
         <button
           type="button"
           onClick={handleSave}
           disabled={isSaving || !isDirty}
-          className={`rounded-lg px-6 py-2 text-sm font-semibold text-white ${
+          className={`rounded-lg px-6 py-2 text-sm font-semibold transition-colors ${
             isSaving || !isDirty
-              ? "cursor-not-allowed bg-slate-400"
-              : "bg-slate-900 hover:bg-slate-800"
+              ? "cursor-not-allowed bg-[var(--theme-border)] text-[var(--theme-text-muted)]"
+              : "bg-[var(--theme-primary)] text-[var(--theme-primary-text)] hover:bg-[var(--theme-primary-hover)]"
           }`}
         >
           {isSaving ? "Saving..." : "Save Changes"}
@@ -660,7 +660,7 @@ function ColorInput({
 }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-slate-600 mb-1">
+      <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
         {label}
       </label>
       <div className="flex gap-2">
@@ -668,13 +668,13 @@ function ColorInput({
           type="color"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="h-10 w-16 rounded border border-slate-300 cursor-pointer"
+          className="h-10 w-16 rounded border border-[var(--theme-border)] cursor-pointer"
         />
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono"
+          className="flex-1 rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm font-mono bg-[var(--theme-surface)] text-[var(--theme-text)]"
           placeholder="#FFFFFF"
         />
       </div>
@@ -695,7 +695,7 @@ function TextInput({
 }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-slate-600 mb-1">
+      <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
         {label}
       </label>
       <input
@@ -703,7 +703,7 @@ function TextInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+        className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm bg-[var(--theme-surface)] text-[var(--theme-text)]"
       />
     </div>
   );
