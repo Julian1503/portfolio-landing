@@ -281,7 +281,7 @@ async function main() {
                 md: 'md',
                 lg: 'lg',
                 xl: 'xl',
-                xxl: '2xl',
+                '2xl': '2xl',
             },
             layout: {
                 containerSmall: '48rem',

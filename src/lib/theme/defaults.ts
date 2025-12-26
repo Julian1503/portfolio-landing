@@ -107,7 +107,7 @@ export const DEFAULT_SHADOWS: ShadowTokens = {
   md: "md",
   lg: "lg",
   xl: "xl",
-  xxl: "2xl",
+  "2xl": "2xl",
 };
 
 export const DEFAULT_LAYOUT: LayoutTokens = {
@@ -282,7 +282,7 @@ export const MINIMAL_THEME: ThemeTokensDTO = {
     md: "sm",
     lg: "md",
     xl: "lg",
-    xxl: "xl",
+    "2xl": "xl",
   },
   layout: DEFAULT_LAYOUT,
   breakpoints: DEFAULT_BREAKPOINTS,

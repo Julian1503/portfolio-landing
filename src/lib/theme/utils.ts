@@ -119,7 +119,7 @@ export function generateThemeCSS(theme: ThemeTokensDTO, section?: string): strin
   cssVars.push(`  --theme-shadow-md: ${getShadowValue(shadows.md)};`);
   cssVars.push(`  --theme-shadow-lg: ${getShadowValue(shadows.lg)};`);
   cssVars.push(`  --theme-shadow-xl: ${getShadowValue(shadows.xl)};`);
-  cssVars.push(`  --theme-shadow-xxl: ${getShadowValue(shadows.xxl)};`);
+  cssVars.push(`  --theme-shadow-2xl: ${getShadowValue(shadows["2xl"])};`);
   
   // Layout
   cssVars.push(`\n  /* Theme Layout */`);

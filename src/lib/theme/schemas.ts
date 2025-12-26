@@ -186,7 +186,7 @@ export const ShadowTokensSchema = z.object({
   md: shadowPresetSchema.default("md"),
   lg: shadowPresetSchema.default("lg"),
   xl: shadowPresetSchema.default("xl"),
-  xxl: shadowPresetSchema.default("2xl"),
+  "2xl": shadowPresetSchema.default("2xl"),
 });
 
 export type ShadowTokens = z.infer<typeof ShadowTokensSchema>;
