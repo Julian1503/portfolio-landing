@@ -12,11 +12,28 @@ const HeroBackground = ({ backgroundImage, backgroundVideo }: HeroBackgroundProp
 
     useEffect(() => {
         if (!videoRef.current) return;
-        videoRef.current
-            .play()
-            .catch(() => {
-                // Ignore autoplay restrictions silently
-            });
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && videoRef.current) {
+                        videoRef.current
+                            .play()
+                            .catch(() => {
+                                // Ignore autoplay restrictions silently
+                            });
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        observer.observe(videoRef.current);
+
+        return () => {
+            if (videoRef.current) {
+                observer.unobserve(videoRef.current);
+            }
+        };
     }, []);
 
     // Default fallbacks
@@ -28,7 +45,7 @@ const HeroBackground = ({ backgroundImage, backgroundVideo }: HeroBackgroundProp
             <video
                 ref={videoRef}
                 className="absolute inset-0 w-full h-full object-cover"
-                preload="metadata"
+                preload="none"
                 playsInline
                 muted
                 loop
