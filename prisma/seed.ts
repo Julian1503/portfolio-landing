@@ -11,7 +11,7 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
     // Seed CMS sections with current hardcoded content
     console.log('Seeding CMS sections...');
-    
+
     // Hero section
     await prisma.heroSection.upsert({
         where: { id: 'hero_singleton' },
@@ -27,7 +27,7 @@ async function main() {
             contactLabel: 'Get in Touch',
         },
     });
-    
+
     // About section
     await prisma.aboutSection.upsert({
         where: { id: 'about_singleton' },
@@ -52,7 +52,7 @@ async function main() {
             cta2Url: 'https://www.linkedin.com/in/mlourdesynigo/',
         },
     });
-    
+
     // Contact section
     await prisma.contactSection.upsert({
         where: { id: 'contact_singleton' },
@@ -67,7 +67,7 @@ async function main() {
             availability: 'Available for projects',
         },
     });
-    
+
     // Footer section with social links
     const footer = await prisma.footerSection.upsert({
         where: { id: 'footer_singleton' },
@@ -76,7 +76,7 @@ async function main() {
             id: 'footer_singleton',
         },
     });
-    
+
     // Add social links
     await prisma.socialLink.deleteMany({ where: { footerId: footer.id } });
     await prisma.socialLink.createMany({
@@ -97,9 +97,9 @@ async function main() {
             },
         ],
     });
-    
+
     console.log('CMS sections seeded successfully!');
-    
+
     // Seed projects
     console.log('Seeding projects...');
     await prisma.project.create({
@@ -202,9 +202,9 @@ async function main() {
             },
         },
     });
-    
+
     console.log('Projects seeded successfully!');
-    
+
     // Seed default theme
     console.log('Seeding default theme...');
     await prisma.themeTokens.upsert({
@@ -230,6 +230,10 @@ async function main() {
                 secondary: '#1C1917',
                 secondaryHover: '#292524',
                 secondaryText: '#FFFFFF',
+                tertiary: '#F5F5F4',
+                tertiaryHover: '#E7E5E4',
+                accent1: '#9BB19F',
+                accent2: '#92400E',
                 link: '#65816A',
                 linkHover: '#527258',
                 danger: '#DC2626',
@@ -259,6 +263,8 @@ async function main() {
                 md: '0.5rem',
                 lg: '1rem',
                 xl: '1.5rem',
+                xxl: '2rem',
+                round: '50%',
                 full: '9999px',
             },
             spacing: {
@@ -274,10 +280,30 @@ async function main() {
                 sm: 'sm',
                 md: 'md',
                 lg: 'lg',
+                xl: 'xl',
+                '2xl': '2xl',
+            },
+            layout: {
+                containerSmall: '48rem',
+                containerMedium: '64rem',
+                containerLarge: '80rem',
+                gridGutters: '1.5rem',
+                flexGap: '1rem',
+            },
+            breakpoints: {
+                sm: '640px',
+                md: '768px',
+                lg: '1024px',
+                xl: '1280px',
+            },
+            animations: {
+                fast: '150ms',
+                default: '300ms',
+                slow: '500ms',
             },
         },
     });
-    
+
     console.log('Default theme seeded successfully!');
 }
 

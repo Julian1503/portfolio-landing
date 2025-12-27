@@ -234,6 +234,9 @@ model ThemeTokens {
   radii           Json     // sm, md, lg
   spacing         Json     // xs, sm, md, lg, xl
   shadows         Json     // sm, md, lg (optional shadow presets)
+  layout          Json     // containerSmall, containerMedium, containerLarge, gridGutters, flexGap
+  breakpoints     Json     // sm, md, lg, xl (responsive breakpoints)
+  animations      Json     // fast, default, slow (animation durations)
   
   // Section-specific overrides (optional)
   // Allows Hero/Projects/About/Contact/Footer to override specific tokens
