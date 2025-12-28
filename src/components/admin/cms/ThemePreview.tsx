@@ -9,10 +9,10 @@ export function ThemePreview({ theme }: ThemePreviewProps) {
   const { colors, typography, radii, spacing, shadows, layout, breakpoints, animations } = theme;
 
   return (
-    <div className="rounded-lg border border-[var(--theme-border)] bg-[var(--theme-surface)] overflow-hidden">
-      <div className="bg-[var(--theme-surface-hover)] px-6 py-4 border-b border-[var(--theme-border)]">
-        <h3 className="text-sm font-medium text-[var(--theme-text)]">Live Preview</h3>
-        <p className="text-xs text-[var(--theme-text-secondary)] mt-1">
+    <div className="rounded-lg border border-slate-200 bg-white overflow-hidden">
+      <div className="bg-slate-50 px-6 py-4 border-b border-slate-200">
+        <h3 className="text-sm font-medium text-slate-700">Live Preview</h3>
+        <p className="text-xs text-slate-500 mt-1">
           Preview of your theme across different components and states
         </p>
       </div>
@@ -461,7 +461,7 @@ function ColorSwatch({ label, color, textColor }: { label: string; color: string
       >
         {label}
       </div>
-      <span className="text-xs font-mono text-[var(--theme-text-muted)]">{color}</span>
+      <span className="text-xs font-mono text-slate-600">{color}</span>
     </div>
   );
 }
