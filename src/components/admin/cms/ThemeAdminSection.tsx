@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import type { ThemeTokensDTO, ColorTokens, TypographyTokens, RadiiTokens, SpacingTokens } from "@/lib/theme/schemas";
+import type { ThemeTokensDTO, ColorTokens, TypographyTokens, RadiiTokens, SpacingTokens, ShadowTokens, LayoutTokens, Breakpoints, AnimationTokens } from "@/lib/theme/schemas";
 import { ThemePreview } from "./ThemePreview";
 
 type PresetInfo = {
@@ -142,6 +142,42 @@ export function ThemeAdminSection() {
     setTheme({
       ...theme,
       spacing: { ...theme.spacing, [key]: value },
+    });
+    setIsDirty(true);
+  };
+
+  const handleShadowChange = (key: keyof ShadowTokens, value: string) => {
+    if (!theme) return;
+    setTheme({
+      ...theme,
+      shadows: { ...theme.shadows, [key]: value },
+    });
+    setIsDirty(true);
+  };
+
+  const handleLayoutChange = (key: keyof LayoutTokens, value: string) => {
+    if (!theme) return;
+    setTheme({
+      ...theme,
+      layout: { ...theme.layout, [key]: value },
+    });
+    setIsDirty(true);
+  };
+
+  const handleBreakpointChange = (key: keyof Breakpoints, value: string) => {
+    if (!theme) return;
+    setTheme({
+      ...theme,
+      breakpoints: { ...theme.breakpoints, [key]: value },
+    });
+    setIsDirty(true);
+  };
+
+  const handleAnimationChange = (key: keyof AnimationTokens, value: string) => {
+    if (!theme) return;
+    setTheme({
+      ...theme,
+      animations: { ...theme.animations, [key]: value },
     });
     setIsDirty(true);
   };
@@ -365,6 +401,43 @@ export function ThemeAdminSection() {
               </div>
             </div>
 
+            {/* Tertiary Colors */}
+            <div>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Tertiary Action Colors</h3>
+              <div className="grid gap-4 md:grid-cols-2">
+                <ColorInput
+                  label="Tertiary"
+                  value={theme.colors.tertiary}
+                  onChange={(v) => handleColorChange("tertiary", v)}
+                />
+                <ColorInput
+                  label="Tertiary Hover"
+                  value={theme.colors.tertiaryHover}
+                  onChange={(v) => handleColorChange("tertiaryHover", v)}
+                />
+              </div>
+            </div>
+
+            {/* Accent Colors */}
+            <div>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Accent Colors</h3>
+              <p className="text-xs text-[var(--theme-text-secondary)] mb-3">
+                Additional accent colors for highlights and decorative elements
+              </p>
+              <div className="grid gap-4 md:grid-cols-2">
+                <ColorInput
+                  label="Accent 1"
+                  value={theme.colors.accent1}
+                  onChange={(v) => handleColorChange("accent1", v)}
+                />
+                <ColorInput
+                  label="Accent 2"
+                  value={theme.colors.accent2}
+                  onChange={(v) => handleColorChange("accent2", v)}
+                />
+              </div>
+            </div>
+
             {/* Link and Semantic Colors */}
             <div>
               <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Links & Semantic Colors</h3>
@@ -577,6 +650,18 @@ export function ThemeAdminSection() {
                   onChange={(v) => handleRadiiChange("xl", v)}
                   placeholder="1.5rem"
                 />
+                <TextInput
+                  label="2X Large"
+                  value={theme.radii.xxl}
+                  onChange={(v) => handleRadiiChange("xxl", v)}
+                  placeholder="2rem"
+                />
+                <TextInput
+                  label="Round (50%)"
+                  value={theme.radii.round}
+                  onChange={(v) => handleRadiiChange("round", v)}
+                  placeholder="50%"
+                />
               </div>
             </div>
 
@@ -619,6 +704,203 @@ export function ThemeAdminSection() {
                   value={theme.spacing["2xl"]}
                   onChange={(v) => handleSpacingChange("2xl", v)}
                   placeholder="3rem"
+                />
+              </div>
+            </div>
+
+            {/* Shadows */}
+            <div>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Shadow Scale</h3>
+              <p className="text-xs text-[var(--theme-text-secondary)] mb-3">
+                Select shadow presets (none, sm, md, lg, xl, 2xl)
+              </p>
+              <div className="grid gap-4 md:grid-cols-3">
+                <div>
+                  <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
+                    Small Shadow
+                  </label>
+                  <select
+                    value={theme.shadows.sm}
+                    onChange={(e) => handleShadowChange("sm", e.target.value)}
+                    className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm bg-[var(--theme-surface)] text-[var(--theme-text)]"
+                  >
+                    <option value="none">None</option>
+                    <option value="sm">Small</option>
+                    <option value="md">Medium</option>
+                    <option value="lg">Large</option>
+                    <option value="xl">Extra Large</option>
+                    <option value="2xl">2X Large</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
+                    Medium Shadow
+                  </label>
+                  <select
+                    value={theme.shadows.md}
+                    onChange={(e) => handleShadowChange("md", e.target.value)}
+                    className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm bg-[var(--theme-surface)] text-[var(--theme-text)]"
+                  >
+                    <option value="none">None</option>
+                    <option value="sm">Small</option>
+                    <option value="md">Medium</option>
+                    <option value="lg">Large</option>
+                    <option value="xl">Extra Large</option>
+                    <option value="2xl">2X Large</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
+                    Large Shadow
+                  </label>
+                  <select
+                    value={theme.shadows.lg}
+                    onChange={(e) => handleShadowChange("lg", e.target.value)}
+                    className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm bg-[var(--theme-surface)] text-[var(--theme-text)]"
+                  >
+                    <option value="none">None</option>
+                    <option value="sm">Small</option>
+                    <option value="md">Medium</option>
+                    <option value="lg">Large</option>
+                    <option value="xl">Extra Large</option>
+                    <option value="2xl">2X Large</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
+                    Extra Large Shadow
+                  </label>
+                  <select
+                    value={theme.shadows.xl}
+                    onChange={(e) => handleShadowChange("xl", e.target.value)}
+                    className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm bg-[var(--theme-surface)] text-[var(--theme-text)]"
+                  >
+                    <option value="none">None</option>
+                    <option value="sm">Small</option>
+                    <option value="md">Medium</option>
+                    <option value="lg">Large</option>
+                    <option value="xl">Extra Large</option>
+                    <option value="2xl">2X Large</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[var(--theme-text-secondary)] mb-1">
+                    2X Large Shadow
+                  </label>
+                  <select
+                    value={theme.shadows["2xl"]}
+                    onChange={(e) => handleShadowChange("2xl", e.target.value)}
+                    className="w-full rounded-lg border border-[var(--theme-border)] px-3 py-2 text-sm bg-[var(--theme-surface)] text-[var(--theme-text)]"
+                  >
+                    <option value="none">None</option>
+                    <option value="sm">Small</option>
+                    <option value="md">Medium</option>
+                    <option value="lg">Large</option>
+                    <option value="xl">Extra Large</option>
+                    <option value="2xl">2X Large</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Layout Containers */}
+            <div>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Layout Containers</h3>
+              <p className="text-xs text-[var(--theme-text-secondary)] mb-3">
+                Maximum widths for content containers
+              </p>
+              <div className="grid gap-4 md:grid-cols-3">
+                <TextInput
+                  label="Small Container"
+                  value={theme.layout.containerSmall}
+                  onChange={(v) => handleLayoutChange("containerSmall", v)}
+                  placeholder="48rem"
+                />
+                <TextInput
+                  label="Medium Container"
+                  value={theme.layout.containerMedium}
+                  onChange={(v) => handleLayoutChange("containerMedium", v)}
+                  placeholder="64rem"
+                />
+                <TextInput
+                  label="Large Container"
+                  value={theme.layout.containerLarge}
+                  onChange={(v) => handleLayoutChange("containerLarge", v)}
+                  placeholder="80rem"
+                />
+                <TextInput
+                  label="Grid Gutters"
+                  value={theme.layout.gridGutters}
+                  onChange={(v) => handleLayoutChange("gridGutters", v)}
+                  placeholder="1.5rem"
+                />
+                <TextInput
+                  label="Flex Gap"
+                  value={theme.layout.flexGap}
+                  onChange={(v) => handleLayoutChange("flexGap", v)}
+                  placeholder="1rem"
+                />
+              </div>
+            </div>
+
+            {/* Breakpoints */}
+            <div>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Responsive Breakpoints</h3>
+              <p className="text-xs text-[var(--theme-text-secondary)] mb-3">
+                Screen size breakpoints for responsive design
+              </p>
+              <div className="grid gap-4 md:grid-cols-4">
+                <TextInput
+                  label="Small (sm)"
+                  value={theme.breakpoints.sm}
+                  onChange={(v) => handleBreakpointChange("sm", v)}
+                  placeholder="640px"
+                />
+                <TextInput
+                  label="Medium (md)"
+                  value={theme.breakpoints.md}
+                  onChange={(v) => handleBreakpointChange("md", v)}
+                  placeholder="768px"
+                />
+                <TextInput
+                  label="Large (lg)"
+                  value={theme.breakpoints.lg}
+                  onChange={(v) => handleBreakpointChange("lg", v)}
+                  placeholder="1024px"
+                />
+                <TextInput
+                  label="Extra Large (xl)"
+                  value={theme.breakpoints.xl}
+                  onChange={(v) => handleBreakpointChange("xl", v)}
+                  placeholder="1280px"
+                />
+              </div>
+            </div>
+
+            {/* Animations */}
+            <div>
+              <h3 className="text-sm font-medium text-[var(--theme-text)] mb-3">Animation Durations</h3>
+              <p className="text-xs text-[var(--theme-text-secondary)] mb-3">
+                Standard animation and transition timings (use ms or s)
+              </p>
+              <div className="grid gap-4 md:grid-cols-3">
+                <TextInput
+                  label="Fast"
+                  value={theme.animations.fast}
+                  onChange={(v) => handleAnimationChange("fast", v)}
+                  placeholder="150ms"
+                />
+                <TextInput
+                  label="Default"
+                  value={theme.animations.default}
+                  onChange={(v) => handleAnimationChange("default", v)}
+                  placeholder="300ms"
+                />
+                <TextInput
+                  label="Slow"
+                  value={theme.animations.slow}
+                  onChange={(v) => handleAnimationChange("slow", v)}
+                  placeholder="500ms"
                 />
               </div>
             </div>
