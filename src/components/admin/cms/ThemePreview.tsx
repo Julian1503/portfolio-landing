@@ -284,7 +284,7 @@ export function ThemePreview({ theme }: ThemePreviewProps) {
                 <div 
                   style={{
                     width: value,
-                    height: "1.5rem",
+                    height: spacing.lg,
                     backgroundColor: colors.primary,
                     borderRadius: radii.sm,
                   }}
@@ -407,7 +407,7 @@ export function ThemePreview({ theme }: ThemePreviewProps) {
                   style={{
                     width: '100%',
                     maxWidth: value,
-                    height: "1.5rem",
+                    height: spacing.lg,
                     backgroundColor: colors.primary,
                     borderRadius: radii.sm,
                   }}
