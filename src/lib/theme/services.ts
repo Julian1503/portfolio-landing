@@ -15,6 +15,18 @@ export interface IThemeService {
   getTheme(): Promise<ThemeTokensDTO>;
 
   /**
+   * Get theme by name
+   * Returns null if not found
+   */
+  getThemeByName(name: string): Promise<ThemeTokensDTO | null>;
+
+  /**
+   * Get a list of themes' names
+   * Returns an empty array if none exist, if exists returns an array of names
+   */
+  getThemesNames(): Promise<string[]>;
+
+  /**
    * Update theme tokens (partial update supported)
    */
   updateTheme(data: ThemeTokensUpdateDTO): Promise<ThemeTokensDTO>;
@@ -36,6 +48,14 @@ export interface IThemeService {
 
 export class ThemeService implements IThemeService {
   constructor(private repository: IThemeRepository = new PrismaThemeRepository()) {}
+
+  async getThemesNames(): Promise<string[]> {
+    return this.repository.findAll().then(themes => themes.map(theme => theme.name));
+  }
+
+  async getThemeByName(name: string): Promise<ThemeTokensDTO | null> {
+    return this.repository.findByName(name);
+  }
 
   async getTheme(): Promise<ThemeTokensDTO> {
     const theme = await this.repository.findUnique();

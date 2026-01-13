@@ -46,7 +46,7 @@ export const ProjectCard = React.memo(function ProjectCard({ slug, title, tag, l
                             />
                         </motion.div>
                     ) : (
-                        <div className="h-full w-full bg-gray-200" />
+                        <div className="h-full w-full bg-[var(--theme-surface-hover)]" />
                     )}
 
                     {/* Animated overlay */}
@@ -80,7 +80,7 @@ export const ProjectCard = React.memo(function ProjectCard({ slug, title, tag, l
                         animate={{ y: isHovered ? -4 : 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <span className="inline-flex px-3 py-1 rounded-full text-[10px] md:text-xs tracking-[0.25em] uppercase bg-[var(--theme-surface)]/40 text-[var(--theme-text)] border border-[var(--theme-border)]">
+                        <span className="inline-flex px-3 py-1 rounded-full text-[10px] md:text-xs tracking-[0.25em] uppercase bg-[var(--theme-surface)]/80 text-[var(--theme-text)] border border-[var(--theme-border)]">
                             {tag}
                         </span>
                         <h3 className="text-lg md:text-xl font-semibold text-[var(--theme-text)] leading-snug">

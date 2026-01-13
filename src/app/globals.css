@@ -15,11 +15,6 @@
   --accent: #92400E;          /* Amber-800 - tierra quemada */
   --accent-light: #B45309;    /* Amber-700 */
   --accent-lighter: #D97706;  /* Amber-600 */
-
-  /* O alternativamente, un verde salvia: */
-  --accent: #65816A;
-  --accent-light: #7D9982;
-  --accent-lighter: #9BB19F;
 }
 
 @theme inline {

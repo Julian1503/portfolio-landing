@@ -6,12 +6,19 @@ import type { ThemeTokensDTO, ThemeTokensUpdateDTO } from "./schemas";
 
 export interface IThemeRepository {
   /**
-   * Find the current active theme
+   * Find a theme by its unique name
    */
-  findUnique(): Promise<ThemeTokensDTO | null>;
+  findByName(name: string): Promise<ThemeTokensDTO | null>;
 
   /**
-   * Upsert (create or update) theme tokens
+   * Retrieve all themes
+   */
+  findAll(): Promise<ThemeTokensDTO[]>;
+
+  /**
+   * Create or update theme tokens
    */
   upsert(data: ThemeTokensUpdateDTO): Promise<ThemeTokensDTO>;
+
+  findUnique(): Promise<ThemeTokensDTO | null>;
 }

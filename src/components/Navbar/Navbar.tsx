@@ -52,12 +52,11 @@ const Navbar: React.FC<NavbarProps> = ({ options }) => {
             className="w-full sticky top-0 z-50 backdrop-blur border-b border-[var(--theme-border)] transition-all"
             animate={{
                 backgroundColor: scrolled ? 'var(--theme-surface)' : 'var(--theme-bg-primary)',
-                boxShadow: scrolled ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : '0 0 0 0 rgba(0, 0, 0, 0)'
+                boxShadow: scrolled ? 'var(--theme-shadow-md)' : 'none'
             }}
         >
             <nav className="mx-auto flex max-w-6xl items-center justify-end px-6 py-4 gap-4">
                 <DesktopMenu options={options} onNavigate={handleNavigate} />
-                <ThemeSwitcher />
                 <MobileMenuButton isOpen={open} onClick={() => setOpen((prev) => !prev)} />
             </nav>
 

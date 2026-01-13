@@ -20,7 +20,7 @@ const ScrollCue = ({ onClick }: ScrollCueProps) => (
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         >
-            <ArrowDown className="w-5 h-5 text-white/70" />
+            <ArrowDown className="w-5 h-5 text-[var(--theme-primary-text)] opacity-70" />
         </motion.div>
     </motion.div>
 );

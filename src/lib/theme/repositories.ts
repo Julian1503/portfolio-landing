@@ -11,16 +11,32 @@ const THEME_ID = "theme_singleton";
 // ============================================
 
 export class PrismaThemeRepository implements IThemeRepository {
-  async findUnique(): Promise<ThemeTokensDTO | null> {
-    const theme = await prisma.themeTokens?.findUnique({
-      where: { id: THEME_ID },
-    });
+  
+      async findByName(name: string): Promise<ThemeTokensDTO | null> {
+        const theme = await prisma.themeTokens.findFirst({
+          where: { name },
+        });
 
-    if (!theme) {
-      return null;
-    }
+        return theme ? mapPrismaThemeToDTO(theme) : null;
+      }
 
-    return mapPrismaThemeToDTO(theme);
+      async findAll(): Promise<ThemeTokensDTO[]> {
+        const themes = await prisma.themeTokens.findMany({
+          orderBy: { createdAt: "asc" }
+        });
+        return themes.map(mapPrismaThemeToDTO);
+      }
+
+    async findUnique(): Promise<ThemeTokensDTO | null> {
+      const theme = await prisma.themeTokens.findUnique({
+        where: { id: THEME_ID },
+      });
+
+      if (!theme) {
+        return null;
+      }
+
+      return mapPrismaThemeToDTO(theme);
   }
 
   async upsert(data: ThemeTokensUpdateDTO): Promise<ThemeTokensDTO> {
