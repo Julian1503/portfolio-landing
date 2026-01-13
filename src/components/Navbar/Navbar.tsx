@@ -5,7 +5,6 @@ import {scrollToSection} from "@/hooks/scrollToSection";
 import type {NavigationItem} from "@/lib/config/navigation";
 import { DesktopMenu } from "./DesktopMenu";
 import { MobileMenuButton, MobileMenu } from "./MobileMenu";
-import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 type NavbarProps = {
     options: NavigationItem[];

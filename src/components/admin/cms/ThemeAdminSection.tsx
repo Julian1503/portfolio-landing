@@ -14,7 +14,6 @@ export function ThemeAdminSection() {
   const [theme, setTheme] = React.useState<ThemeTokensDTO | null>(null);
   const [presets, setPresets] = React.useState<PresetInfo[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [sectionOverrides, setSectionOverrides] = React.useState({});
   const [isSaving, setIsSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
@@ -64,7 +63,6 @@ export function ThemeAdminSection() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...theme,
-          sectionOverrides: sectionOverrides || {}, // Ensure it is never null
         }),
       });
 

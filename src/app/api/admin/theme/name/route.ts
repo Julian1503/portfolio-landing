@@ -5,7 +5,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import {createThemeService, IThemeService} from "@/lib/theme";
 
-export async function GET(req: NextRequest) {
+export async function GET(_: NextRequest) {
     try {
         const service : IThemeService = createThemeService();
         const theme : string[] = await service.getThemesNames();
